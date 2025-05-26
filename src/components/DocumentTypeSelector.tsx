@@ -60,12 +60,12 @@ export const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
         <Button
           variant="outline"
           onClick={onBack}
-          className="mr-4 border-gray-600 text-gray-300 hover:bg-gray-700"
+          className="mr-4 border-gray-600 dark:border-gray-400 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           Select Document Type - {getCountryName(country)}
         </h2>
       </div>
@@ -74,15 +74,15 @@ export const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
         {documents.map((document) => (
           <Card 
             key={document.id}
-            className="cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg bg-gray-800 border-gray-700 hover:border-blue-500"
+            className="cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500"
             onClick={() => onDocumentTypeSelect(document.id)}
           >
             <CardContent className="p-6 text-center">
               <div className="text-blue-400 mb-4 flex justify-center">
                 {document.icon}
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">{document.name}</h3>
-              <p className="text-gray-400 text-sm">{document.description}</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{document.name}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">{document.description}</p>
             </CardContent>
           </Card>
         ))}
