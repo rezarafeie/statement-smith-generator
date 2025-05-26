@@ -41,36 +41,127 @@ export const StatementGenerator: React.FC = () => {
       description: "Your PDF is being prepared for download.",
     });
     
-    // Create a new window with only the statement content
+    // Get only the statement content
     const statementElement = document.getElementById('bank-statement');
     if (statementElement) {
+      // Clone the element to avoid modifying the original
+      const clonedElement = statementElement.cloneNode(true) as HTMLElement;
+      
+      // Create a new window for printing
       const printWindow = window.open('', '_blank');
       if (printWindow) {
         printWindow.document.write(`
           <!DOCTYPE html>
           <html>
           <head>
-            <title>Bank Statement</title>
+            <title>Metro Bank Statement</title>
+            <meta charset="utf-8">
             <style>
-              body { margin: 0; padding: 0; }
-              @media print {
-                body { margin: 0; }
-                * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+              * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
               }
+              
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                background: white;
+                color: black;
+                line-height: 1.4;
+              }
+              
+              @media print {
+                body {
+                  margin: 0 !important;
+                  padding: 0 !important;
+                }
+                
+                * {
+                  -webkit-print-color-adjust: exact !important;
+                  color-adjust: exact !important;
+                  print-color-adjust: exact !important;
+                }
+                
+                @page {
+                  margin: 10mm;
+                  size: A4;
+                }
+              }
+              
+              /* Tailwind-like utility classes for the statement */
+              .bg-white { background-color: white; }
+              .text-black { color: black; }
+              .p-8 { padding: 2rem; }
+              .max-w-4xl { max-width: 56rem; }
+              .mx-auto { margin-left: auto; margin-right: auto; }
+              .font-sans { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+              .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+              .mb-6 { margin-bottom: 1.5rem; }
+              .relative { position: relative; }
+              .flex { display: flex; }
+              .items-center { align-items: center; }
+              .p-4 { padding: 1rem; }
+              .text-white { color: white; }
+              .z-10 { z-index: 10; }
+              .h-12 { height: 3rem; }
+              .w-auto { width: auto; }
+              .absolute { position: absolute; }
+              .bottom-0 { bottom: 0; }
+              .left-0 { left: 0; }
+              .w-full { width: 100%; }
+              .h-6 { height: 1.5rem; }
+              .h-2 { height: 0.5rem; }
+              .grid { display: grid; }
+              .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+              .gap-8 { gap: 2rem; }
+              .font-bold { font-weight: 700; }
+              .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+              .mb-2 { margin-bottom: 0.5rem; }
+              .leading-relaxed { line-height: 1.625; }
+              .mb-1 { margin-bottom: 0.25rem; }
+              .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+              .mb-4 { margin-bottom: 1rem; }
+              .tracking-wider { letter-spacing: 0.05em; }
+              .border-2 { border-width: 2px; }
+              .border-black { border-color: black; }
+              .border-collapse { border-collapse: collapse; }
+              .border { border-width: 1px; }
+              .text-center { text-align: center; }
+              .bg-gray-100 { background-color: rgb(243 244 246); }
+              .w-20 { width: 5rem; }
+              .bg-gray-200 { background-color: rgb(229 231 235); }
+              .text-left { text-align: left; }
+              .bg-gray-50 { background-color: rgb(249 250 251); }
+              .h-8 { height: 2rem; }
+              .mt-8 { margin-top: 2rem; }
+              .text-xs { font-size: 0.75rem; line-height: 1rem; }
+              .text-gray-700 { color: rgb(55 65 81); }
+              .mt-6 { margin-top: 1.5rem; }
+              .text-gray-600 { color: rgb(75 85 99); }
+              .border-t { border-top-width: 1px; }
+              .pt-4 { padding-top: 1rem; }
+              .w-24 { width: 6rem; }
             </style>
-            <script src="https://cdn.tailwindcss.com"></script>
           </head>
           <body>
-            ${statementElement.outerHTML}
+            ${clonedElement.outerHTML}
           </body>
           </html>
         `);
+        
         printWindow.document.close();
         printWindow.focus();
+        
+        // Wait for content to load then print
         setTimeout(() => {
           printWindow.print();
-          printWindow.close();
-        }, 250);
+          // Close window after printing
+          setTimeout(() => {
+            printWindow.close();
+          }, 100);
+        }, 500);
       }
     }
   };

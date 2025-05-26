@@ -22,21 +22,35 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
 
   return (
     <div id="bank-statement" className="bg-white text-black p-8 max-w-4xl mx-auto font-sans text-sm" style={{ minHeight: '297mm', width: '210mm' }}>
-      {/* Header with Metro Bank branding */}
-      <div className="bg-blue-700 text-white p-4 mb-6 flex items-center">
-        <div className="flex items-center">
-          <img 
-            src="/lovable-uploads/f44a0de1-54ad-4c18-b992-95b7a85117d1.png" 
-            alt="Metro Bank Logo" 
-            className="h-12 w-auto"
-          />
+      {/* Header with Metro Bank branding and custom shape */}
+      <div className="relative mb-6">
+        {/* Main blue header with custom shape */}
+        <div className="relative" style={{ backgroundColor: '#015fab' }}>
+          {/* Header content */}
+          <div className="flex items-center p-4 text-white relative z-10">
+            <img 
+              src="/lovable-uploads/49eceb79-87a8-4f4c-856c-aecaf173538c.png" 
+              alt="Metro Bank Logo" 
+              className="h-12 w-auto"
+            />
+          </div>
+          {/* Custom angled bottom edge */}
+          <div 
+            className="absolute bottom-0 left-0 w-full h-6"
+            style={{
+              background: 'linear-gradient(135deg, #015fab 0%, #015fab 85%, transparent 85%)',
+              clipPath: 'polygon(0 0, 85% 0, 100% 100%, 0 100%)'
+            }}
+          ></div>
         </div>
+        {/* White space after header */}
+        <div className="h-2 bg-white"></div>
       </div>
 
       {/* Account holder and account details */}
       <div className="grid grid-cols-2 gap-8 mb-6">
         <div>
-          <h2 className="text-blue-700 font-bold text-lg mb-2">{userDetails.name}</h2>
+          <h2 className="font-bold text-lg mb-2" style={{ color: '#015fab' }}>{userDetails.name}</h2>
           <div className="text-sm leading-relaxed">
             {userDetails.address.split(', ').map((line, index) => (
               <div key={index}>{line}</div>
@@ -52,7 +66,7 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
       </div>
 
       {/* Account Summary Title */}
-      <h2 className="text-blue-700 font-bold text-xl mb-4 tracking-wider">ACCOUNT SUMMARY</h2>
+      <h2 className="font-bold text-xl mb-4 tracking-wider" style={{ color: '#015fab' }}>ACCOUNT SUMMARY</h2>
 
       {/* Main transactions table */}
       <div className="border-2 border-black">
@@ -120,7 +134,7 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
       {/* Footer with Metro Bank branding and address */}
       <div className="mt-8 text-center">
         <img 
-          src="/lovable-uploads/ff01ab1b-3133-4c16-ae4d-ea26e9fbd77d.png" 
+          src="/lovable-uploads/49eceb79-87a8-4f4c-856c-aecaf173538c.png" 
           alt="Metro Bank Logo" 
           className="h-8 w-auto mx-auto mb-2"
         />
