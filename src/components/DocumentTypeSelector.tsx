@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { FileText, Receipt, ArrowLeft } from 'lucide-react';
+import { FileText, Receipt } from 'lucide-react';
 
 interface DocumentType {
   id: string;
@@ -34,8 +33,7 @@ const spanishDocuments: DocumentType[] = [
 
 export const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({ 
   country, 
-  onDocumentTypeSelect, 
-  onBack 
+  onDocumentTypeSelect
 }) => {
   const getCountryName = (code: string) => {
     switch (code) {
@@ -56,16 +54,8 @@ export const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="flex items-center mb-6">
-        <Button
-          variant="outline"
-          onClick={onBack}
-          className="mr-4 border-gray-600 dark:border-gray-400 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">
           Select Document Type - {getCountryName(country)}
         </h2>
       </div>

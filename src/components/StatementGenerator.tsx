@@ -1,14 +1,11 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BankStatement } from './BankStatement';
-import { SpanishUtilityBill } from './SpanishUtilityBill';
-import { SpanishBankStatement } from './SpanishBankStatement';
 import { CustomDataForm } from './CustomDataForm';
 import { CountrySelector } from './CountrySelector';
 import { DocumentTypeSelector } from './DocumentTypeSelector';
 import { generateUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
-import { Download, RefreshCw, FileText, Zap, User, ArrowLeft, Sun, Moon, Menu, X } from 'lucide-react';
+import { RefreshCw, FileText, Zap, User, Sun, Moon, Menu, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement';
@@ -18,8 +15,6 @@ export const StatementGenerator: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<FlowStep>('country-selection');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedDocumentType, setSelectedDocumentType] = useState<DocumentType | ''>('');
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -33,6 +28,33 @@ export const StatementGenerator: React.FC = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
+  };
+
+  const generateDocumentId = () => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  };
+
+  const openDocumentInNewPage = (documentType: DocumentType, userDetails: UserDetails, transactions: Transaction[]) => {
+    const documentId = generateDocumentId();
+    
+    // Store document data in localStorage
+    const documentData = {
+      userDetails,
+      transactions,
+      documentType,
+      timestamp: Date.now()
+    };
+    
+    localStorage.setItem(`document_${documentId}`, JSON.stringify(documentData));
+    
+    // Open in new tab
+    const newUrl = `/view/${documentId}`;
+    window.open(newUrl, '_blank');
+    
+    toast({
+      title: "Document Generated!",
+      description: "Your document has been opened in a new tab.",
+    });
   };
 
   const handleCountrySelect = (countryCode: string) => {
@@ -59,167 +81,10 @@ export const StatementGenerator: React.FC = () => {
       const newUserDetails = generateUserDetails(customData);
       const newTransactions = generateTransactions(12 + Math.floor(Math.random() * 8), initialBalance);
       
-      setUserDetails(newUserDetails);
-      setTransactions(newTransactions);
+      openDocumentInNewPage(documentType, newUserDetails, newTransactions);
       setCurrentStep('document-generated');
       setIsGenerating(false);
-      
-      const documentNames = {
-        'metro-bank': 'Metro Bank Statement',
-        'utility-bill': 'Spanish Utility Bill',
-        'bank-statement': 'Spanish Bank Statement'
-      };
-      
-      toast({
-        title: "Document Generated!",
-        description: `Your ${documentNames[documentType]} has been generated successfully.`,
-      });
     }, 1000);
-  };
-
-  const downloadPDF = () => {
-    if (!userDetails) return;
-    
-    toast({
-      title: "Download Started",
-      description: "Your PDF is being prepared for download.",
-    });
-    
-    const elementId = selectedDocumentType === 'metro-bank' ? 'bank-statement' : 
-                     selectedDocumentType === 'utility-bill' ? 'utility-bill' : 'spanish-bank-statement';
-    
-    const documentElement = document.getElementById(elementId);
-    if (documentElement) {
-      const clonedElement = documentElement.cloneNode(true) as HTMLElement;
-      
-      const printWindow = window.open('', '_blank');
-      if (printWindow) {
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Document</title>
-            <meta charset="utf-8">
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              
-              body {
-                margin: 0;
-                padding: 0;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                background: white;
-                color: black;
-                line-height: 1.2;
-                font-size: 11px;
-              }
-              
-              @media print {
-                body {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                }
-                
-                * {
-                  -webkit-print-color-adjust: exact !important;
-                  color-adjust: exact !important;
-                  print-color-adjust: exact !important;
-                }
-                
-                @page {
-                  margin: 8mm;
-                  size: A4;
-                }
-                
-                #bank-statement, #utility-bill, #spanish-bank-statement {
-                  page-break-inside: avoid;
-                  transform: scale(0.85);
-                  transform-origin: top left;
-                  width: 118% !important;
-                }
-                
-                table {
-                  border-collapse: collapse !important;
-                  width: 100% !important;
-                }
-                
-                th, td {
-                  border: 1px solid black !important;
-                  padding: 4px !important;
-                  font-size: 10px !important;
-                  line-height: 1.2 !important;
-                }
-              }
-              
-              .bg-white { background-color: white; }
-              .text-black { color: black; }
-              .bg-gray-100 { background-color: #f3f4f6; }
-              .bg-gray-50 { background-color: #f9fafb; }
-              .bg-orange-50 { background-color: #fff7ed; }
-              .bg-orange-500 { background-color: #f97316; }
-              .text-white { color: white; }
-              .text-orange-600 { color: #ea580c; }
-              .font-bold { font-weight: 700; }
-              .text-center { text-align: center; }
-              .text-right { text-align: right; }
-              .text-left { text-align: left; }
-              .p-6 { padding: 1.5rem; }
-              .p-4 { padding: 1rem; }
-              .p-3 { padding: 0.75rem; }
-              .p-2 { padding: 0.5rem; }
-              .mb-8 { margin-bottom: 2rem; }
-              .mb-6 { margin-bottom: 1.5rem; }
-              .mb-4 { margin-bottom: 1rem; }
-              .mb-2 { margin-bottom: 0.5rem; }
-              .mt-4 { margin-top: 1rem; }
-              .mt-2 { margin-top: 0.5rem; }
-              .mt-1 { margin-top: 0.25rem; }
-              .grid { display: grid; }
-              .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-              .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-              .gap-8 { gap: 2rem; }
-              .gap-6 { gap: 1.5rem; }
-              .gap-4 { gap: 1rem; }
-              .flex { display: flex; }
-              .justify-between { justify-content: space-between; }
-              .items-start { align-items: flex-start; }
-              .space-y-2 > * + * { margin-top: 0.5rem; }
-              .space-y-1 > * + * { margin-top: 0.25rem; }
-              .border { border-width: 1px; }
-              .border-2 { border-width: 2px; }
-              .border-black { border-color: black; }
-              .border-gray-300 { border-color: #d1d5db; }
-              .border-t-2 { border-top-width: 2px; }
-              .rounded { border-radius: 0.25rem; }
-              .text-xs { font-size: 0.75rem; }
-              .text-sm { font-size: 0.875rem; }
-              .text-xl { font-size: 1.25rem; }
-              .h-16 { height: 4rem; }
-              .h-12 { height: 3rem; }
-              .w-auto { width: auto; }
-              .font-mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace; }
-            </style>
-          </head>
-          <body>
-            ${clonedElement.outerHTML}
-          </body>
-          </html>
-        `);
-        
-        printWindow.document.close();
-        printWindow.focus();
-        
-        setTimeout(() => {
-          printWindow.print();
-          setTimeout(() => {
-            printWindow.close();
-          }, 100);
-        }, 500);
-      }
-    }
   };
 
   const handleCustomDataSubmit = (customData: Partial<UserDetails> & { initialBalance?: string }) => {
@@ -235,13 +100,7 @@ export const StatementGenerator: React.FC = () => {
     setCurrentStep('country-selection');
     setSelectedCountry('');
     setSelectedDocumentType('');
-    setUserDetails(null);
-    setTransactions([]);
     setIsMobileMenuOpen(false);
-  };
-
-  const formatCurrency = (amount: number) => {
-    return `£${amount.toFixed(2)}`;
   };
 
   const getDocumentTitle = () => {
@@ -253,32 +112,8 @@ export const StatementGenerator: React.FC = () => {
     }
   };
 
-  const renderDocument = () => {
-    if (!userDetails) return null;
-
-    switch (selectedDocumentType) {
-      case 'metro-bank':
-        return <BankStatement userDetails={userDetails} transactions={transactions} />;
-      case 'utility-bill':
-        return <SpanishUtilityBill userDetails={userDetails} />;
-      case 'bank-statement':
-        return <SpanishBankStatement userDetails={userDetails} transactions={transactions} />;
-      default:
-        return null;
-    }
-  };
-
   const ActionButtons = () => (
     <>
-      <Button 
-        onClick={resetToCountrySelection}
-        variant="outline"
-        className="border-gray-600 text-gray-300 hover:bg-gray-700 dark:border-gray-400 dark:text-gray-200"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Countries
-      </Button>
-
       {currentStep === 'document-generated' && (
         <>
           <Button 
@@ -289,12 +124,12 @@ export const StatementGenerator: React.FC = () => {
             {isGenerating ? (
               <>
                 <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
-                Regenerating...
+                Generating...
               </>
             ) : (
               <>
                 <Zap className="mr-2 h-5 w-5" />
-                Regenerate
+                Generate New
               </>
             )}
           </Button>
@@ -310,12 +145,12 @@ export const StatementGenerator: React.FC = () => {
           </Button>
           
           <Button 
-            onClick={downloadPDF}
+            onClick={resetToCountrySelection}
             variant="outline"
-            className="border-green-500 text-green-400 hover:bg-green-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
+            className="border-gray-500 text-gray-400 hover:bg-gray-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
           >
-            <Download className="mr-2 h-4 w-4" />
-            Download PDF
+            <FileText className="mr-2 h-4 w-4" />
+            New Document
           </Button>
         </>
       )}
@@ -383,13 +218,13 @@ export const StatementGenerator: React.FC = () => {
             </>
           )}
           
-          {currentStep === 'document-generated' && userDetails && (
+          {currentStep === 'document-generated' && (
             <div className={`mt-6 p-4 rounded-lg transition-colors duration-300 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-              <h3 className="font-semibold mb-2 text-green-400">{getDocumentTitle()} Summary</h3>
+              <h3 className="font-semibold mb-2 text-green-400">{getDocumentTitle()} Generated</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                 <div>
-                  <span className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Name:</span>
-                  <p className="font-medium">{userDetails.name}</p>
+                  <span className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Status:</span>
+                  <p className="font-medium text-green-500">Document opened in new tab</p>
                 </div>
                 <div>
                   <span className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Country:</span>
@@ -420,17 +255,11 @@ export const StatementGenerator: React.FC = () => {
             />
           )}
 
-          {currentStep === 'document-generated' && userDetails ? (
-            <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
-              <div className="overflow-x-auto">
-                {renderDocument()}
-              </div>
-            </div>
-          ) : currentStep === 'document-generated' && (
+          {currentStep === 'document-generated' && (
             <div className="text-center py-12">
               <FileText className={`h-24 w-24 mx-auto mb-4 transition-colors duration-300 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} />
-              <h3 className={`text-xl font-semibold mb-2 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>No Document Generated</h3>
-              <p className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>Something went wrong. Please try again.</p>
+              <h3 className={`text-xl font-semibold mb-2 transition-colors duration-300 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Document Generated Successfully</h3>
+              <p className={`transition-colors duration-300 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>Your document has been opened in a new tab. You can generate another document or customize the data using the buttons above.</p>
             </div>
           )}
         </div>
