@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { CustomDataForm } from './CustomDataForm';
 import { CountrySelector } from './CountrySelector';
@@ -8,13 +8,21 @@ import { BankStatement } from './BankStatement';
 import { SpanishUtilityBill } from './SpanishUtilityBill';
 import { SpanishBankStatement } from './SpanishBankStatement';
 import { generateUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
-import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages } from 'lucide-react';
+import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
+import html2pdf from 'html2pdf.js';
 
 type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement';
 type FlowStep = 'country-selection' | 'document-selection' | 'document-generated';
 type Language = 'en' | 'fa';
+
+interface DocumentState {
+  userDetails: UserDetails;
+  transactions: Transaction[];
+  documentType: DocumentType;
+  country: string;
+}
 
 interface Translations {
   [key: string]: {
@@ -30,11 +38,15 @@ const translations: Translations = {
   generateNew: { en: 'Generate New', fa: 'تولید جدید' },
   customData: { en: 'Custom Data', fa: 'داده‌های سفارشی' },
   downloadImage: { en: 'Download as Image', fa: 'دانلود به عنوان تصویر' },
+  downloadPDF: { en: 'Download PDF', fa: 'دانلود PDF' },
   copyLink: { en: 'Copy Link', fa: 'کپی لینک' },
-  linkCopied: { en: 'Copied!', fa: 'کپی شد!' },
+  linkCopied: { en: 'Link copied!', fa: 'لینک کپی شد!' },
   generating: { en: 'Generating...', fa: 'در حال تولید...' },
   documentGenerated: { en: 'Document Generated Successfully', fa: 'سند با موفقیت تولید شد' },
-  disclaimer: { en: 'This tool is designed for educational and design demonstration purposes only. The generated documents are not real and should never be used for fraudulent activities or official purposes.', fa: 'این ابزار فقط برای اهداف آموزشی و نمایشی طراحی شده است. اسناد تولید شده واقعی نیستند و هرگز نباید برای فعالیت‌های تقلبی یا اهداف رسمی استفاده شوند.' }
+  disclaimer: { en: 'This tool is designed for educational and design demonstration purposes only. The generated documents are not real and should never be used for fraudulent activities or official purposes.', fa: 'این ابزار فقط برای اهداف آموزشی و نمایشی طراحی شده است. اسناد تولید شده واقعی نیستند و هرگز نباید برای فعالیت‌های تقلبی یا اهداف رسمی استفاده شوند.' },
+  darkMode: { en: 'Dark Mode', fa: 'حالت تاریک' },
+  lightMode: { en: 'Light Mode', fa: 'حالت روشن' },
+  language: { en: 'Language', fa: 'زبان' }
 };
 
 export const StatementGenerator: React.FC = () => {
@@ -48,10 +60,34 @@ export const StatementGenerator: React.FC = () => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [documentId, setDocumentId] = useState<string>('');
   const { toast } = useToast();
   const documentRef = useRef<HTMLDivElement>(null);
 
   const t = (key: string) => translations[key]?.[language] || key;
+
+  // Load document from URL on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const docId = urlParams.get('doc');
+    if (docId) {
+      // Load document from localStorage or generate based on ID
+      const savedDoc = localStorage.getItem(`doc_${docId}`);
+      if (savedDoc) {
+        try {
+          const docState: DocumentState = JSON.parse(savedDoc);
+          setUserDetails(docState.userDetails);
+          setTransactions(docState.transactions);
+          setSelectedDocumentType(docState.documentType);
+          setSelectedCountry(docState.country);
+          setCurrentStep('document-generated');
+          setDocumentId(docId);
+        } catch (error) {
+          console.error('Failed to load document:', error);
+        }
+      }
+    }
+  }, []);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -71,6 +107,14 @@ export const StatementGenerator: React.FC = () => {
       document.documentElement.setAttribute('dir', 'ltr');
       document.documentElement.lang = 'en';
     }
+  };
+
+  const generateDocumentId = () => {
+    return Math.random().toString(36).substr(2, 9);
+  };
+
+  const saveDocumentState = (id: string, state: DocumentState) => {
+    localStorage.setItem(`doc_${id}`, JSON.stringify(state));
   };
 
   const handleCountrySelect = (countryCode: string) => {
@@ -96,11 +140,26 @@ export const StatementGenerator: React.FC = () => {
     setTimeout(() => {
       const newUserDetails = generateUserDetails(customData);
       const newTransactions = generateTransactions(12 + Math.floor(Math.random() * 8), initialBalance);
+      const newDocId = generateDocumentId();
       
       setUserDetails(newUserDetails);
       setTransactions(newTransactions);
+      setDocumentId(newDocId);
       setCurrentStep('document-generated');
       setIsGenerating(false);
+
+      // Save document state for sharing
+      const docState: DocumentState = {
+        userDetails: newUserDetails,
+        transactions: newTransactions,
+        documentType,
+        country: selectedCountry
+      };
+      saveDocumentState(newDocId, docState);
+
+      // Update URL without refresh
+      const newUrl = `${window.location.origin}${window.location.pathname}?doc=${newDocId}`;
+      window.history.pushState({ docId: newDocId }, '', newUrl);
 
       toast({
         title: t('documentGenerated'),
@@ -122,16 +181,32 @@ export const StatementGenerator: React.FC = () => {
     if (!documentRef.current) return;
     
     try {
+      // Ensure all images are loaded first
+      const images = documentRef.current.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      }));
+
       const canvas = await html2canvas(documentRef.current, {
-        scale: 2,
+        scale: 3, // Higher resolution
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        width: documentRef.current.scrollWidth,
+        height: documentRef.current.scrollHeight,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: documentRef.current.scrollWidth,
+        windowHeight: documentRef.current.scrollHeight
       });
       
       const link = document.createElement('a');
-      link.download = `document-${Date.now()}.png`;
-      link.href = canvas.toDataURL();
+      link.download = `document-${documentId || Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
       link.click();
 
       toast({
@@ -139,6 +214,7 @@ export const StatementGenerator: React.FC = () => {
         description: "Your document image is being downloaded.",
       });
     } catch (error) {
+      console.error('Image download error:', error);
       toast({
         title: "Download Failed",
         description: "Failed to generate image. Please try again.",
@@ -147,15 +223,69 @@ export const StatementGenerator: React.FC = () => {
     }
   };
 
+  const downloadAsPDF = async () => {
+    if (!documentRef.current) return;
+    
+    try {
+      // Ensure all images are loaded first
+      const images = documentRef.current.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      }));
+
+      const opt = {
+        margin: 0,
+        filename: `document-${documentId || Date.now()}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          width: documentRef.current.scrollWidth,
+          height: documentRef.current.scrollHeight
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      await html2pdf().set(opt).from(documentRef.current).save();
+
+      toast({
+        title: "PDF Download Started",
+        description: "Your document PDF is being downloaded.",
+      });
+    } catch (error) {
+      console.error('PDF download error:', error);
+      toast({
+        title: "PDF Download Failed",
+        description: "Failed to generate PDF. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const copyShareableLink = () => {
-    const currentUrl = window.location.href;
+    const currentUrl = documentId 
+      ? `${window.location.origin}${window.location.pathname}?doc=${documentId}`
+      : window.location.href;
+    
     navigator.clipboard.writeText(currentUrl).then(() => {
       setCopySuccess(true);
       toast({
         title: t('linkCopied'),
-        description: "Link copied to clipboard!",
+        description: "Shareable link copied to clipboard!",
       });
       setTimeout(() => setCopySuccess(false), 2000);
+    }).catch(() => {
+      toast({
+        title: "Copy Failed",
+        description: "Failed to copy link to clipboard.",
+        variant: "destructive"
+      });
     });
   };
 
@@ -165,6 +295,9 @@ export const StatementGenerator: React.FC = () => {
     setSelectedDocumentType('');
     setUserDetails(null);
     setTransactions([]);
+    setDocumentId('');
+    // Clear URL
+    window.history.pushState({}, '', window.location.pathname);
   };
 
   const renderDocument = () => {
@@ -255,27 +388,40 @@ export const StatementGenerator: React.FC = () => {
 
           {currentStep === 'document-generated' && userDetails && (
             <div className="space-y-6">
-              {/* Generated Document */}
-              <div ref={documentRef} className="bg-white rounded-lg shadow-2xl overflow-hidden">
+              {/* Generated Document - Always LTR regardless of UI language */}
+              <div 
+                ref={documentRef} 
+                className="bg-white rounded-lg shadow-2xl overflow-hidden"
+                dir="ltr"
+                style={{ direction: 'ltr' }}
+              >
                 <div className="overflow-x-auto">
                   {renderDocument()}
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center flex-wrap">
                 <Button 
                   onClick={downloadAsImage}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg min-w-[160px]"
                 >
                   <Download className="mr-2 h-5 w-5" />
                   {t('downloadImage')}
+                </Button>
+
+                <Button 
+                  onClick={downloadAsPDF}
+                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg shadow-lg min-w-[160px]"
+                >
+                  <FileText className="mr-2 h-5 w-5" />
+                  {t('downloadPDF')}
                 </Button>
                 
                 <Button 
                   onClick={copyShareableLink}
                   variant="outline"
-                  className="border-gray-500 text-gray-600 hover:bg-gray-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
+                  className="border-gray-500 text-gray-600 hover:bg-gray-600 hover:text-white px-6 py-3 rounded-lg shadow-lg min-w-[160px]"
                 >
                   {copySuccess ? <CheckCircle className="mr-2 h-4 w-4 text-green-600" /> : <Copy className="mr-2 h-4 w-4" />}
                   {copySuccess ? t('linkCopied') : t('copyLink')}
@@ -301,17 +447,20 @@ export const StatementGenerator: React.FC = () => {
             <Button
               onClick={toggleLanguage}
               variant="outline"
-              size="icon"
+              size="sm"
               className={`transition-colors duration-300 ${isDarkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+              title={t('language')}
             >
-              <Languages className="h-4 w-4" />
+              <Languages className="h-4 w-4 mr-2" />
+              {language === 'en' ? 'EN' : 'FA'}
             </Button>
             
             <Button
               onClick={toggleDarkMode}
               variant="outline"
-              size="icon"
+              size="sm"
               className={`transition-colors duration-300 ${isDarkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+              title={isDarkMode ? t('lightMode') : t('darkMode')}
             >
               {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
