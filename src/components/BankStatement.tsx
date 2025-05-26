@@ -21,22 +21,22 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
   const closingBalance = transactions.length > 0 ? transactions[transactions.length - 1].balance : 0;
 
   return (
-    <div id="bank-statement" className="bg-white text-black p-8 max-w-4xl mx-auto font-sans text-sm" style={{ minHeight: '297mm', width: '210mm' }}>
+    <div id="bank-statement" className="bg-white text-black p-6 max-w-4xl mx-auto font-sans text-xs" style={{ minHeight: '270mm', width: '210mm' }}>
       {/* Header with Metro Bank branding and custom shape */}
-      <div className="relative mb-6">
+      <div className="relative mb-4">
         {/* Main blue header with custom shape */}
         <div className="relative" style={{ backgroundColor: '#015fab' }}>
           {/* Header content */}
-          <div className="flex items-center p-4 text-white relative z-10">
+          <div className="flex items-center p-3 text-white relative z-10">
             <img 
-              src="/lovable-uploads/49eceb79-87a8-4f4c-856c-aecaf173538c.png" 
+              src="/lovable-uploads/683936aa-eca1-4f81-9dd0-1e6951f9a4ae.png" 
               alt="Metro Bank Logo" 
-              className="h-12 w-auto"
+              className="h-8 w-auto"
             />
           </div>
           {/* Custom angled bottom edge */}
           <div 
-            className="absolute bottom-0 left-0 w-full h-6"
+            className="absolute bottom-0 left-0 w-full h-4"
             style={{
               background: 'linear-gradient(135deg, #015fab 0%, #015fab 85%, transparent 85%)',
               clipPath: 'polygon(0 0, 85% 0, 100% 100%, 0 100%)'
@@ -44,20 +44,20 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
           ></div>
         </div>
         {/* White space after header */}
-        <div className="h-2 bg-white"></div>
+        <div className="h-1 bg-white"></div>
       </div>
 
       {/* Account holder and account details */}
-      <div className="grid grid-cols-2 gap-8 mb-6">
+      <div className="grid grid-cols-2 gap-6 mb-4">
         <div>
-          <h2 className="font-bold text-lg mb-2" style={{ color: '#015fab' }}>{userDetails.name}</h2>
-          <div className="text-sm leading-relaxed">
+          <h2 className="font-bold text-base mb-1" style={{ color: '#015fab' }}>{userDetails.name}</h2>
+          <div className="text-xs leading-relaxed">
             {userDetails.address.split(', ').map((line, index) => (
               <div key={index}>{line}</div>
             ))}
           </div>
         </div>
-        <div className="text-sm">
+        <div className="text-xs">
           <div className="mb-1"><strong>Account number:</strong> {userDetails.accountNumber}</div>
           <div className="mb-1"><strong>Account Currency:</strong> GBP</div>
           <div className="mb-1"><strong>Statement period:</strong> {userDetails.statementPeriod.replace(/\//g, '/')}</div>
@@ -66,65 +66,65 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
       </div>
 
       {/* Account Summary Title */}
-      <h2 className="font-bold text-xl mb-4 tracking-wider" style={{ color: '#015fab' }}>ACCOUNT SUMMARY</h2>
+      <h2 className="font-bold text-lg mb-3 tracking-wider" style={{ color: '#015fab' }}>ACCOUNT SUMMARY</h2>
 
       {/* Main transactions table */}
       <div className="border-2 border-black">
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th rowSpan={2} className="border border-black p-2 text-center font-bold bg-gray-100 w-20">Date</th>
-              <th rowSpan={2} className="border border-black p-2 text-center font-bold bg-gray-100 w-20">Amount</th>
-              <th rowSpan={2} className="border border-black p-2 text-center font-bold bg-gray-100 w-20">Currency</th>
-              <th colSpan={2} className="border border-black p-2 text-center font-bold bg-gray-100">Transaction amount in the account currency</th>
-              <th rowSpan={2} className="border border-black p-2 text-center font-bold bg-gray-100 w-24">Balance at the end</th>
-              <th rowSpan={2} className="border border-black p-2 text-center font-bold bg-gray-100">Transaction description</th>
+              <th rowSpan={2} className="border border-black p-1 text-center font-bold bg-gray-100 w-16 text-xs">Date</th>
+              <th rowSpan={2} className="border border-black p-1 text-center font-bold bg-gray-100 w-16 text-xs">Amount</th>
+              <th rowSpan={2} className="border border-black p-1 text-center font-bold bg-gray-100 w-16 text-xs">Currency</th>
+              <th colSpan={2} className="border border-black p-1 text-center font-bold bg-gray-100 text-xs">Transaction amount in the account currency</th>
+              <th rowSpan={2} className="border border-black p-1 text-center font-bold bg-gray-100 w-20 text-xs">Balance at the end</th>
+              <th rowSpan={2} className="border border-black p-1 text-center font-bold bg-gray-100 text-xs">Transaction description</th>
             </tr>
             <tr>
-              <th className="border border-black p-2 text-center font-bold bg-gray-100 w-20">Credit</th>
-              <th className="border border-black p-2 text-center font-bold bg-gray-100 w-20">Debit</th>
+              <th className="border border-black p-1 text-center font-bold bg-gray-100 w-16 text-xs">Credit</th>
+              <th className="border border-black p-1 text-center font-bold bg-gray-100 w-16 text-xs">Debit</th>
             </tr>
             <tr>
-              <th colSpan={7} className="border border-black p-2 text-left font-bold bg-gray-200">Transactions, other operations</th>
+              <th colSpan={7} className="border border-black p-1 text-left font-bold bg-gray-200 text-xs">Transactions, other operations</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction, index) => (
+            {transactions.slice(0, 10).map((transaction, index) => (
               <React.Fragment key={index}>
                 <tr className="bg-white">
-                  <td className="border border-black p-2 text-center">{formatDate(transaction.date)}</td>
-                  <td className="border border-black p-2 text-center">{formatCurrency(transaction.amount)}</td>
-                  <td className="border border-black p-2 text-center">GBP</td>
-                  <td className="border border-black p-2 text-center">
+                  <td className="border border-black p-1 text-center text-xs">{formatDate(transaction.date)}</td>
+                  <td className="border border-black p-1 text-center text-xs">{formatCurrency(transaction.amount)}</td>
+                  <td className="border border-black p-1 text-center text-xs">GBP</td>
+                  <td className="border border-black p-1 text-center text-xs">
                     {transaction.type === 'credit' ? formatCurrency(transaction.amount) : ''}
                   </td>
-                  <td className="border border-black p-2 text-center">
+                  <td className="border border-black p-1 text-center text-xs">
                     {transaction.type === 'debit' ? formatCurrency(transaction.amount) : ''}
                   </td>
-                  <td className="border border-black p-2 text-center"></td>
-                  <td className="border border-black p-2 text-left">{transaction.description}</td>
+                  <td className="border border-black p-1 text-center text-xs"></td>
+                  <td className="border border-black p-1 text-left text-xs">{transaction.description}</td>
                 </tr>
                 <tr className="bg-gray-50">
-                  <td className="border border-black p-2 text-center"></td>
-                  <td className="border border-black p-2 text-center"></td>
-                  <td className="border border-black p-2 text-center"></td>
-                  <td className="border border-black p-2 text-center"></td>
-                  <td className="border border-black p-2 text-center"></td>
-                  <td className="border border-black p-2 text-center font-bold">{formatCurrency(transaction.balance)}</td>
-                  <td className="border border-black p-2 text-left">Balance at the end of day</td>
+                  <td className="border border-black p-1 text-center text-xs"></td>
+                  <td className="border border-black p-1 text-center text-xs"></td>
+                  <td className="border border-black p-1 text-center text-xs"></td>
+                  <td className="border border-black p-1 text-center text-xs"></td>
+                  <td className="border border-black p-1 text-center text-xs"></td>
+                  <td className="border border-black p-1 text-center font-bold text-xs">{formatCurrency(transaction.balance)}</td>
+                  <td className="border border-black p-1 text-left text-xs">Balance at the end of day</td>
                 </tr>
               </React.Fragment>
             ))}
-            {/* Add empty rows to match the template */}
-            {Array.from({ length: Math.max(0, 8 - transactions.length) }, (_, i) => (
+            {/* Add empty rows to fill space but limit total */}
+            {Array.from({ length: Math.max(0, 5 - Math.min(transactions.length, 10)) }, (_, i) => (
               <tr key={`empty-${i}`} className="bg-white">
-                <td className="border border-black p-2 h-8"></td>
-                <td className="border border-black p-2"></td>
-                <td className="border border-black p-2"></td>
-                <td className="border border-black p-2"></td>
-                <td className="border border-black p-2"></td>
-                <td className="border border-black p-2"></td>
-                <td className="border border-black p-2"></td>
+                <td className="border border-black p-1 h-6 text-xs"></td>
+                <td className="border border-black p-1 text-xs"></td>
+                <td className="border border-black p-1 text-xs"></td>
+                <td className="border border-black p-1 text-xs"></td>
+                <td className="border border-black p-1 text-xs"></td>
+                <td className="border border-black p-1 text-xs"></td>
+                <td className="border border-black p-1 text-xs"></td>
               </tr>
             ))}
           </tbody>
@@ -132,11 +132,11 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
       </div>
 
       {/* Footer with Metro Bank branding and address */}
-      <div className="mt-8 text-center">
+      <div className="mt-6 text-center">
         <img 
-          src="/lovable-uploads/49eceb79-87a8-4f4c-856c-aecaf173538c.png" 
+          src="/lovable-uploads/d439f0b9-7a36-4148-a06c-3ebcd9782b4c.png" 
           alt="Metro Bank Logo" 
-          className="h-8 w-auto mx-auto mb-2"
+          className="h-6 w-auto mx-auto mb-2"
         />
         <div className="text-xs text-gray-700">
           <p>Address: 58-64 Fargate, Sheffield City Centre, Sheffield S1 2HE, United Kingdom</p>
@@ -146,8 +146,8 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
       </div>
 
       {/* Disclaimer */}
-      <div className="mt-6 text-xs text-gray-600 border-t pt-4">
-        <p className="mb-2">
+      <div className="mt-4 text-xs text-gray-600 border-t pt-3">
+        <p className="mb-1">
           <strong>Important:</strong> This statement is for educational and demonstration purposes only. 
           It does not represent a real bank account or financial institution.
         </p>

@@ -69,7 +69,8 @@ export const StatementGenerator: React.FC = () => {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
                 background: white;
                 color: black;
-                line-height: 1.4;
+                line-height: 1.2;
+                font-size: 11px;
               }
               
               @media print {
@@ -85,44 +86,50 @@ export const StatementGenerator: React.FC = () => {
                 }
                 
                 @page {
-                  margin: 10mm;
+                  margin: 8mm;
                   size: A4;
+                }
+                
+                #bank-statement {
+                  page-break-inside: avoid;
+                  transform: scale(0.85);
+                  transform-origin: top left;
+                  width: 118% !important;
                 }
               }
               
               /* Tailwind-like utility classes for the statement */
               .bg-white { background-color: white; }
               .text-black { color: black; }
-              .p-8 { padding: 2rem; }
+              .p-6 { padding: 1.5rem; }
               .max-w-4xl { max-width: 56rem; }
               .mx-auto { margin-left: auto; margin-right: auto; }
               .font-sans { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
-              .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
-              .mb-6 { margin-bottom: 1.5rem; }
+              .text-xs { font-size: 0.75rem; line-height: 1rem; }
+              .mb-4 { margin-bottom: 1rem; }
               .relative { position: relative; }
               .flex { display: flex; }
               .items-center { align-items: center; }
-              .p-4 { padding: 1rem; }
+              .p-3 { padding: 0.75rem; }
               .text-white { color: white; }
               .z-10 { z-index: 10; }
-              .h-12 { height: 3rem; }
+              .h-8 { height: 2rem; }
               .w-auto { width: auto; }
               .absolute { position: absolute; }
               .bottom-0 { bottom: 0; }
               .left-0 { left: 0; }
               .w-full { width: 100%; }
-              .h-6 { height: 1.5rem; }
-              .h-2 { height: 0.5rem; }
+              .h-4 { height: 1rem; }
+              .h-1 { height: 0.25rem; }
               .grid { display: grid; }
               .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-              .gap-8 { gap: 2rem; }
+              .gap-6 { gap: 1.5rem; }
               .font-bold { font-weight: 700; }
-              .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-              .mb-2 { margin-bottom: 0.5rem; }
-              .leading-relaxed { line-height: 1.625; }
+              .text-base { font-size: 1rem; line-height: 1.5rem; }
               .mb-1 { margin-bottom: 0.25rem; }
-              .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-              .mb-4 { margin-bottom: 1rem; }
+              .leading-relaxed { line-height: 1.625; }
+              .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+              .mb-3 { margin-bottom: 0.75rem; }
               .tracking-wider { letter-spacing: 0.05em; }
               .border-2 { border-width: 2px; }
               .border-black { border-color: black; }
@@ -130,19 +137,20 @@ export const StatementGenerator: React.FC = () => {
               .border { border-width: 1px; }
               .text-center { text-align: center; }
               .bg-gray-100 { background-color: rgb(243 244 246); }
-              .w-20 { width: 5rem; }
+              .w-16 { width: 4rem; }
               .bg-gray-200 { background-color: rgb(229 231 235); }
               .text-left { text-align: left; }
               .bg-gray-50 { background-color: rgb(249 250 251); }
-              .h-8 { height: 2rem; }
-              .mt-8 { margin-top: 2rem; }
-              .text-xs { font-size: 0.75rem; line-height: 1rem; }
-              .text-gray-700 { color: rgb(55 65 81); }
+              .h-6 { height: 1.5rem; }
               .mt-6 { margin-top: 1.5rem; }
+              .text-gray-700 { color: rgb(55 65 81); }
+              .mt-4 { margin-top: 1rem; }
               .text-gray-600 { color: rgb(75 85 99); }
               .border-t { border-top-width: 1px; }
-              .pt-4 { padding-top: 1rem; }
-              .w-24 { width: 6rem; }
+              .pt-3 { padding-top: 0.75rem; }
+              .w-20 { width: 5rem; }
+              .p-1 { padding: 0.25rem; }
+              .mb-2 { margin-bottom: 0.5rem; }
             </style>
           </head>
           <body>
