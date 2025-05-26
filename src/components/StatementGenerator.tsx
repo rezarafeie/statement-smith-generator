@@ -96,6 +96,35 @@ export const StatementGenerator: React.FC = () => {
                   transform-origin: top left;
                   width: 118% !important;
                 }
+                
+                table {
+                  border-collapse: collapse !important;
+                  width: 100% !important;
+                }
+                
+                th, td {
+                  border: 1px solid black !important;
+                  padding: 4px !important;
+                  font-size: 10px !important;
+                  line-height: 1.2 !important;
+                }
+                
+                tr {
+                  page-break-inside: avoid !important;
+                  break-inside: avoid !important;
+                }
+                
+                .bg-gray-100 {
+                  background-color: #f3f4f6 !important;
+                }
+                
+                .bg-gray-200 {
+                  background-color: #e5e7eb !important;
+                }
+                
+                .bg-gray-50 {
+                  background-color: #f9fafb !important;
+                }
               }
               
               /* Tailwind-like utility classes for the statement */

@@ -22,29 +22,14 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
 
   return (
     <div id="bank-statement" className="bg-white text-black p-6 max-w-4xl mx-auto font-sans text-xs" style={{ minHeight: '270mm', width: '210mm' }}>
-      {/* Header with Metro Bank branding and custom shape */}
+      {/* Header with Metro Bank image */}
       <div className="relative mb-4">
-        {/* Main blue header with custom shape */}
-        <div className="relative" style={{ backgroundColor: '#015fab' }}>
-          {/* Header content */}
-          <div className="flex items-center p-3 text-white relative z-10">
-            <img 
-              src="/lovable-uploads/683936aa-eca1-4f81-9dd0-1e6951f9a4ae.png" 
-              alt="Metro Bank Logo" 
-              className="h-8 w-auto"
-            />
-          </div>
-          {/* Custom angled bottom edge */}
-          <div 
-            className="absolute bottom-0 left-0 w-full h-4"
-            style={{
-              background: 'linear-gradient(135deg, #015fab 0%, #015fab 85%, transparent 85%)',
-              clipPath: 'polygon(0 0, 85% 0, 100% 100%, 0 100%)'
-            }}
-          ></div>
-        </div>
-        {/* White space after header */}
-        <div className="h-1 bg-white"></div>
+        <img 
+          src="/lovable-uploads/c818d778-bf0c-4bb2-b375-2ac991da54f5.png" 
+          alt="Metro Bank Header" 
+          className="w-full h-auto"
+          style={{ maxHeight: '80px', objectFit: 'contain' }}
+        />
       </div>
 
       {/* Account holder and account details */}
@@ -89,7 +74,7 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
             </tr>
           </thead>
           <tbody>
-            {transactions.slice(0, 10).map((transaction, index) => (
+            {transactions.slice(0, 8).map((transaction, index) => (
               <React.Fragment key={index}>
                 <tr className="bg-white">
                   <td className="border border-black p-1 text-center text-xs">{formatDate(transaction.date)}</td>
@@ -116,7 +101,7 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
               </React.Fragment>
             ))}
             {/* Add empty rows to fill space but limit total */}
-            {Array.from({ length: Math.max(0, 5 - Math.min(transactions.length, 10)) }, (_, i) => (
+            {Array.from({ length: Math.max(0, 3 - Math.min(transactions.length, 8)) }, (_, i) => (
               <tr key={`empty-${i}`} className="bg-white">
                 <td className="border border-black p-1 h-6 text-xs"></td>
                 <td className="border border-black p-1 text-xs"></td>
