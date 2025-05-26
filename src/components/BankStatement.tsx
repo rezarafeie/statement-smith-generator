@@ -21,15 +21,15 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
   const closingBalance = transactions.length > 0 ? transactions[transactions.length - 1].balance : 0;
 
   return (
-    <div className="bg-white text-black p-8 max-w-4xl mx-auto font-sans text-sm" style={{ minHeight: '297mm', width: '210mm' }}>
+    <div id="bank-statement" className="bg-white text-black p-8 max-w-4xl mx-auto font-sans text-sm" style={{ minHeight: '297mm', width: '210mm' }}>
       {/* Header with Metro Bank branding */}
       <div className="bg-blue-700 text-white p-4 mb-6 flex items-center">
         <div className="flex items-center">
-          <div className="bg-red-600 text-white font-bold text-2xl px-3 py-1 mr-2 rounded">M</div>
-          <div className="text-2xl font-bold">
-            ETRO<br />
-            BANK
-          </div>
+          <img 
+            src="/lovable-uploads/f44a0de1-54ad-4c18-b992-95b7a85117d1.png" 
+            alt="Metro Bank Logo" 
+            className="h-12 w-auto"
+          />
         </div>
       </div>
 
@@ -119,7 +119,11 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
 
       {/* Footer with Metro Bank branding and address */}
       <div className="mt-8 text-center">
-        <div className="text-red-600 font-bold text-2xl mb-2">Metro Bank</div>
+        <img 
+          src="/lovable-uploads/ff01ab1b-3133-4c16-ae4d-ea26e9fbd77d.png" 
+          alt="Metro Bank Logo" 
+          className="h-8 w-auto mx-auto mb-2"
+        />
         <div className="text-xs text-gray-700">
           <p>Address: 58-64 Fargate, Sheffield City Centre, Sheffield S1 2HE, United Kingdom</p>
           <p>Tel.: +44 345 080 8500</p>

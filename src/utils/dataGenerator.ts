@@ -1,4 +1,3 @@
-
 export interface Transaction {
   date: string;
   description: string;
@@ -30,7 +29,7 @@ const merchants = [
   'SALARY', 'BONUS', 'REFUND', 'TRANSFER'
 ];
 
-export const generateUserDetails = (): UserDetails => {
+export const generateUserDetails = (customData?: Partial<UserDetails>): UserDetails => {
   const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
   const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
   const street = streets[Math.floor(Math.random() * streets.length)];
@@ -54,18 +53,24 @@ export const generateUserDetails = (): UserDetails => {
     return `${day}/${month}/${year}`;
   };
   
-  return {
+  const defaultData = {
     name: `${firstName} ${lastName}`,
     address: `${houseNumber} ${street}, ${city}, ${postcode}`,
     accountNumber,
     sortCode,
     statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`
   };
+
+  // Merge custom data with default data
+  return {
+    ...defaultData,
+    ...customData
+  };
 };
 
-export const generateTransactions = (count: number = 15): Transaction[] => {
+export const generateTransactions = (count: number = 15, initialBalance?: number): Transaction[] => {
   const transactions: Transaction[] = [];
-  let balance = 2500 + Math.random() * 5000; // Starting balance
+  let balance = initialBalance || (2500 + Math.random() * 5000); // Starting balance
   
   const startDate = new Date();
   startDate.setMonth(startDate.getMonth() - 1);
