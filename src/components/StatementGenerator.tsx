@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -41,13 +40,10 @@ export const StatementGenerator: React.FC = () => {
       description: "Your PDF is being prepared for download.",
     });
     
-    // Get only the statement content
     const statementElement = document.getElementById('bank-statement');
     if (statementElement) {
-      // Clone the element to avoid modifying the original
       const clonedElement = statementElement.cloneNode(true) as HTMLElement;
       
-      // Create a new window for printing
       const printWindow = window.open('', '_blank');
       if (printWindow) {
         printWindow.document.write(`
@@ -67,7 +63,7 @@ export const StatementGenerator: React.FC = () => {
                 margin: 0;
                 padding: 0;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                background: white;
+                background: white !important;
                 color: black;
                 line-height: 1.2;
                 font-size: 11px;
@@ -77,6 +73,7 @@ export const StatementGenerator: React.FC = () => {
                 body {
                   margin: 0 !important;
                   padding: 0 !important;
+                  background: white !important;
                 }
                 
                 * {
@@ -92,21 +89,23 @@ export const StatementGenerator: React.FC = () => {
                 
                 #bank-statement {
                   page-break-inside: avoid;
-                  transform: scale(0.85);
-                  transform-origin: top left;
-                  width: 118% !important;
+                  background: white !important;
+                  width: 100% !important;
+                  max-width: none !important;
                 }
                 
                 table {
                   border-collapse: collapse !important;
                   width: 100% !important;
+                  page-break-inside: avoid !important;
                 }
                 
                 th, td {
                   border: 1px solid black !important;
-                  padding: 4px !important;
-                  font-size: 10px !important;
-                  line-height: 1.2 !important;
+                  padding: 2px 4px !important;
+                  font-size: 9px !important;
+                  line-height: 1.1 !important;
+                  page-break-inside: avoid !important;
                 }
                 
                 tr {
@@ -122,64 +121,52 @@ export const StatementGenerator: React.FC = () => {
                   background-color: #e5e7eb !important;
                 }
                 
-                .bg-gray-50 {
-                  background-color: #f9fafb !important;
+                img {
+                  max-width: 100% !important;
+                  height: auto !important;
                 }
               }
               
-              /* Tailwind-like utility classes for the statement */
-              .bg-white { background-color: white; }
-              .text-black { color: black; }
-              .p-6 { padding: 1.5rem; }
-              .max-w-4xl { max-width: 56rem; }
-              .mx-auto { margin-left: auto; margin-right: auto; }
-              .font-sans { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+              /* Reset and utility classes */
+              .bg-white { background-color: white !important; }
+              .text-black { color: black !important; }
+              .font-sans { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
               .text-xs { font-size: 0.75rem; line-height: 1rem; }
-              .mb-4 { margin-bottom: 1rem; }
-              .relative { position: relative; }
-              .flex { display: flex; }
-              .items-center { align-items: center; }
-              .p-3 { padding: 0.75rem; }
-              .text-white { color: white; }
-              .z-10 { z-index: 10; }
-              .h-8 { height: 2rem; }
-              .w-auto { width: auto; }
-              .absolute { position: absolute; }
-              .bottom-0 { bottom: 0; }
-              .left-0 { left: 0; }
-              .w-full { width: 100%; }
-              .h-4 { height: 1rem; }
-              .h-1 { height: 0.25rem; }
-              .grid { display: grid; }
-              .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-              .gap-6 { gap: 1.5rem; }
-              .font-bold { font-weight: 700; }
+              .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
               .text-base { font-size: 1rem; line-height: 1.5rem; }
               .mb-1 { margin-bottom: 0.25rem; }
-              .leading-relaxed { line-height: 1.625; }
-              .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+              .mb-2 { margin-bottom: 0.5rem; }
               .mb-3 { margin-bottom: 0.75rem; }
-              .tracking-wider { letter-spacing: 0.05em; }
-              .border-2 { border-width: 2px; }
+              .mt-2 { margin-top: 0.5rem; }
+              .mt-4 { margin-top: 1rem; }
+              .grid { display: grid; }
+              .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+              .gap-8 { gap: 2rem; }
+              .font-bold { font-weight: 700; }
+              .leading-tight { line-height: 1.25; }
+              .tracking-wide { letter-spacing: 0.025em; }
+              .border { border-width: 1px; }
               .border-black { border-color: black; }
               .border-collapse { border-collapse: collapse; }
-              .border { border-width: 1px; }
               .text-center { text-align: center; }
-              .bg-gray-100 { background-color: rgb(243 244 246); }
-              .w-16 { width: 4rem; }
-              .bg-gray-200 { background-color: rgb(229 231 235); }
               .text-left { text-align: left; }
-              .bg-gray-50 { background-color: rgb(249 250 251); }
-              .h-6 { height: 1.5rem; }
-              .mt-6 { margin-top: 1.5rem; }
+              .bg-gray-100 { background-color: rgb(243 244 246); }
+              .bg-gray-200 { background-color: rgb(229 231 235); }
               .text-gray-700 { color: rgb(55 65 81); }
-              .mt-4 { margin-top: 1rem; }
               .text-gray-600 { color: rgb(75 85 99); }
-              .border-t { border-top-width: 1px; }
-              .pt-3 { padding-top: 0.75rem; }
+              .w-full { width: 100%; }
+              .w-auto { width: auto; }
+              .w-16 { width: 4rem; }
               .w-20 { width: 5rem; }
+              .h-4 { height: 1rem; }
+              .h-5 { height: 1.25rem; }
+              .h-6 { height: 1.5rem; }
               .p-1 { padding: 0.25rem; }
-              .mb-2 { margin-bottom: 0.5rem; }
+              .px-4 { padding-left: 1rem; padding-right: 1rem; }
+              .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+              .mx-auto { margin-left: auto; margin-right: auto; }
+              .relative { position: relative; }
+              .mb-0\\.5 { margin-bottom: 0.125rem; }
             </style>
           </head>
           <body>
@@ -191,10 +178,8 @@ export const StatementGenerator: React.FC = () => {
         printWindow.document.close();
         printWindow.focus();
         
-        // Wait for content to load then print
         setTimeout(() => {
           printWindow.print();
-          // Close window after printing
           setTimeout(() => {
             printWindow.close();
           }, 100);
