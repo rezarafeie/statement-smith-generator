@@ -75,12 +75,12 @@ export const StatementGenerator: React.FC = () => {
     }
   };
 
-  const handleCustomDataSubmit = (customData: Partial<UserDetails>) => {
-    // Extract initial balance if provided
-    const initialBalance = customData.initialBalance ? parseFloat(customData.initialBalance as any) : undefined;
+  const handleCustomDataSubmit = (customData: Partial<UserDetails> & { initialBalance?: string }) => {
+    // Extract initial balance and convert to number if provided
+    const initialBalance = customData.initialBalance ? parseFloat(customData.initialBalance) : undefined;
     
     // Remove initialBalance from customData as it's not part of UserDetails
-    const { initialBalance: _, ...userData } = customData as any;
+    const { initialBalance: _, ...userData } = customData;
     
     generateStatement(userData, initialBalance);
   };
