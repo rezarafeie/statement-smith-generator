@@ -39,19 +39,27 @@ export const generateUserDetails = (): UserDetails => {
   const houseNumber = Math.floor(Math.random() * 999) + 1;
   const postcode = `${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${Math.floor(Math.random() * 10)} ${Math.floor(Math.random() * 10)}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`;
   
-  const accountNumber = Math.floor(10000000 + Math.random() * 90000000).toString();
+  const accountNumber = Math.floor(100000000000 + Math.random() * 900000000000).toString();
   const sortCode = `${Math.floor(10 + Math.random() * 90)}-${Math.floor(10 + Math.random() * 90)}-${Math.floor(10 + Math.random() * 90)}`;
   
   const startDate = new Date();
   startDate.setMonth(startDate.getMonth() - 1);
   const endDate = new Date();
   
+  // Format dates as dd/mm/yyyy to match Metro Bank template
+  const formatDate = (date: Date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  
   return {
     name: `${firstName} ${lastName}`,
     address: `${houseNumber} ${street}, ${city}, ${postcode}`,
     accountNumber,
     sortCode,
-    statementPeriod: `${startDate.toLocaleDateString('en-GB')} - ${endDate.toLocaleDateString('en-GB')}`
+    statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`
   };
 };
 
@@ -61,6 +69,14 @@ export const generateTransactions = (count: number = 15): Transaction[] => {
   
   const startDate = new Date();
   startDate.setMonth(startDate.getMonth() - 1);
+  
+  // Format date as dd/mm/yyyy to match Metro Bank template
+  const formatDate = (date: Date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   
   for (let i = 0; i < count; i++) {
     const transactionDate = new Date(startDate);
@@ -93,7 +109,7 @@ export const generateTransactions = (count: number = 15): Transaction[] => {
     }
     
     transactions.push({
-      date: transactionDate.toLocaleDateString('en-GB'),
+      date: formatDate(transactionDate),
       description: merchant,
       amount: Math.round(amount * 100) / 100,
       balance: Math.round(balance * 100) / 100,
@@ -101,5 +117,11 @@ export const generateTransactions = (count: number = 15): Transaction[] => {
     });
   }
   
-  return transactions.sort((a, b) => new Date(a.date.split('/').reverse().join('-')).getTime() - new Date(b.date.split('/').reverse().join('-')).getTime());
+  return transactions.sort((a, b) => {
+    const [dayA, monthA, yearA] = a.date.split('/').map(Number);
+    const [dayB, monthB, yearB] = b.date.split('/').map(Number);
+    const dateA = new Date(yearA, monthA - 1, dayA);
+    const dateB = new Date(yearB, monthB - 1, dayB);
+    return dateA.getTime() - dateB.getTime();
+  });
 };
