@@ -1,5 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { CustomDataForm } from './CustomDataForm';
 import { CountrySelector } from './CountrySelector';
@@ -50,6 +50,7 @@ const translations: Translations = {
 };
 
 export const StatementGenerator: React.FC = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<FlowStep>('country-selection');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedDocumentType, setSelectedDocumentType] = useState<DocumentType | ''>('');
@@ -71,23 +72,10 @@ export const StatementGenerator: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const docId = urlParams.get('doc');
     if (docId) {
-      // Load document from localStorage or generate based on ID
-      const savedDoc = localStorage.getItem(`doc_${docId}`);
-      if (savedDoc) {
-        try {
-          const docState: DocumentState = JSON.parse(savedDoc);
-          setUserDetails(docState.userDetails);
-          setTransactions(docState.transactions);
-          setSelectedDocumentType(docState.documentType);
-          setSelectedCountry(docState.country);
-          setCurrentStep('document-generated');
-          setDocumentId(docId);
-        } catch (error) {
-          console.error('Failed to load document:', error);
-        }
-      }
+      // Redirect to the new view route
+      navigate(`/view/${docId}`);
     }
-  }, []);
+  }, [navigate]);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -157,10 +145,6 @@ export const StatementGenerator: React.FC = () => {
       };
       saveDocumentState(newDocId, docState);
 
-      // Update URL without refresh
-      const newUrl = `${window.location.origin}${window.location.pathname}?doc=${newDocId}`;
-      window.history.pushState({ docId: newDocId }, '', newUrl);
-
       toast({
         title: t('documentGenerated'),
         description: "Document has been generated successfully.",
@@ -181,7 +165,6 @@ export const StatementGenerator: React.FC = () => {
     if (!documentRef.current) return;
     
     try {
-      // Ensure all images are loaded first
       const images = documentRef.current.querySelectorAll('img');
       await Promise.all(Array.from(images).map(img => {
         if (img.complete) return Promise.resolve();
@@ -192,7 +175,7 @@ export const StatementGenerator: React.FC = () => {
       }));
 
       const canvas = await html2canvas(documentRef.current, {
-        scale: 3, // Higher resolution
+        scale: 3,
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
@@ -201,7 +184,10 @@ export const StatementGenerator: React.FC = () => {
         scrollX: 0,
         scrollY: 0,
         windowWidth: documentRef.current.scrollWidth,
-        windowHeight: documentRef.current.scrollHeight
+        windowHeight: documentRef.current.scrollHeight,
+        x: 0,
+        y: 0,
+        removeContainer: true
       });
       
       const link = document.createElement('a');
@@ -227,7 +213,6 @@ export const StatementGenerator: React.FC = () => {
     if (!documentRef.current) return;
     
     try {
-      // Ensure all images are loaded first
       const images = documentRef.current.querySelectorAll('img');
       await Promise.all(Array.from(images).map(img => {
         if (img.complete) return Promise.resolve();
@@ -247,7 +232,10 @@ export const StatementGenerator: React.FC = () => {
           allowTaint: true,
           backgroundColor: '#ffffff',
           width: documentRef.current.scrollWidth,
-          height: documentRef.current.scrollHeight
+          height: documentRef.current.scrollHeight,
+          x: 0,
+          y: 0,
+          removeContainer: true
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
@@ -270,7 +258,7 @@ export const StatementGenerator: React.FC = () => {
 
   const copyShareableLink = () => {
     const currentUrl = documentId 
-      ? `${window.location.origin}${window.location.pathname}?doc=${documentId}`
+      ? `${window.location.origin}/view/${documentId}`
       : window.location.href;
     
     navigator.clipboard.writeText(currentUrl).then(() => {
@@ -287,6 +275,12 @@ export const StatementGenerator: React.FC = () => {
         variant: "destructive"
       });
     });
+  };
+
+  const viewDocument = () => {
+    if (documentId) {
+      navigate(`/view/${documentId}`);
+    }
   };
 
   const resetToCountrySelection = () => {
@@ -365,6 +359,14 @@ export const StatementGenerator: React.FC = () => {
               >
                 <User className="mr-2 h-4 w-4" />
                 {t('customData')}
+              </Button>
+
+              <Button 
+                onClick={viewDocument}
+                disabled={!documentId}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg shadow-lg"
+              >
+                View Document
               </Button>
             </div>
           )}

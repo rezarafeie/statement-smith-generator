@@ -32,7 +32,7 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
             <img 
               src="/lovable-uploads/d29366bf-af9a-4484-93b6-c1d912d3464a.png" 
               alt="Fenie Energía" 
-              className="h-16 w-auto mr-8"
+              className="h-20 w-auto mr-8"
             />
           </div>
           <div className="text-right text-xs space-y-1 max-w-xs">

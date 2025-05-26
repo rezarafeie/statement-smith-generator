@@ -1,283 +1,253 @@
 
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Download, Copy, CheckCircle } from 'lucide-react';
 import { BankStatement } from '@/components/BankStatement';
 import { SpanishUtilityBill } from '@/components/SpanishUtilityBill';
 import { SpanishBankStatement } from '@/components/SpanishBankStatement';
-import { generateUserDetails, generateTransactions, UserDetails, Transaction } from '@/utils/dataGenerator';
+import { UserDetails, Transaction } from '@/utils/dataGenerator';
+import { ArrowLeft, Download, FileText, Copy, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import html2canvas from 'html2canvas';
+import html2pdf from 'html2pdf.js';
+
+type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement';
+
+interface DocumentState {
+  userDetails: UserDetails;
+  transactions: Transaction[];
+  documentType: DocumentType;
+  country: string;
+}
 
 const DocumentView: React.FC = () => {
-  const { documentId } = useParams<{ documentId: string }>();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [documentType, setDocumentType] = useState<string>('');
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const [documentState, setDocumentState] = useState<DocumentState | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const documentRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Parse document data from URL or localStorage
-    if (documentId) {
-      const documentData = localStorage.getItem(`document_${documentId}`);
-      if (documentData) {
-        const parsed = JSON.parse(documentData);
-        setUserDetails(parsed.userDetails);
-        setTransactions(parsed.transactions || []);
-        setDocumentType(parsed.documentType);
+    if (slug) {
+      const savedDoc = localStorage.getItem(`doc_${slug}`);
+      if (savedDoc) {
+        try {
+          const docState: DocumentState = JSON.parse(savedDoc);
+          setDocumentState(docState);
+        } catch (error) {
+          console.error('Failed to load document:', error);
+          navigate('/');
+        }
       } else {
-        // Fallback: generate new data
-        const newUserDetails = generateUserDetails();
-        const newTransactions = generateTransactions(12 + Math.floor(Math.random() * 8));
-        setUserDetails(newUserDetails);
-        setTransactions(newTransactions);
-        setDocumentType('metro-bank'); // default
+        navigate('/');
       }
     }
+  }, [slug, navigate]);
 
-    // Wait for full page load
-    const handleLoad = () => {
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 1000); // Additional delay to ensure all assets are loaded
-    };
+  const downloadAsImage = async () => {
+    if (!documentRef.current) return;
+    
+    try {
+      const images = documentRef.current.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      }));
 
-    if (document.readyState === 'complete') {
-      handleLoad();
-    } else {
-      window.addEventListener('load', handleLoad);
-    }
+      const canvas = await html2canvas(documentRef.current, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: documentRef.current.scrollWidth,
+        height: documentRef.current.scrollHeight,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: documentRef.current.scrollWidth,
+        windowHeight: documentRef.current.scrollHeight,
+        x: 0,
+        y: 0,
+        removeContainer: true
+      });
+      
+      const link = document.createElement('a');
+      link.download = `document-${slug || Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
 
-    return () => {
-      window.removeEventListener('load', handleLoad);
-    };
-  }, [documentId]);
-
-  const downloadPDF = () => {
-    if (!isLoaded || !userDetails) {
       toast({
-        title: "Please wait",
-        description: "Document is still loading. Please try again in a moment.",
+        title: "Download Started",
+        description: "Your document image is being downloaded.",
+      });
+    } catch (error) {
+      console.error('Image download error:', error);
+      toast({
+        title: "Download Failed",
+        description: "Failed to generate image. Please try again.",
         variant: "destructive"
       });
-      return;
     }
+  };
 
-    toast({
-      title: "Download Started",
-      description: "Your PDF is being prepared for download.",
-    });
+  const downloadAsPDF = async () => {
+    if (!documentRef.current) return;
     
-    const elementId = documentType === 'metro-bank' ? 'bank-statement' : 
-                     documentType === 'utility-bill' ? 'utility-bill' : 'spanish-bank-statement';
-    
-    const documentElement = document.getElementById(elementId);
-    if (documentElement) {
-      const clonedElement = documentElement.cloneNode(true) as HTMLElement;
-      
-      const printWindow = window.open('', '_blank');
-      if (printWindow) {
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Document</title>
-            <meta charset="utf-8">
-            <style>
-              * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }
-              
-              body {
-                margin: 0;
-                padding: 0;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                background: white;
-                color: black;
-                line-height: 1.2;
-                font-size: 11px;
-              }
-              
-              @media print {
-                body {
-                  margin: 0 !important;
-                  padding: 0 !important;
-                }
-                
-                * {
-                  -webkit-print-color-adjust: exact !important;
-                  color-adjust: exact !important;
-                  print-color-adjust: exact !important;
-                }
-                
-                @page {
-                  margin: 8mm;
-                  size: A4;
-                }
-                
-                #bank-statement, #utility-bill, #spanish-bank-statement {
-                  page-break-inside: avoid;
-                  transform: scale(0.85);
-                  transform-origin: top left;
-                  width: 118% !important;
-                }
-                
-                table {
-                  border-collapse: collapse !important;
-                  width: 100% !important;
-                }
-                
-                th, td {
-                  border: 1px solid black !important;
-                  padding: 4px !important;
-                  font-size: 10px !important;
-                  line-height: 1.2 !important;
-                }
-              }
-              
-              .bg-white { background-color: white; }
-              .text-black { color: black; }
-              .bg-gray-100 { background-color: #f3f4f6; }
-              .bg-gray-50 { background-color: #f9fafb; }
-              .bg-orange-50 { background-color: #fff7ed; }
-              .bg-orange-500 { background-color: #f97316; }
-              .text-white { color: white; }
-              .text-orange-600 { color: #ea580c; }
-              .font-bold { font-weight: 700; }
-              .text-center { text-align: center; }
-              .text-right { text-align: right; }
-              .text-left { text-align: left; }
-              .p-6 { padding: 1.5rem; }
-              .p-4 { padding: 1rem; }
-              .p-3 { padding: 0.75rem; }
-              .p-2 { padding: 0.5rem; }
-              .mb-8 { margin-bottom: 2rem; }
-              .mb-6 { margin-bottom: 1.5rem; }
-              .mb-4 { margin-bottom: 1rem; }
-              .mb-2 { margin-bottom: 0.5rem; }
-              .mt-4 { margin-top: 1rem; }
-              .mt-2 { margin-top: 0.5rem; }
-              .mt-1 { margin-top: 0.25rem; }
-              .grid { display: grid; }
-              .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-              .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-              .gap-8 { gap: 2rem; }
-              .gap-6 { gap: 1.5rem; }
-              .gap-4 { gap: 1rem; }
-              .flex { display: flex; }
-              .justify-between { justify-content: space-between; }
-              .items-start { align-items: flex-start; }
-              .space-y-2 > * + * { margin-top: 0.5rem; }
-              .space-y-1 > * + * { margin-top: 0.25rem; }
-              .border { border-width: 1px; }
-              .border-2 { border-width: 2px; }
-              .border-black { border-color: black; }
-              .border-gray-300 { border-color: #d1d5db; }
-              .border-t-2 { border-top-width: 2px; }
-              .rounded { border-radius: 0.25rem; }
-              .text-xs { font-size: 0.75rem; }
-              .text-sm { font-size: 0.875rem; }
-              .text-xl { font-size: 1.25rem; }
-              .h-16 { height: 4rem; }
-              .h-12 { height: 3rem; }
-              .w-auto { width: auto; }
-              .font-mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace; }
-            </style>
-          </head>
-          <body>
-            ${clonedElement.outerHTML}
-          </body>
-          </html>
-        `);
-        
-        printWindow.document.close();
-        printWindow.focus();
-        
-        setTimeout(() => {
-          printWindow.print();
-          setTimeout(() => {
-            printWindow.close();
-          }, 100);
-        }, 500);
-      }
+    try {
+      const images = documentRef.current.querySelectorAll('img');
+      await Promise.all(Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      }));
+
+      const opt = {
+        margin: 0,
+        filename: `document-${slug || Date.now()}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          width: documentRef.current.scrollWidth,
+          height: documentRef.current.scrollHeight,
+          x: 0,
+          y: 0,
+          removeContainer: true
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      await html2pdf().set(opt).from(documentRef.current).save();
+
+      toast({
+        title: "PDF Download Started",
+        description: "Your document PDF is being downloaded.",
+      });
+    } catch (error) {
+      console.error('PDF download error:', error);
+      toast({
+        title: "PDF Download Failed",
+        description: "Failed to generate PDF. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
   const copyShareableLink = () => {
-    const currentUrl = window.location.href;
+    const currentUrl = `${window.location.origin}/view/${slug}`;
+    
     navigator.clipboard.writeText(currentUrl).then(() => {
       setCopySuccess(true);
       toast({
-        title: "Link Copied",
+        title: "Link Copied!",
         description: "Shareable link copied to clipboard!",
       });
       setTimeout(() => setCopySuccess(false), 2000);
+    }).catch(() => {
+      toast({
+        title: "Copy Failed",
+        description: "Failed to copy link to clipboard.",
+        variant: "destructive"
+      });
     });
   };
 
   const renderDocument = () => {
-    if (!userDetails) return null;
+    if (!documentState) return null;
 
-    switch (documentType) {
+    switch (documentState.documentType) {
       case 'metro-bank':
-        return <BankStatement userDetails={userDetails} transactions={transactions} />;
+        return <BankStatement userDetails={documentState.userDetails} transactions={documentState.transactions} />;
       case 'utility-bill':
-        return <SpanishUtilityBill userDetails={userDetails} />;
+        return <SpanishUtilityBill userDetails={documentState.userDetails} />;
       case 'bank-statement':
-        return <SpanishBankStatement userDetails={userDetails} transactions={transactions} />;
+        return <SpanishBankStatement userDetails={documentState.userDetails} transactions={documentState.transactions} />;
       default:
-        return <BankStatement userDetails={userDetails} transactions={transactions} />;
+        return null;
     }
   };
 
+  if (!documentState) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-4">Loading document...</h2>
+          <Button onClick={() => navigate('/')}>Return to Home</Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Loading Indicator */}
-      {!isLoaded && (
-        <div className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-90 flex items-center justify-center z-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading document...</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header with Back Button */}
+      <div className="bg-white border-b p-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <Button 
+              onClick={() => navigate('/')}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Generator
+            </Button>
+            
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Document View
+            </h1>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center flex-wrap">
+            <Button 
+              onClick={downloadAsImage}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg min-w-[160px]"
+            >
+              <Download className="mr-2 h-5 w-5" />
+              Download as Image
+            </Button>
+
+            <Button 
+              onClick={downloadAsPDF}
+              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg shadow-lg min-w-[160px]"
+            >
+              <FileText className="mr-2 h-5 w-5" />
+              Download PDF
+            </Button>
+            
+            <Button 
+              onClick={copyShareableLink}
+              variant="outline"
+              className="border-gray-500 text-gray-600 hover:bg-gray-600 hover:text-white px-6 py-3 rounded-lg shadow-lg min-w-[160px]"
+            >
+              {copySuccess ? <CheckCircle className="mr-2 h-4 w-4 text-green-600" /> : <Copy className="mr-2 h-4 w-4" />}
+              {copySuccess ? "Link Copied!" : "Copy Link"}
+            </Button>
           </div>
         </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="fixed top-4 right-4 z-40 flex gap-2">
-        <Button 
-          onClick={copyShareableLink}
-          variant="outline"
-          className="bg-white shadow-lg"
-          disabled={!isLoaded}
-        >
-          {copySuccess ? <CheckCircle className="mr-2 h-4 w-4 text-green-600" /> : <Copy className="mr-2 h-4 w-4" />}
-          {copySuccess ? 'Copied!' : 'Copy Link'}
-        </Button>
-        
-        <Button 
-          onClick={downloadPDF}
-          className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
-          disabled={!isLoaded}
-        >
-          <Download className="mr-2 h-4 w-4" />
-          Download PDF
-        </Button>
       </div>
 
-      {/* Document Content */}
-      <div className="p-4">
+      {/* Document Display */}
+      <div className="p-6">
         <div className="max-w-6xl mx-auto">
-          {userDetails && (
-            <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
-              <div className="overflow-x-auto">
-                {renderDocument()}
-              </div>
+          <div 
+            ref={documentRef} 
+            className="bg-white rounded-lg shadow-2xl overflow-hidden"
+            dir="ltr"
+            style={{ direction: 'ltr' }}
+          >
+            <div className="overflow-x-auto">
+              {renderDocument()}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
