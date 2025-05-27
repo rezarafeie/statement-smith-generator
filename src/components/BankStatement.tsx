@@ -26,8 +26,42 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
     return period.replace(/\//g, '/');
   };
 
+  // Helper function to format address in 3-line structure
+  const formatAddress = (address: string | undefined) => {
+    if (!address) return ['N/A'];
+    
+    // Check if address uses the new pipe-separated format
+    if (address.includes('|')) {
+      return address.split('|');
+    }
+    
+    // Handle legacy comma-separated format
+    const parts = address.split(', ');
+    if (parts.length >= 3) {
+      // Try to restructure: [street], [city, postcode], [country]
+      const street = parts[0];
+      const cityPostcode = parts.slice(1, -1).join(', ');
+      const country = parts[parts.length - 1].toUpperCase();
+      return [street, cityPostcode, country];
+    }
+    
+    // Fallback for simple addresses
+    return parts;
+  };
+
+  const addressLines = formatAddress(userDetails.address);
+
   return (
-    <div id="bank-statement" className="bg-white text-black font-sans text-xs" style={{ width: '210mm', minHeight: '270mm', margin: '0 auto' }}>
+    <div 
+      id="bank-statement" 
+      className="bg-white text-black text-xs" 
+      style={{ 
+        width: '210mm', 
+        minHeight: '270mm', 
+        margin: '0 auto',
+        fontFamily: '"Times New Roman", Georgia, serif'
+      }}
+    >
       {/* Header with exact Metro Bank image */}
       <div className="w-full">
         <img 
@@ -45,7 +79,7 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
           <div>
             <h2 className="font-bold text-base mb-1" style={{ color: '#015fab' }}>{userDetails.name || 'N/A'}</h2>
             <div className="text-xs leading-relaxed">
-              {(userDetails.address || 'N/A').split(', ').map((line, index) => (
+              {addressLines.map((line, index) => (
                 <div key={index}>{line}</div>
               ))}
             </div>

@@ -20,13 +20,47 @@ export const SpanishBankStatement: React.FC<SpanishBankStatementProps> = ({
     return `${month}/${day}`;
   };
 
+  // Helper function to format address in 3-line structure
+  const formatAddress = (address: string | undefined) => {
+    if (!address) return ['N/A'];
+    
+    // Check if address uses the new pipe-separated format
+    if (address.includes('|')) {
+      return address.split('|');
+    }
+    
+    // Handle legacy comma-separated format
+    const parts = address.split(', ');
+    if (parts.length >= 3) {
+      // Try to restructure: [street], [city, postcode], [country]
+      const street = parts[0];
+      const cityPostcode = parts.slice(1, -1).join(', ');
+      const country = parts[parts.length - 1].toUpperCase();
+      return [street, cityPostcode, country];
+    }
+    
+    // Fallback for simple addresses
+    return parts;
+  };
+
+  const addressLines = formatAddress(userDetails.address);
+
   const openingBalance = transactions.length > 0 ? 29710 : 0;
   const totalMoneyIn = transactions.filter(t => t.type === 'credit').reduce((sum, t) => sum + t.amount, 0);
   const totalMoneyOut = transactions.filter(t => t.type === 'debit').reduce((sum, t) => sum + t.amount, 0);
   const closingBalance = transactions.length > 0 ? transactions[transactions.length - 1].balance : 0;
 
   return (
-    <div id="spanish-bank-statement" className="bg-white text-black font-sans text-sm" style={{ width: '210mm', minHeight: '270mm', margin: '0 auto' }}>
+    <div 
+      id="spanish-bank-statement" 
+      className="bg-white text-black text-sm" 
+      style={{ 
+        width: '210mm', 
+        minHeight: '270mm', 
+        margin: '0 auto',
+        fontFamily: '"Times New Roman", Georgia, serif'
+      }}
+    >
       <div className="p-6">
         {/* Header */}
         <div className="flex justify-between items-start mb-8">
@@ -51,7 +85,7 @@ export const SpanishBankStatement: React.FC<SpanishBankStatementProps> = ({
             <div className="text-sm">
               <div className="font-bold">{userDetails.name}</div>
               <div className="mt-1">
-                {userDetails.address.split(', ').map((line, index) => (
+                {addressLines.map((line, index) => (
                   <div key={index}>{line}</div>
                 ))}
               </div>

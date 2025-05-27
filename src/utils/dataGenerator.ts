@@ -1,3 +1,4 @@
+
 export interface Transaction {
   date: string;
   description: string;
@@ -53,9 +54,12 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
     return `${day}/${month}/${year}`;
   };
   
+  // Create properly formatted address: Street | City, Postcode | Country
+  const formattedAddress = `${houseNumber} ${street}|${city}, ${postcode}|UNITED KINGDOM`;
+  
   const defaultData = {
     name: `${firstName} ${lastName}`,
-    address: `${houseNumber} ${street}, ${city}, ${postcode}`,
+    address: formattedAddress,
     accountNumber,
     sortCode,
     statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`
