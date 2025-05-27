@@ -106,23 +106,44 @@ export const StatementGenerator: React.FC = () => {
   };
 
   const handleCountrySelect = (countryCode: string) => {
+    console.log('Country selected:', countryCode);
     setSelectedCountry(countryCode);
     
     if (countryCode === 'UK') {
+      // For UK, auto-select Metro Bank and go directly to generation
       setSelectedDocumentType('metro-bank');
       generateDocument('metro-bank');
     } else if (countryCode === 'ES') {
+      // For Spain, show document type selection
       setCurrentStep('document-selection');
+      setSelectedDocumentType(''); // Reset document type for Spain
     }
   };
 
   const handleDocumentTypeSelect = (documentType: string) => {
+    console.log('Document type selected:', documentType);
     const docType = documentType as DocumentType;
     setSelectedDocumentType(docType);
     generateDocument(docType);
   };
 
+  const isValidDocumentType = (docType: DocumentType | ''): docType is DocumentType => {
+    return docType !== '' && ['metro-bank', 'utility-bill', 'bank-statement'].includes(docType);
+  };
+
   const generateDocument = (documentType: DocumentType, customData?: Partial<UserDetails>, initialBalance?: number) => {
+    console.log('Generating document:', { documentType, customData, initialBalance });
+    
+    if (!isValidDocumentType(documentType)) {
+      console.error('Invalid document type:', documentType);
+      toast({
+        title: "Error",
+        description: "Invalid document type selected.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsGenerating(true);
     
     setTimeout(() => {
@@ -155,20 +176,23 @@ export const StatementGenerator: React.FC = () => {
   const handleCustomDataSubmit = (customData: Partial<UserDetails> & { initialBalance?: string }) => {
     console.log('Custom data submitted:', customData);
     console.log('Current document type:', selectedDocumentType);
+    console.log('Current step:', currentStep);
     
     const initialBalance = customData.initialBalance ? parseFloat(customData.initialBalance) : undefined;
     const { initialBalance: _, ...userData } = customData;
     
-    // Ensure we have a document type selected
-    if (selectedDocumentType) {
-      generateDocument(selectedDocumentType, userData, initialBalance);
-    } else {
+    // Check if we have a valid document type selected
+    if (!isValidDocumentType(selectedDocumentType)) {
+      console.error('No valid document type selected when submitting custom data');
       toast({
         title: "Error",
         description: "Please select a document type first.",
         variant: "destructive"
       });
+      return;
     }
+
+    generateDocument(selectedDocumentType, userData, initialBalance);
   };
 
   const downloadAsImage = async () => {
@@ -353,23 +377,32 @@ export const StatementGenerator: React.FC = () => {
           )}
 
           {currentStep === 'document-selection' && (
-            <div className="flex justify-center mb-6">
-              <Button 
-                onClick={() => setShowCustomForm(true)}
-                variant="outline"
-                className="border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
-              >
-                <User className="mr-2 h-4 w-4" />
-                {t('customData')}
-              </Button>
+            <div className="space-y-6">
+              <DocumentTypeSelector 
+                country={selectedCountry}
+                onDocumentTypeSelect={handleDocumentTypeSelect}
+                onBack={resetToCountrySelection}
+              />
+              
+              {/* Show custom data button only after a document type could be selected */}
+              <div className="flex justify-center">
+                <Button 
+                  onClick={() => setShowCustomForm(true)}
+                  variant="outline"
+                  className="border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  {t('customData')}
+                </Button>
+              </div>
             </div>
           )}
 
           {currentStep === 'document-generated' && (
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
               <Button 
-                onClick={() => selectedDocumentType && generateDocument(selectedDocumentType)}
-                disabled={isGenerating}
+                onClick={() => isValidDocumentType(selectedDocumentType) && generateDocument(selectedDocumentType)}
+                disabled={isGenerating || !isValidDocumentType(selectedDocumentType)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg"
               >
                 {isGenerating ? (
@@ -415,11 +448,25 @@ export const StatementGenerator: React.FC = () => {
           )}
 
           {currentStep === 'document-selection' && (
-            <DocumentTypeSelector 
-              country={selectedCountry}
-              onDocumentTypeSelect={handleDocumentTypeSelect}
-              onBack={resetToCountrySelection}
-            />
+            <div className="space-y-6">
+              <DocumentTypeSelector 
+                country={selectedCountry}
+                onDocumentTypeSelect={handleDocumentTypeSelect}
+                onBack={resetToCountrySelection}
+              />
+              
+              {/* Show custom data button only after a document type could be selected */}
+              <div className="flex justify-center">
+                <Button 
+                  onClick={() => setShowCustomForm(true)}
+                  variant="outline"
+                  className="border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  {t('customData')}
+                </Button>
+              </div>
+            </div>
           )}
 
           {currentStep === 'document-generated' && userDetails && (
