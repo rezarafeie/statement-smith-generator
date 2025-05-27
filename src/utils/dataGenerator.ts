@@ -61,10 +61,17 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
     statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`
   };
 
-  // Merge custom data with default data
+  // Filter out undefined, null, and empty string values from custom data
+  const filteredCustomData = customData ? Object.fromEntries(
+    Object.entries(customData).filter(([_, value]) => 
+      value !== undefined && value !== null && value !== ''
+    )
+  ) : {};
+
+  // Merge filtered custom data with default data
   return {
     ...defaultData,
-    ...customData
+    ...filteredCustomData
   };
 };
 

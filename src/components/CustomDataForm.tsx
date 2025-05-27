@@ -26,14 +26,14 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Convert form data to UserDetails format with initialBalance included
-    const userData: Partial<UserDetails> & { initialBalance?: string } = {
-      name: formData.name || undefined,
-      address: formData.address || undefined,
-      accountNumber: formData.accountNumber || undefined,
-      statementPeriod: formData.statementPeriod || undefined,
-      initialBalance: formData.initialBalance || undefined
-    };
+    // Only include fields that have actual values (not empty strings)
+    const userData: Partial<UserDetails> & { initialBalance?: string } = {};
+    
+    if (formData.name.trim()) userData.name = formData.name.trim();
+    if (formData.address.trim()) userData.address = formData.address.trim();
+    if (formData.accountNumber.trim()) userData.accountNumber = formData.accountNumber.trim();
+    if (formData.statementPeriod.trim()) userData.statementPeriod = formData.statementPeriod.trim();
+    if (formData.initialBalance.trim()) userData.initialBalance = formData.initialBalance.trim();
 
     onSubmit(userData);
     onClose();
