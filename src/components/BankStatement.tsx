@@ -20,6 +20,12 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
   const openingBalance = transactions.length > 0 ? transactions[0].balance - transactions[0].amount * (transactions[0].type === 'credit' ? 1 : -1) : 0;
   const closingBalance = transactions.length > 0 ? transactions[transactions.length - 1].balance : 0;
 
+  // Helper function to safely format statement period
+  const formatStatementPeriod = (period: string | undefined) => {
+    if (!period) return 'N/A';
+    return period.replace(/\//g, '/');
+  };
+
   return (
     <div id="bank-statement" className="bg-white text-black font-sans text-xs" style={{ width: '210mm', minHeight: '270mm', margin: '0 auto' }}>
       {/* Header with exact Metro Bank image */}
@@ -37,17 +43,17 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
         {/* Account holder and account details */}
         <div className="grid grid-cols-2 gap-6 mb-4">
           <div>
-            <h2 className="font-bold text-base mb-1" style={{ color: '#015fab' }}>{userDetails.name}</h2>
+            <h2 className="font-bold text-base mb-1" style={{ color: '#015fab' }}>{userDetails.name || 'N/A'}</h2>
             <div className="text-xs leading-relaxed">
-              {userDetails.address.split(', ').map((line, index) => (
+              {(userDetails.address || 'N/A').split(', ').map((line, index) => (
                 <div key={index}>{line}</div>
               ))}
             </div>
           </div>
           <div className="text-xs">
-            <div className="mb-1"><strong>Account number:</strong> {userDetails.accountNumber}</div>
+            <div className="mb-1"><strong>Account number:</strong> {userDetails.accountNumber || 'N/A'}</div>
             <div className="mb-1"><strong>Account Currency:</strong> GBP</div>
-            <div className="mb-1"><strong>Statement period:</strong> {userDetails.statementPeriod.replace(/\//g, '/')}</div>
+            <div className="mb-1"><strong>Statement period:</strong> {formatStatementPeriod(userDetails.statementPeriod)}</div>
             <div className="mb-1"><strong>Statement date:</strong> {new Date().toLocaleDateString('en-GB').replace(/\//g, '/')}</div>
           </div>
         </div>
