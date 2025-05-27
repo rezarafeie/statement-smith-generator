@@ -59,19 +59,19 @@ const DocumentView: React.FC = () => {
       }));
 
       const canvas = await html2canvas(documentRef.current, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
+        windowWidth: documentRef.current.scrollWidth,
+        windowHeight: documentRef.current.scrollHeight,
         width: documentRef.current.scrollWidth,
         height: documentRef.current.scrollHeight,
         scrollX: 0,
         scrollY: 0,
-        windowWidth: documentRef.current.scrollWidth,
-        windowHeight: documentRef.current.scrollHeight,
         x: 0,
         y: 0,
-        removeContainer: true
+        removeContainer: false
       });
       
       const link = document.createElement('a');
@@ -115,13 +115,24 @@ const DocumentView: React.FC = () => {
           useCORS: true,
           allowTaint: true,
           backgroundColor: '#ffffff',
+          windowWidth: documentRef.current.scrollWidth,
+          windowHeight: documentRef.current.scrollHeight,
           width: documentRef.current.scrollWidth,
           height: documentRef.current.scrollHeight,
+          scrollX: 0,
+          scrollY: 0,
           x: 0,
           y: 0,
-          removeContainer: true
+          removeContainer: false
         },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { 
+          unit: 'mm', 
+          format: [
+            documentRef.current.scrollWidth * 0.264583,
+            documentRef.current.scrollHeight * 0.264583
+          ], 
+          orientation: 'portrait' 
+        }
       };
 
       await html2pdf().set(opt).from(documentRef.current).save();
@@ -244,9 +255,7 @@ const DocumentView: React.FC = () => {
             dir="ltr"
             style={{ direction: 'ltr' }}
           >
-            <div className="overflow-x-auto">
-              {renderDocument()}
-            </div>
+            {renderDocument()}
           </div>
         </div>
       </div>
