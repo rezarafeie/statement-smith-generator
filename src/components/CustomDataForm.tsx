@@ -11,7 +11,7 @@ import { UserDetails } from '../utils/dataGenerator';
 interface CustomDataFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Partial<UserDetails>) => void;
+  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string }) => void;
 }
 
 export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -26,12 +26,13 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Convert form data to UserDetails format
-    const userData: Partial<UserDetails> = {
+    // Convert form data to UserDetails format with initialBalance included
+    const userData: Partial<UserDetails> & { initialBalance?: string } = {
       name: formData.name || undefined,
       address: formData.address || undefined,
       accountNumber: formData.accountNumber || undefined,
       statementPeriod: formData.statementPeriod || undefined,
+      initialBalance: formData.initialBalance || undefined
     };
 
     onSubmit(userData);

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -154,11 +153,21 @@ export const StatementGenerator: React.FC = () => {
   };
 
   const handleCustomDataSubmit = (customData: Partial<UserDetails> & { initialBalance?: string }) => {
+    console.log('Custom data submitted:', customData);
+    console.log('Current document type:', selectedDocumentType);
+    
     const initialBalance = customData.initialBalance ? parseFloat(customData.initialBalance) : undefined;
     const { initialBalance: _, ...userData } = customData;
     
+    // Ensure we have a document type selected
     if (selectedDocumentType) {
       generateDocument(selectedDocumentType, userData, initialBalance);
+    } else {
+      toast({
+        title: "Error",
+        description: "Please select a document type first.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -340,6 +349,19 @@ export const StatementGenerator: React.FC = () => {
               <h2 className={`text-xl font-semibold mb-6 transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 {t('selectCountry')}
               </h2>
+            </div>
+          )}
+
+          {currentStep === 'document-selection' && (
+            <div className="flex justify-center mb-6">
+              <Button 
+                onClick={() => setShowCustomForm(true)}
+                variant="outline"
+                className="border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
+              >
+                <User className="mr-2 h-4 w-4" />
+                {t('customData')}
+              </Button>
             </div>
           )}
 
