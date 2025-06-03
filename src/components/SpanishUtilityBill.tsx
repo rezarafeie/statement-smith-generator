@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { UserDetails, Transaction } from '../utils/dataGenerator';
 
@@ -23,8 +22,33 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
     return `${amount.toFixed(2)} €`;
   };
 
+  // Helper function to format address in 3-line structure
+  const formatAddress = (address: string | undefined) => {
+    if (!address) return ['N/A'];
+    
+    // Check if address uses the new pipe-separated format
+    if (address.includes('|')) {
+      return address.split('|');
+    }
+    
+    // Handle legacy comma-separated format
+    const parts = address.split(', ');
+    if (parts.length >= 3) {
+      // Try to restructure: [street], [city, postcode], [country]
+      const street = parts[0];
+      const cityPostcode = parts.slice(1, -1).join(', ');
+      const country = parts[parts.length - 1].toUpperCase();
+      return [street, cityPostcode, country];
+    }
+    
+    // Fallback for simple addresses
+    return parts;
+  };
+
+  const addressLines = formatAddress(userDetails.address);
+
   return (
-    <div id="utility-bill" className="bg-white text-black font-sans text-sm" style={{ width: '210mm', minHeight: '270mm', margin: '0 auto' }}>
+    <div id="utility-bill" className="bg-white text-black text-sm" style={{ width: '210mm', minHeight: '270mm', margin: '0 auto', fontFamily: '"Times New Roman", Georgia, serif' }}>
       {/* Header with Fenie Energía logo */}
       <div className="p-6">
         <div className="flex justify-between items-start mb-8">
@@ -39,7 +63,7 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
             <div><strong>Razón Social:</strong> {userDetails.name}</div>
             <div><strong>NIF / CIF:</strong> 167995605</div>
             <div><strong>CUPS:</strong> ES0021000007301376FT</div>
-            <div><strong>Dir. Suministro:</strong> {userDetails.address.split(',')[0]}</div>
+            <div><strong>Dir. Suministro:</strong> {addressLines[0]}</div>
             <div><strong>Contrato Acceso:</strong> 0005031826I</div>
             <div><strong>Empresa Distribuidora:</strong> IBERDROLA DISTRIBUCION ELECTRICA, S.A.</div>
           </div>
@@ -59,8 +83,9 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
           <div className="text-right">
             <div className="font-bold text-sm">{userDetails.name}</div>
             <div className="text-xs mt-1 space-y-1">
-              <div>Paseo de Santa Matilde, 1</div>
-              <div>Valdecilla, Cantabria, 39724</div>
+              {addressLines.map((line, index) => (
+                <div key={index}>{line}</div>
+              ))}
             </div>
           </div>
         </div>

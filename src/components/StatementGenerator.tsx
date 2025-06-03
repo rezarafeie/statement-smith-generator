@@ -7,7 +7,7 @@ import { DocumentTypeSelector } from './DocumentTypeSelector';
 import { BankStatement } from './BankStatement';
 import { SpanishUtilityBill } from './SpanishUtilityBill';
 import { SpanishBankStatement } from './SpanishBankStatement';
-import { generateUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
+import { generateUserDetails, generateSpanishUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
 import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
@@ -147,7 +147,12 @@ export const StatementGenerator: React.FC = () => {
     setIsGenerating(true);
     
     setTimeout(() => {
-      const newUserDetails = generateUserDetails(customData);
+      // Use Spanish address generation for Spanish documents
+      const isSpanishDocument = selectedCountry === 'ES' || ['utility-bill', 'bank-statement'].includes(documentType);
+      const newUserDetails = isSpanishDocument 
+        ? generateSpanishUserDetails(customData)
+        : generateUserDetails(customData);
+      
       const newTransactions = generateTransactions(12 + Math.floor(Math.random() * 8), initialBalance);
       const newDocId = generateDocumentId();
       
