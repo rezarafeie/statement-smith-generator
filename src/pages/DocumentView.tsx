@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,8 +9,9 @@ import { ArrowLeft, Download, FileText, Copy, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
+import { UKUtilityBill } from '@/components/UKUtilityBill';
 
-type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement';
+type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement' | 'uk-utility-bill';
 
 interface DocumentState {
   userDetails: UserDetails;
@@ -180,6 +180,8 @@ const DocumentView: React.FC = () => {
         return <SpanishUtilityBill userDetails={documentState.userDetails} />;
       case 'bank-statement':
         return <SpanishBankStatement userDetails={documentState.userDetails} transactions={documentState.transactions} />;
+      case 'uk-utility-bill':
+        return <UKUtilityBill userDetails={documentState.userDetails} />;
       default:
         return null;
     }

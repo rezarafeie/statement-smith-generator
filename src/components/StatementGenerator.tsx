@@ -7,13 +7,14 @@ import { DocumentTypeSelector } from './DocumentTypeSelector';
 import { BankStatement } from './BankStatement';
 import { SpanishUtilityBill } from './SpanishUtilityBill';
 import { SpanishBankStatement } from './SpanishBankStatement';
+import { UKUtilityBill } from './UKUtilityBill';
 import { generateUserDetails, generateSpanishUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
 import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
 
-type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement';
+type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement' | 'uk-utility-bill';
 type FlowStep = 'country-selection' | 'document-selection' | 'document-generated';
 type Language = 'en' | 'fa';
 
@@ -109,15 +110,9 @@ export const StatementGenerator: React.FC = () => {
     console.log('Country selected:', countryCode);
     setSelectedCountry(countryCode);
     
-    if (countryCode === 'UK') {
-      // For UK, auto-select Metro Bank and go directly to generation
-      setSelectedDocumentType('metro-bank');
-      generateDocument('metro-bank');
-    } else if (countryCode === 'ES') {
-      // For Spain, show document type selection
-      setCurrentStep('document-selection');
-      setSelectedDocumentType(''); // Reset document type for Spain
-    }
+    // For both UK and Spain, show document type selection
+    setCurrentStep('document-selection');
+    setSelectedDocumentType(''); // Reset document type
   };
 
   const handleDocumentTypeSelect = (documentType: string) => {
@@ -128,7 +123,7 @@ export const StatementGenerator: React.FC = () => {
   };
 
   const isValidDocumentType = (docType: DocumentType | ''): docType is DocumentType => {
-    return docType !== '' && ['metro-bank', 'utility-bill', 'bank-statement'].includes(docType);
+    return docType !== '' && ['metro-bank', 'utility-bill', 'bank-statement', 'uk-utility-bill'].includes(docType);
   };
 
   const generateDocument = (documentType: DocumentType, customData?: Partial<UserDetails>, initialBalance?: number) => {
@@ -354,6 +349,8 @@ export const StatementGenerator: React.FC = () => {
         return <SpanishUtilityBill userDetails={userDetails} />;
       case 'bank-statement':
         return <SpanishBankStatement userDetails={userDetails} transactions={transactions} />;
+      case 'uk-utility-bill':
+        return <UKUtilityBill userDetails={userDetails} />;
       default:
         return null;
     }

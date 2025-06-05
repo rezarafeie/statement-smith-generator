@@ -16,6 +16,21 @@ interface DocumentTypeSelectorProps {
   onBack: () => void;
 }
 
+const ukDocuments: DocumentType[] = [
+  {
+    id: 'metro-bank',
+    name: 'Bank Statement',
+    description: 'Metro Bank account statement',
+    icon: <FileText className="h-8 w-8" />
+  },
+  {
+    id: 'uk-utility-bill',
+    name: 'Utility Bill',
+    description: 'British Gas electricity bill',
+    icon: <Receipt className="h-8 w-8" />
+  }
+];
+
 const spanishDocuments: DocumentType[] = [
   {
     id: 'utility-bill',
@@ -45,6 +60,7 @@ export const DocumentTypeSelector: React.FC<DocumentTypeSelectorProps> = ({
 
   const getDocuments = (code: string) => {
     switch (code) {
+      case 'UK': return ukDocuments;
       case 'ES': return spanishDocuments;
       default: return [];
     }
