@@ -12,7 +12,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
         {/* Header - Two Column Layout */}
         <div className="grid grid-cols-2 gap-4 mb-4">
-          {/* Left Column - Logo, Address and QR Code */}
+          {/* Left Column - Logo and Address */}
           <div>
             {/* Logo */}
             <div className="mb-4">
@@ -23,43 +23,45 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               />
             </div>
 
-            {/* Address and QR Code Row */}
-            <div className="flex justify-between items-start">
-              <div style={{ fontSize: '11px', lineHeight: '1.2' }}>
-                <div className="font-medium">{userDetails.name}</div>
-                <div>2 Frederick Street</div>
-                <div>Kings Cross</div>
-                <div>London</div>
-                <div>WC1X 0ND</div>
-                <div>+447412375153</div>
-              </div>
-              <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+            {/* Address - Bigger size */}
+            <div style={{ fontSize: '12px', lineHeight: '1.3' }}>
+              <div className="font-medium">{userDetails.name}</div>
+              <div>2 Frederick Street</div>
+              <div>Kings Cross</div>
+              <div>London</div>
+              <div>WC1X 0ND</div>
+              <div>+447412375153</div>
             </div>
           </div>
 
           {/* Right Column - Contact Info, Account Number, etc. */}
           <div className="space-y-3">
-            {/* Contact Info */}
+            {/* Contact Info - Bigger size */}
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
-              <div className="flex items-center gap-2 mb-1" style={{ fontSize: '10px' }}>
+              <div className="flex items-center gap-2 mb-1" style={{ fontSize: '11px' }}>
                 <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" className="w-3 h-3" />
                 <span>eonnext.com/contact</span>
               </div>
-              <div className="flex items-center gap-2" style={{ fontSize: '10px' }}>
+              <div className="flex items-center gap-2" style={{ fontSize: '11px' }}>
                 <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" className="w-3 h-3" />
                 <span>hi@eonnext.com</span>
               </div>
             </div>
 
-            {/* Account Number Box */}
+            {/* QR Code moved down */}
+            <div className="flex justify-end mt-4">
+              <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+            </div>
+
+            {/* Account Number Box - Smaller text and matching document color */}
             <div>
               <div className="font-bold mb-2 flex items-center gap-1" style={{ color: '#ec1c24', fontSize: '12px' }}>
                 <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
                 Your account number:
               </div>
               <div className="text-left">
-                <span className="block" style={{ fontSize: '14px', fontWeight: '300' }}>A-73398C00</span>
+                <span className="block text-gray-900" style={{ fontSize: '12px', fontWeight: '400' }}>A-73398C00</span>
                 <div className="flex justify-start mt-2">
                   <div className="flex" style={{ height: '4px', width: '80px' }}>
                     <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
@@ -70,8 +72,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* Bill Reference */}
-            <div style={{ fontSize: '10px' }}>
+            {/* Bill Reference moved down */}
+            <div style={{ fontSize: '10px' }} className="mt-4">
               <div>Bill Reference: 72513189 (29th Jul. 2023)</div>
             </div>
             
@@ -113,11 +115,16 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           </div>
         </div>
 
-        {/* Main Title and Date Range - Full Width Left Aligned */}
-        <div className="mb-3">
-          <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
-          <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
-          <div className="font-normal mb-1" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
+        {/* Main Title and Date Range - Two Column Layout (Left side only) */}
+        <div className="grid grid-cols-2 gap-4 mb-3">
+          {/* Left Column - Title Information */}
+          <div>
+            <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
+            <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
+            <div className="font-normal mb-1" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
+          </div>
+          {/* Right Column - Empty */}
+          <div></div>
         </div>
 
         {/* Previous Balance */}
