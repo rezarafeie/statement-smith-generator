@@ -10,8 +10,9 @@ import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
 import { UKUtilityBill } from '@/components/UKUtilityBill';
+import { EONUtilityBill } from '@/components/EONUtilityBill';
 
-type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement' | 'uk-utility-bill';
+type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement' | 'uk-utility-bill' | 'eon-utility-bill';
 
 interface DocumentState {
   userDetails: UserDetails;
@@ -182,6 +183,8 @@ const DocumentView: React.FC = () => {
         return <SpanishBankStatement userDetails={documentState.userDetails} transactions={documentState.transactions} />;
       case 'uk-utility-bill':
         return <UKUtilityBill userDetails={documentState.userDetails} />;
+      case 'eon-utility-bill':
+        return <EONUtilityBill userDetails={documentState.userDetails} />;
       default:
         return null;
     }

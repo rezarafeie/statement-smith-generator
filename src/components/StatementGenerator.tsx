@@ -8,13 +8,14 @@ import { BankStatement } from './BankStatement';
 import { SpanishUtilityBill } from './SpanishUtilityBill';
 import { SpanishBankStatement } from './SpanishBankStatement';
 import { UKUtilityBill } from './UKUtilityBill';
+import { EONUtilityBill } from './EONUtilityBill';
 import { generateUserDetails, generateSpanishUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
 import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
 
-type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement' | 'uk-utility-bill';
+type DocumentType = 'metro-bank' | 'utility-bill' | 'bank-statement' | 'uk-utility-bill' | 'eon-utility-bill';
 type FlowStep = 'country-selection' | 'document-selection' | 'document-generated';
 type Language = 'en' | 'fa';
 
@@ -123,7 +124,7 @@ export const StatementGenerator: React.FC = () => {
   };
 
   const isValidDocumentType = (docType: DocumentType | ''): docType is DocumentType => {
-    return docType !== '' && ['metro-bank', 'utility-bill', 'bank-statement', 'uk-utility-bill'].includes(docType);
+    return docType !== '' && ['metro-bank', 'utility-bill', 'bank-statement', 'uk-utility-bill', 'eon-utility-bill'].includes(docType);
   };
 
   const generateDocument = (documentType: DocumentType, customData?: Partial<UserDetails>, initialBalance?: number) => {
@@ -351,6 +352,8 @@ export const StatementGenerator: React.FC = () => {
         return <SpanishBankStatement userDetails={userDetails} transactions={transactions} />;
       case 'uk-utility-bill':
         return <UKUtilityBill userDetails={userDetails} />;
+      case 'eon-utility-bill':
+        return <EONUtilityBill userDetails={userDetails} />;
       default:
         return null;
     }

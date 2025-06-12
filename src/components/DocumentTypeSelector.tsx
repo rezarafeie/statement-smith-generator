@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { FileText, Receipt } from 'lucide-react';
+import { FileText, Receipt, Zap } from 'lucide-react';
 
 interface DocumentType {
   id: string;
@@ -25,9 +24,15 @@ const ukDocuments: DocumentType[] = [
   },
   {
     id: 'uk-utility-bill',
-    name: 'Utility Bill',
+    name: 'British Gas Utility Bill',
     description: 'British Gas electricity bill',
     icon: <Receipt className="h-8 w-8" />
+  },
+  {
+    id: 'eon-utility-bill',
+    name: 'E.ON Next Utility Bill',
+    description: 'E.ON Next energy bill (3 pages)',
+    icon: <Zap className="h-8 w-8" />
   }
 ];
 
