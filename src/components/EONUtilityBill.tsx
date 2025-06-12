@@ -12,7 +12,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
         {/* Header - Restructured Layout */}
         <div className="flex justify-between mb-6">
-          {/* Left Column - Logo, Address and QR Code */}
+          {/* Left Column - Logo and Address with QR Code */}
           <div className="flex-1">
             {/* Logo - Much Larger */}
             <div className="mb-6">
@@ -23,8 +23,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               />
             </div>
 
-            {/* Address and QR Code - Side by Side */}
-            <div className="flex items-start gap-6">
+            {/* Address and QR Code - Side by Side, QR positioned inline with address */}
+            <div className="flex items-start gap-8">
               {/* Address */}
               <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
                 <div className="font-medium">{userDetails.name}</div>
@@ -35,8 +35,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 <div>+447412375153</div>
               </div>
 
-              {/* QR Code */}
-              <div>
+              {/* QR Code - positioned to align with the middle of the address block */}
+              <div className="mt-6">
                 <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
               </div>
             </div>
