@@ -10,7 +10,7 @@ import { SpanishBankStatement } from './SpanishBankStatement';
 import { UKUtilityBill } from './UKUtilityBill';
 import { EONUtilityBill } from './EONUtilityBill';
 import { generateUserDetails, generateSpanishUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
-import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages, FileText } from 'lucide-react';
+import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages, FileText, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
@@ -110,8 +110,6 @@ export const StatementGenerator: React.FC = () => {
   const handleCountrySelect = (countryCode: string) => {
     console.log('Country selected:', countryCode);
     setSelectedCountry(countryCode);
-    
-    // For both UK and Spain, show document type selection
     setCurrentStep('document-selection');
     setSelectedDocumentType(''); // Reset document type
   };
@@ -340,6 +338,19 @@ export const StatementGenerator: React.FC = () => {
     window.history.pushState({}, '', window.location.pathname);
   };
 
+  const handleBackToCountrySelection = () => {
+    setCurrentStep('country-selection');
+    setSelectedCountry('');
+    setSelectedDocumentType('');
+  };
+
+  const handleBackToDocumentSelection = () => {
+    setCurrentStep('document-selection');
+    setUserDetails(null);
+    setTransactions([]);
+    setDocumentId('');
+  };
+
   const renderDocument = () => {
     if (!userDetails) return null;
 
@@ -382,64 +393,68 @@ export const StatementGenerator: React.FC = () => {
           )}
 
           {currentStep === 'document-selection' && (
-            <div className="space-y-6">
-              <DocumentTypeSelector 
-                country={selectedCountry}
-                onDocumentTypeSelect={handleDocumentTypeSelect}
-                onBack={resetToCountrySelection}
-              />
+            <div className="text-center">
+              <Button 
+                onClick={handleBackToCountrySelection}
+                variant="outline"
+                className="mb-4"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Country Selection
+              </Button>
+            </div>
+          )}
+
+          {currentStep === 'document-generated' && (
+            <div className="space-y-4">
+              <div className="text-center">
+                <Button 
+                  onClick={handleBackToDocumentSelection}
+                  variant="outline"
+                  className="mb-4"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Document Selection
+                </Button>
+              </div>
               
-              {/* Show custom data button only after a document type could be selected */}
-              <div className="flex justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <Button 
+                  onClick={() => isValidDocumentType(selectedDocumentType) && generateDocument(selectedDocumentType)}
+                  disabled={isGenerating || !isValidDocumentType(selectedDocumentType)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                >
+                  {isGenerating ? (
+                    <>
+                      <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
+                      {t('generating')}
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="mr-2 h-5 w-5" />
+                      {t('generateNew')}
+                    </>
+                  )}
+                </Button>
+                
                 <Button 
                   onClick={() => setShowCustomForm(true)}
+                  disabled={isGenerating}
                   variant="outline"
                   className="border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
                 >
                   <User className="mr-2 h-4 w-4" />
                   {t('customData')}
                 </Button>
+
+                <Button 
+                  onClick={viewDocument}
+                  disabled={!documentId}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg shadow-lg"
+                >
+                  View Document
+                </Button>
               </div>
-            </div>
-          )}
-
-          {currentStep === 'document-generated' && (
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-              <Button 
-                onClick={() => isValidDocumentType(selectedDocumentType) && generateDocument(selectedDocumentType)}
-                disabled={isGenerating || !isValidDocumentType(selectedDocumentType)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg"
-              >
-                {isGenerating ? (
-                  <>
-                    <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
-                    {t('generating')}
-                  </>
-                ) : (
-                  <>
-                    <Zap className="mr-2 h-5 w-5" />
-                    {t('generateNew')}
-                  </>
-                )}
-              </Button>
-              
-              <Button 
-                onClick={() => setShowCustomForm(true)}
-                disabled={isGenerating}
-                variant="outline"
-                className="border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
-              >
-                <User className="mr-2 h-4 w-4" />
-                {t('customData')}
-              </Button>
-
-              <Button 
-                onClick={viewDocument}
-                disabled={!documentId}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg shadow-lg"
-              >
-                View Document
-              </Button>
             </div>
           )}
         </div>
@@ -453,25 +468,11 @@ export const StatementGenerator: React.FC = () => {
           )}
 
           {currentStep === 'document-selection' && (
-            <div className="space-y-6">
-              <DocumentTypeSelector 
-                country={selectedCountry}
-                onDocumentTypeSelect={handleDocumentTypeSelect}
-                onBack={resetToCountrySelection}
-              />
-              
-              {/* Show custom data button only after a document type could be selected */}
-              <div className="flex justify-center">
-                <Button 
-                  onClick={() => setShowCustomForm(true)}
-                  variant="outline"
-                  className="border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg shadow-lg"
-                >
-                  <User className="mr-2 h-4 w-4" />
-                  {t('customData')}
-                </Button>
-              </div>
-            </div>
+            <DocumentTypeSelector 
+              country={selectedCountry}
+              onDocumentTypeSelect={handleDocumentTypeSelect}
+              onBack={handleBackToCountrySelection}
+            />
           )}
 
           {currentStep === 'document-generated' && userDetails && (
