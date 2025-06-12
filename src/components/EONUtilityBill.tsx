@@ -24,7 +24,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             </div>
 
             {/* Address and QR Code - Side by Side, QR positioned inline with address */}
-            <div className="flex items-start gap-8">
+            <div className="flex items-center gap-4">
               {/* Address */}
               <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
                 <div className="font-medium">{userDetails.name}</div>
@@ -35,8 +35,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 <div>+447412375153</div>
               </div>
 
-              {/* QR Code - positioned to align with the middle of the address block */}
-              <div className="mt-6">
+              {/* QR Code - positioned directly next to address */}
+              <div>
                 <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
               </div>
             </div>
