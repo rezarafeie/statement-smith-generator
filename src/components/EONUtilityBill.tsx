@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { UserDetails } from '@/utils/dataGenerator';
 
@@ -8,14 +7,14 @@ interface EONUtilityBillProps {
 
 export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) => {
   return (
-    <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '40px' }}>
+    <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
         {/* Header - Two Column Layout */}
-        <div className="grid grid-cols-2 gap-8 mb-6">
+        <div className="grid grid-cols-2 gap-4 mb-4">
           {/* Left Column - Logo, Address and QR Code */}
           <div>
             {/* Logo */}
-            <div className="mb-6">
+            <div className="mb-4">
               <img 
                 src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
                 alt="E.ON Next" 
@@ -38,7 +37,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           </div>
 
           {/* Right Column - Contact Info, Account Number, etc. */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             {/* Contact Info */}
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
@@ -59,11 +58,11 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 Your account number:
               </div>
               <div style={{ backgroundColor: '#f2f2f2' }} className="p-3 text-left">
-                <span className="font-bold block" style={{ fontSize: '18px' }}>A-73398C00</span>
+                <span className="block" style={{ fontSize: '18px', fontWeight: 'normal' }}>A-73398C00</span>
                 <div className="flex justify-start mt-2">
                   <div className="flex" style={{ height: '4px', width: '80px' }}>
-                    <div className="flex-1" style={{ backgroundColor: '#1d70b8' }}></div>
                     <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
+                    <div className="flex-1" style={{ backgroundColor: '#1d70b8' }}></div>
                     <div className="flex-1" style={{ backgroundColor: '#ec1c24' }}></div>
                   </div>
                 </div>
@@ -87,7 +86,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            <hr className="border-gray-400 my-3" />
+            <hr className="border-gray-400 my-2" />
 
             {/* Could you pay less section */}
             <div>
@@ -113,11 +112,16 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           </div>
         </div>
 
-        {/* Main Title and Date Range */}
-        <div className="mb-4">
-          <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
-          <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
-          <div className="font-normal mb-1" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
+        {/* Main Title and Date Range - Two Column Layout */}
+        <div className="grid grid-cols-2 gap-4 mb-3">
+          {/* Left Column - Title Information */}
+          <div>
+            <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
+            <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
+            <div className="font-normal mb-1" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
+          </div>
+          {/* Right Column - Empty */}
+          <div></div>
         </div>
 
         {/* Previous Balance */}
