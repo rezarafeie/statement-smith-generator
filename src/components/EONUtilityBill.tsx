@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { UserDetails } from '@/utils/dataGenerator';
 
@@ -57,8 +58,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
                 Your account number:
               </div>
-              <div style={{ backgroundColor: '#f2f2f2' }} className="p-3 text-left">
-                <span className="block" style={{ fontSize: '18px', fontWeight: 'normal' }}>A-73398C00</span>
+              <div className="text-left">
+                <span className="block" style={{ fontSize: '14px', fontWeight: '300' }}>A-73398C00</span>
                 <div className="flex justify-start mt-2">
                   <div className="flex" style={{ height: '4px', width: '80px' }}>
                     <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
@@ -112,16 +113,11 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           </div>
         </div>
 
-        {/* Main Title and Date Range - Two Column Layout */}
-        <div className="grid grid-cols-2 gap-4 mb-3">
-          {/* Left Column - Title Information */}
-          <div>
-            <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
-            <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
-            <div className="font-normal mb-1" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
-          </div>
-          {/* Right Column - Empty */}
-          <div></div>
+        {/* Main Title and Date Range - Full Width Left Aligned */}
+        <div className="mb-3">
+          <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
+          <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
+          <div className="font-normal mb-1" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
         </div>
 
         {/* Previous Balance */}
