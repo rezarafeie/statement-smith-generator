@@ -1,21 +1,44 @@
 
 import React from 'react';
-import { UserDetails } from '@/utils/dataGenerator';
+import { generateEONUserDetails } from '@/utils/dataGenerator';
 
 interface EONUtilityBillProps {
-  userDetails: UserDetails;
+  userDetails?: any;
 }
 
-export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) => {
+export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: providedUserDetails }) => {
+  // Generate random UK user details if not provided
+  const userDetails = providedUserDetails || generateEONUserDetails();
+  
+  // Parse address properly
+  const addressParts = userDetails.address.split('|');
+  const streetAddress = addressParts[0] || '2 Frederick Street';
+  const area1 = addressParts[1] || 'Kings Cross';
+  const area2 = addressParts[2] || 'London';
+  const postcode = addressParts[3] || userDetails.address.split('|')[2] || 'WC1X 0ND';
+  
+  // Generate random phone number if not provided
+  const phoneNumber = `+44${Math.floor(1000000000 + Math.random() * 9000000000)}`;
+  
+  // Generate random bill amounts
+  const electricityAmount = (Math.random() * 100 + 50).toFixed(2);
+  const gasAmount = (Math.random() * 60 + 20).toFixed(2);
+  const totalCharges = (parseFloat(electricityAmount) + parseFloat(gasAmount)).toFixed(2);
+  const previousBalance = (Math.random() * 1000 + 500).toFixed(2);
+  const payment = (Math.random() * 500 + 300).toFixed(2);
+  const newBalance = (parseFloat(previousBalance) + parseFloat(totalCharges) - parseFloat(payment)).toFixed(2);
+  const estimatedElectricity = (Math.random() * 2000 + 3000).toFixed(2);
+  const estimatedGas = (Math.random() * 2000 + 3000).toFixed(2);
+
   return (
     <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
-        {/* Header - Restructured Layout */}
+        {/* Header - Three Column Layout */}
         <div className="flex justify-between mb-6">
-          {/* Left Column - Logo and Address with QR Code */}
-          <div className="flex-1">
-            {/* Logo - Much Larger */}
-            <div className="mb-6">
+          {/* Left Column - Logo and Address */}
+          <div className="flex-1 max-w-xs">
+            {/* Logo */}
+            <div className="mb-4">
               <img 
                 src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
                 alt="E.ON Next" 
@@ -23,26 +46,21 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               />
             </div>
 
-            {/* Address and QR Code - Side by Side, QR positioned inline with address */}
-            <div className="flex items-start gap-2">
-              {/* Address */}
-              <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
-                <div className="font-medium">{userDetails.name}</div>
-                <div>2 Frederick Street</div>
-                <div>Kings Cross</div>
-                <div>London</div>
-                <div>WC1X 0ND</div>
-                <div>+447412375153</div>
-              </div>
-
-              {/* QR Code - positioned directly next to address */}
-              <div>
-                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
-              </div>
+            {/* Address Only */}
+            <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
+              <div className="font-medium">{userDetails.name}</div>
+              <div>{streetAddress}</div>
+              <div>{area1}</div>
+              <div>{area2}</div>
+              <div>{postcode}</div>
+              <div>{phoneNumber}</div>
             </div>
           </div>
 
-          {/* Right Column - Contact Info and Account Number */}
+          {/* Middle Column - Spacer */}
+          <div className="flex-1"></div>
+
+          {/* Right Column - Contact Info, Account Number, and QR Code */}
           <div className="w-80 space-y-4">
             {/* Contact Info */}
             <div>
@@ -64,7 +82,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 Your account number:
               </div>
               <div className="text-left">
-                <span className="block text-black" style={{ fontSize: '10px', fontWeight: '400' }}>A-73398C00</span>
+                <span className="block text-black" style={{ fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
                 <div className="flex justify-start mt-2">
                   <div className="flex" style={{ height: '4px', width: '80px' }}>
                     <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
@@ -75,9 +93,17 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* Bill Reference */}
-            <div style={{ fontSize: '10px' }}>
-              <div>Bill Reference: 72513189 (29th Jul. 2023)</div>
+            {/* Bill Reference and QR Code - Side by Side */}
+            <div className="flex items-start justify-between">
+              <div style={{ fontSize: '10px' }}>
+                <div>Bill Reference: {userDetails.sortCode}</div>
+                <div>({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
+              </div>
+              
+              {/* QR Code positioned exactly opposite the address */}
+              <div className="ml-4">
+                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+              </div>
             </div>
           </div>
         </div>
@@ -88,14 +114,14 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           <div className="flex-1">
             {/* Title and Date Range */}
             <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
-            <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
-            <div className="font-normal mb-3" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
+            <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for {streetAddress} {area1} {area2} {postcode}.</div>
+            <div className="font-normal mb-3" style={{ fontSize: '12px', fontWeight: 'normal' }}>{userDetails.statementPeriod}</div>
 
             {/* Previous Balance */}
             <div className="mb-3">
               <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
-                <span className="font-bold">On 29th Jun. 2023 your previous balance was</span>
-                <span className="font-normal">£872.46 DR</span>
+                <span className="font-bold">On {new Date(Date.now() - 30*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your previous balance was</span>
+                <span className="font-normal">£{previousBalance} DR</span>
               </div>
             </div>
 
@@ -108,13 +134,13 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 <tbody>
                   <tr className="border-b border-gray-300">
                     <td className="py-2">Electricity</td>
-                    <td className="py-2 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
-                    <td className="py-2 text-right font-medium">£82.52 DR</td>
+                    <td className="py-2 text-center">{userDetails.statementPeriod}</td>
+                    <td className="py-2 text-right font-medium">£{electricityAmount} DR</td>
                   </tr>
                   <tr className="border-b border-gray-300">
                     <td className="py-2">Gas</td>
-                    <td className="py-2 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
-                    <td className="py-2 text-right font-medium">£34.48 DR</td>
+                    <td className="py-2 text-center">{userDetails.statementPeriod}</td>
+                    <td className="py-2 text-right font-medium">£{gasAmount} DR</td>
                   </tr>
                 </tbody>
               </table>
@@ -127,7 +153,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 <tbody>
                   <tr className="border-b border-gray-300">
                     <td className="py-2">Direct Debit collection</td>
-                    <td className="py-2 text-right font-medium">20th Jul. 2023 £422.20 CR</td>
+                    <td className="py-2 text-right font-medium">{new Date(Date.now() - 10*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} £{payment} CR</td>
                   </tr>
                 </tbody>
               </table>
@@ -136,8 +162,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             {/* New Balance */}
             <div className="mb-4">
               <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
-                <span className="font-bold">On 28th Jul. 2023 your new balance was</span>
-                <span className="font-normal">£567.26 DR</span>
+                <span className="font-bold">On {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your new balance was</span>
+                <span className="font-normal">£{newBalance} DR</span>
               </div>
             </div>
 
@@ -155,8 +181,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
               <div style={{ fontSize: '11px' }} className="space-y-1">
-                <div><span className="font-bold">£4435.01</span> a year for electricity</div>
-                <div><span className="font-bold">£4322.87</span> a year for gas</div>
+                <div><span className="font-bold">£{estimatedElectricity}</span> a year for electricity</div>
+                <div><span className="font-bold">£{estimatedGas}</span> a year for gas</div>
               </div>
               <div style={{ fontSize: '9px' }} className="mt-2 text-gray-600 leading-tight">
                 This is an estimate based on your expected annual energy usage, and your current tariff rates, charges and discounts, including VAT. Actual bills will vary depending on your usage and tariff selection. More information about your current tariff can be found overleaf.
@@ -172,14 +198,14 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
                 Remember - it might be worth thinking about switching your tariff or supplier.
               </div>
               <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
-                For your <strong>electricity</strong> (on meter point 1900005170146)
+                For your <strong>electricity</strong> (on meter point {Math.floor(1000000000000 + Math.random() * 9000000000000)})
               </div>
               <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
               <div style={{ fontSize: '9px' }} className="text-gray-700 mb-2">
                 You're already on our cheapest tariff for your <strong>electricity</strong> usage. We'll let you know if this changes.
               </div>
               <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
-                For your <strong>gas</strong> (on meter point 711310402)
+                For your <strong>gas</strong> (on meter point {Math.floor(100000000 + Math.random() * 900000000)})
               </div>
               <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
               <div style={{ fontSize: '9px' }} className="text-gray-700">

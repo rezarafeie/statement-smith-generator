@@ -20,7 +20,93 @@ const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', '
 const streets = ['High Street', 'Church Lane', 'Victoria Road', 'King Street', 'Queen Street', 'Park Avenue', 'Mill Lane'];
 const cities = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Sheffield', 'Bristol', 'Edinburgh'];
 
-// Spanish address data
+// UK specific data for E.ON bills
+const ukFirstNames = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Christopher', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald', 'Steven', 'Paul', 'Andrew', 'Joshua', 'Kenneth', 'Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen', 'Nancy', 'Lisa', 'Betty', 'Helen', 'Sandra', 'Donna', 'Carol', 'Ruth', 'Sharon', 'Michelle', 'Laura', 'Sarah', 'Kimberly', 'Deborah', 'Dorothy', 'Lisa', 'Nancy', 'Karen', 'Betty', 'Helen'];
+
+const ukLastNames = ['Smith', 'Jones', 'Taylor', 'Williams', 'Brown', 'Davies', 'Evans', 'Wilson', 'Thomas', 'Roberts', 'Johnson', 'Lewis', 'Walker', 'Robinson', 'Wood', 'Thompson', 'White', 'Watson', 'Jackson', 'Wright', 'Green', 'Harris', 'Cooper', 'King', 'Lee', 'Martin', 'Clarke', 'James', 'Morgan', 'Hughes', 'Edwards', 'Hill', 'Moore', 'Clark', 'Harrison', 'Scott', 'Young', 'Morris', 'Hall', 'Ward', 'Turner', 'Carter', 'Phillips', 'Mitchell', 'Patel', 'Adams', 'Campbell', 'Anderson', 'Allen', 'Cook'];
+
+const ukStreetNames = ['High Street', 'Church Lane', 'Victoria Road', 'King Street', 'Queen Street', 'Park Avenue', 'Mill Lane', 'Station Road', 'Main Street', 'The Green', 'Manor Road', 'Church Street', 'Park Road', 'Victoria Street', 'Albert Road', 'Queensway', 'King\'s Road', 'The Avenue', 'Oak Tree Lane', 'Rose Gardens', 'Cedar Close', 'Elm Grove', 'Beech Road', 'Maple Drive', 'Willow Way', 'Birch Avenue', 'Pine Close', 'Cherry Tree Road', 'Orchard Lane', 'Garden Close'];
+
+const ukCities = [
+  { name: 'London', area: 'Greater London' },
+  { name: 'Birmingham', area: 'West Midlands' },
+  { name: 'Manchester', area: 'Greater Manchester' },
+  { name: 'Leeds', area: 'West Yorkshire' },
+  { name: 'Liverpool', area: 'Merseyside' },
+  { name: 'Sheffield', area: 'South Yorkshire' },
+  { name: 'Bristol', area: 'Bristol' },
+  { name: 'Newcastle', area: 'Tyne and Wear' },
+  { name: 'Leicester', area: 'Leicestershire' },
+  { name: 'Nottingham', area: 'Nottinghamshire' },
+  { name: 'Coventry', area: 'West Midlands' },
+  { name: 'Bradford', area: 'West Yorkshire' },
+  { name: 'Reading', area: 'Berkshire' },
+  { name: 'Oxford', area: 'Oxfordshire' },
+  { name: 'Cambridge', area: 'Cambridgeshire' }
+];
+
+// Generate UK postcode
+const generateUKPostcode = (): string => {
+  const areas = ['SW', 'SE', 'NW', 'NE', 'W', 'E', 'N', 'S', 'EC', 'WC', 'M', 'B', 'L', 'LS', 'S', 'BS', 'NE', 'LE', 'NG', 'CV', 'BD', 'RG', 'OX', 'CB'];
+  const area = areas[Math.floor(Math.random() * areas.length)];
+  const district = Math.floor(Math.random() * 99) + 1;
+  const sector = Math.floor(Math.random() * 9) + 1;
+  const unit = String.fromCharCode(65 + Math.floor(Math.random() * 26)) + String.fromCharCode(65 + Math.floor(Math.random() * 26));
+  return `${area}${district} ${sector}${unit}`;
+};
+
+// Generate UK phone number
+const generateUKPhone = (): string => {
+  const areaCode = Math.floor(Math.random() * 9000) + 1000;
+  const number = Math.floor(Math.random() * 900000) + 100000;
+  return `+44${areaCode}${number}`;
+};
+
+// Generate E.ON specific data
+export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserDetails => {
+  const firstName = ukFirstNames[Math.floor(Math.random() * ukFirstNames.length)];
+  const lastName = ukLastNames[Math.floor(Math.random() * ukLastNames.length)];
+  const streetName = ukStreetNames[Math.floor(Math.random() * ukStreetNames.length)];
+  const city = ukCities[Math.floor(Math.random() * ukCities.length)];
+  const houseNumber = Math.floor(Math.random() * 999) + 1;
+  const postcode = generateUKPostcode();
+  
+  const accountNumber = `A-${Math.floor(10000000 + Math.random() * 90000000)}`;
+  const billReference = Math.floor(10000000 + Math.random() * 90000000).toString();
+  
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 1);
+  const endDate = new Date();
+  
+  const formatDate = (date: Date) => {
+    const day = date.getDate().toString();
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day}${day.endsWith('1') && day !== '11' ? 'st' : day.endsWith('2') && day !== '12' ? 'nd' : day.endsWith('3') && day !== '13' ? 'rd' : 'th'} ${month}. ${year}`;
+  };
+  
+  const formattedAddress = `${houseNumber} ${streetName}|${city.name}|${postcode}`;
+  
+  const defaultData = {
+    name: `${firstName} ${lastName}`,
+    address: formattedAddress,
+    accountNumber,
+    sortCode: billReference,
+    statementPeriod: `${formatDate(startDate)} - ${formatDate(endDate)}`
+  };
+
+  const filteredCustomData = customData ? Object.fromEntries(
+    Object.entries(customData).filter(([_, value]) => 
+      value !== undefined && value !== null && value !== ''
+    )
+  ) : {};
+
+  return {
+    ...defaultData,
+    ...filteredCustomData
+  };
+};
+
 const spanishFirstNames = ['José', 'María', 'Antonio', 'Carmen', 'Francisco', 'Ana', 'Manuel', 'Isabel', 'David', 'Pilar'];
 const spanishLastNames = ['García', 'Rodríguez', 'González', 'Fernández', 'López', 'Martínez', 'Sánchez', 'Pérez', 'Gómez', 'Martín'];
 
