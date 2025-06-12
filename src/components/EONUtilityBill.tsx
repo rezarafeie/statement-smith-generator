@@ -10,41 +10,33 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
   return (
     <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
-        {/* Header - Flexible Layout */}
-        <div className="flex justify-between items-start mb-6">
-          {/* Left Section - Logo, Address and QR Code */}
-          <div className="flex gap-8">
-            {/* Logo and Address Column */}
-            <div>
-              {/* Logo - Much Larger */}
-              <div className="mb-6">
-                <img 
-                  src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
-                  alt="E.ON Next" 
-                  className="h-20"
-                />
-              </div>
-
-              {/* Address */}
-              <div style={{ fontSize: '13px', lineHeight: '1.4' }}>
-                <div className="font-medium">{userDetails.name}</div>
-                <div>2 Frederick Street</div>
-                <div>Kings Cross</div>
-                <div>London</div>
-                <div>WC1X 0ND</div>
-                <div>+447412375153</div>
-              </div>
+        {/* Header - Two Column Layout */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          {/* Left Column - Logo and Address */}
+          <div>
+            {/* Logo */}
+            <div className="mb-4">
+              <img 
+                src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
+                alt="E.ON Next" 
+                className="h-12"
+              />
             </div>
 
-            {/* QR Code - Positioned beside address */}
-            <div className="flex items-center">
-              <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+            {/* Address - Increased size */}
+            <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
+              <div className="font-medium">{userDetails.name}</div>
+              <div>2 Frederick Street</div>
+              <div>Kings Cross</div>
+              <div>London</div>
+              <div>WC1X 0ND</div>
+              <div>+447412375153</div>
             </div>
           </div>
 
-          {/* Right Section - Contact Info, Account Number, etc. */}
-          <div className="space-y-4 max-w-xs">
-            {/* Contact Info */}
+          {/* Right Column - Contact Info, Account Number, etc. */}
+          <div className="space-y-3">
+            {/* Contact Info - Increased size */}
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
               <div className="flex items-center gap-2 mb-1" style={{ fontSize: '12px' }}>
@@ -57,7 +49,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* Account Number Box */}
+            {/* Account Number Box - Smaller text and black color */}
             <div>
               <div className="font-bold mb-2 flex items-center gap-1" style={{ color: '#ec1c24', fontSize: '12px' }}>
                 <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
@@ -75,8 +67,13 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* Bill Reference */}
-            <div style={{ fontSize: '10px' }}>
+            {/* QR Code moved further down */}
+            <div className="flex justify-end mt-6">
+              <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+            </div>
+
+            {/* Bill Reference moved further down */}
+            <div style={{ fontSize: '10px' }} className="mt-6">
               <div>Bill Reference: 72513189 (29th Jul. 2023)</div>
             </div>
             
@@ -118,71 +115,75 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           </div>
         </div>
 
-        {/* Main Content - Single Column Layout */}
-        <div className="space-y-4">
-          {/* Title and Date Range */}
+        {/* Main Content - Two Column Layout with content on LEFT only */}
+        <div className="grid grid-cols-2 gap-4 mb-3">
+          {/* Left Column - Main Account Information */}
           <div>
+            {/* Title and Date Range */}
             <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
             <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
             <div className="font-normal mb-3" style={{ fontSize: '12px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
-          </div>
 
-          {/* Previous Balance */}
-          <div>
-            <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
-              <span className="font-bold">On 29th Jun. 2023 your previous balance was</span>
-              <span className="font-normal">£872.46 DR</span>
+            {/* Previous Balance */}
+            <div className="mb-3">
+              <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
+                <span className="font-bold">On 29th Jun. 2023 your previous balance was</span>
+                <span className="font-normal">£872.46 DR</span>
+              </div>
+            </div>
+
+            {/* Charges Section */}
+            <div className="mb-3">
+              <h2 className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '14px' }}>1. We have charged you</h2>
+              <div style={{ fontSize: '11px' }} className="mb-2">Based on your meter readings.</div>
+              
+              <table className="w-full mb-3" style={{ fontSize: '11px' }}>
+                <tbody>
+                  <tr className="border-b border-gray-300">
+                    <td className="py-2">Electricity</td>
+                    <td className="py-2 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
+                    <td className="py-2 text-right font-medium">£82.52 DR</td>
+                  </tr>
+                  <tr className="border-b border-gray-300">
+                    <td className="py-2">Gas</td>
+                    <td className="py-2 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
+                    <td className="py-2 text-right font-medium">£34.48 DR</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Payment Section */}
+            <div className="mb-3">
+              <h2 className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '14px' }}>2. You have paid</h2>
+              <table className="w-full mb-3" style={{ fontSize: '11px' }}>
+                <tbody>
+                  <tr className="border-b border-gray-300">
+                    <td className="py-2">Direct Debit collection</td>
+                    <td className="py-2 text-right font-medium">20th Jul. 2023 £422.20 CR</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* New Balance */}
+            <div className="mb-4">
+              <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
+                <span className="font-bold">On 28th Jul. 2023 your new balance was</span>
+                <span className="font-normal">£567.26 DR</span>
+              </div>
+            </div>
+
+            {/* Payment Info */}
+            <div className="mb-6" style={{ fontSize: '11px', lineHeight: '1.4' }}>
+              <p>
+                You pay by monthly Direct Debit, so your payments are up to date. We regularly review how much you're paying to make sure it's the right amount and will let you know if it needs to change.
+              </p>
             </div>
           </div>
 
-          {/* Charges Section */}
-          <div>
-            <h2 className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '14px' }}>1. We have charged you</h2>
-            <div style={{ fontSize: '11px' }} className="mb-2">Based on your meter readings.</div>
-            
-            <table className="w-full mb-3" style={{ fontSize: '11px' }}>
-              <tbody>
-                <tr className="border-b border-gray-300">
-                  <td className="py-2">Electricity</td>
-                  <td className="py-2 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
-                  <td className="py-2 text-right font-medium">£82.52 DR</td>
-                </tr>
-                <tr className="border-b border-gray-300">
-                  <td className="py-2">Gas</td>
-                  <td className="py-2 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
-                  <td className="py-2 text-right font-medium">£34.48 DR</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Payment Section */}
-          <div>
-            <h2 className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '14px' }}>2. You have paid</h2>
-            <table className="w-full mb-3" style={{ fontSize: '11px' }}>
-              <tbody>
-                <tr className="border-b border-gray-300">
-                  <td className="py-2">Direct Debit collection</td>
-                  <td className="py-2 text-right font-medium">20th Jul. 2023 £422.20 CR</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* New Balance */}
-          <div>
-            <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
-              <span className="font-bold">On 28th Jul. 2023 your new balance was</span>
-              <span className="font-normal">£567.26 DR</span>
-            </div>
-          </div>
-
-          {/* Payment Info */}
-          <div style={{ fontSize: '11px', lineHeight: '1.4' }}>
-            <p>
-              You pay by monthly Direct Debit, so your payments are up to date. We regularly review how much you're paying to make sure it's the right amount and will let you know if it needs to change.
-            </p>
-          </div>
+          {/* Right Column - Empty */}
+          <div></div>
         </div>
 
         {/* Footer */}
@@ -204,8 +205,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           }
         }
         @media (max-width: 768px) {
-          .flex {
-            flex-direction: column;
+          .grid-cols-2 {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
