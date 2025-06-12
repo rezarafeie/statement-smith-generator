@@ -12,6 +12,7 @@ export interface UserDetails {
   accountNumber: string;
   sortCode: string;
   statementPeriod: string;
+  phoneNumber?: string;
 }
 
 const firstNames = ['James', 'Sarah', 'Michael', 'Emma', 'David', 'Lucy', 'Thomas', 'Sophie', 'Daniel', 'Charlotte'];
@@ -21,7 +22,7 @@ const streets = ['High Street', 'Church Lane', 'Victoria Road', 'King Street', '
 const cities = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Sheffield', 'Bristol', 'Edinburgh'];
 
 // UK specific data for E.ON bills
-const ukFirstNames = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Christopher', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald', 'Steven', 'Paul', 'Andrew', 'Joshua', 'Kenneth', 'Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen', 'Nancy', 'Lisa', 'Betty', 'Helen', 'Sandra', 'Donna', 'Carol', 'Ruth', 'Sharon', 'Michelle', 'Laura', 'Sarah', 'Kimberly', 'Deborah', 'Dorothy', 'Lisa', 'Nancy', 'Karen', 'Betty', 'Helen'];
+const ukFirstNames = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Christopher', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald', 'Steven', 'Paul', 'Andrew', 'Joshua', 'Kenneth', 'Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen', 'Nancy', 'Lisa', 'Betty', 'Helen', 'Sandra', 'Donna', 'Carol', 'Ruth', 'Sharon', 'Michelle', 'Laura', 'Kimberly', 'Deborah', 'Dorothy'];
 
 const ukLastNames = ['Smith', 'Jones', 'Taylor', 'Williams', 'Brown', 'Davies', 'Evans', 'Wilson', 'Thomas', 'Roberts', 'Johnson', 'Lewis', 'Walker', 'Robinson', 'Wood', 'Thompson', 'White', 'Watson', 'Jackson', 'Wright', 'Green', 'Harris', 'Cooper', 'King', 'Lee', 'Martin', 'Clarke', 'James', 'Morgan', 'Hughes', 'Edwards', 'Hill', 'Moore', 'Clark', 'Harrison', 'Scott', 'Young', 'Morris', 'Hall', 'Ward', 'Turner', 'Carter', 'Phillips', 'Mitchell', 'Patel', 'Adams', 'Campbell', 'Anderson', 'Allen', 'Cook'];
 
@@ -42,7 +43,7 @@ const ukCities = [
   { name: 'Bradford', area: 'West Yorkshire' },
   { name: 'Reading', area: 'Berkshire' },
   { name: 'Oxford', area: 'Oxfordshire' },
-  { name: 'Cambridge', area: 'Cambridgeshire' }
+  { name: 'Cambridge', area: 'Cambrideshire' }
 ];
 
 // Generate UK postcode
@@ -57,13 +58,13 @@ const generateUKPostcode = (): string => {
 
 // Generate UK phone number
 const generateUKPhone = (): string => {
-  const areaCode = Math.floor(Math.random() * 9000) + 1000;
+  const prefix = Math.floor(Math.random() * 9000) + 1000;
   const number = Math.floor(Math.random() * 900000) + 100000;
-  return `+44${areaCode}${number}`;
+  return `+44${prefix}${number}`;
 };
 
 // Generate E.ON specific data
-export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserDetails => {
+export const generateEONUserDetails = (customData?: Partial<UserDetails> & { phoneNumber?: string }): UserDetails => {
   const firstName = ukFirstNames[Math.floor(Math.random() * ukFirstNames.length)];
   const lastName = ukLastNames[Math.floor(Math.random() * ukLastNames.length)];
   const streetName = ukStreetNames[Math.floor(Math.random() * ukStreetNames.length)];
@@ -73,6 +74,7 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserD
   
   const accountNumber = `A-${Math.floor(10000000 + Math.random() * 90000000)}`;
   const billReference = Math.floor(10000000 + Math.random() * 90000000).toString();
+  const phoneNumber = generateUKPhone();
   
   const startDate = new Date();
   startDate.setMonth(startDate.getMonth() - 1);
@@ -85,14 +87,15 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserD
     return `${day}${day.endsWith('1') && day !== '11' ? 'st' : day.endsWith('2') && day !== '12' ? 'nd' : day.endsWith('3') && day !== '13' ? 'rd' : 'th'} ${month}. ${year}`;
   };
   
-  const formattedAddress = `${houseNumber} ${streetName}|${city.name}|${postcode}`;
+  const formattedAddress = `${houseNumber} ${streetName}|${city.name}|${city.area}|${postcode}`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
     address: formattedAddress,
     accountNumber,
     sortCode: billReference,
-    statementPeriod: `${formatDate(startDate)} - ${formatDate(endDate)}`
+    statementPeriod: `${formatDate(startDate)} - ${formatDate(endDate)}`,
+    phoneNumber
   };
 
   const filteredCustomData = customData ? Object.fromEntries(

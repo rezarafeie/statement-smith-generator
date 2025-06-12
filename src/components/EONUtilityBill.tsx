@@ -12,13 +12,13 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   
   // Parse address properly
   const addressParts = userDetails.address.split('|');
-  const streetAddress = addressParts[0] || '2 Frederick Street';
-  const area1 = addressParts[1] || 'Kings Cross';
-  const area2 = addressParts[2] || 'London';
-  const postcode = addressParts[3] || userDetails.address.split('|')[2] || 'WC1X 0ND';
+  const streetAddress = addressParts[0] || `${Math.floor(Math.random() * 999) + 1} High Street`;
+  const area1 = addressParts[1] || 'London';
+  const area2 = addressParts[2] || 'Greater London';
+  const postcode = addressParts[3] || 'SW1A 1AA';
   
-  // Generate random phone number if not provided
-  const phoneNumber = `+44${Math.floor(1000000000 + Math.random() * 9000000000)}`;
+  // Use provided phone number or generate one
+  const phoneNumber = userDetails.phoneNumber || `+44${Math.floor(1000000000 + Math.random() * 9000000000)}`;
   
   // Generate random bill amounts
   const electricityAmount = (Math.random() * 100 + 50).toFixed(2);
@@ -35,7 +35,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
         {/* Header - Three Column Layout */}
         <div className="flex justify-between mb-6">
-          {/* Left Column - Logo and Address */}
+          {/* Left Column - Logo and Customer Address */}
           <div className="flex-1 max-w-xs">
             {/* Logo */}
             <div className="mb-4">
@@ -46,7 +46,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
               />
             </div>
 
-            {/* Address Only */}
+            {/* Customer Address */}
             <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
               <div className="font-medium">{userDetails.name}</div>
               <div>{streetAddress}</div>
@@ -60,7 +60,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           {/* Middle Column - Spacer */}
           <div className="flex-1"></div>
 
-          {/* Right Column - Contact Info, Account Number, and QR Code */}
+          {/* Right Column - Contact Info, Account Number, Bill Reference and QR Code */}
           <div className="w-80 space-y-4">
             {/* Contact Info */}
             <div>
@@ -93,14 +93,14 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
               </div>
             </div>
 
-            {/* Bill Reference and QR Code - Side by Side */}
-            <div className="flex items-start justify-between">
+            {/* Bill Reference and QR Code - Side by Side - Positioned exactly opposite the customer address */}
+            <div className="flex items-start justify-between" style={{ marginTop: '60px' }}>
               <div style={{ fontSize: '10px' }}>
                 <div>Bill Reference: {userDetails.sortCode}</div>
                 <div>({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
               </div>
               
-              {/* QR Code positioned exactly opposite the address */}
+              {/* QR Code positioned exactly opposite the customer address */}
               <div className="ml-4">
                 <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
               </div>

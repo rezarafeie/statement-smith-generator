@@ -5,13 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { X, User } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { X, User, CalendarIcon } from 'lucide-react';
 import { UserDetails } from '../utils/dataGenerator';
+import { format } from 'date-fns';
 
 interface CustomDataFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string }) => void;
+  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string }) => void;
 }
 
 export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -20,20 +23,42 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     address: '',
     accountNumber: '',
     statementPeriod: '',
-    initialBalance: ''
+    initialBalance: '',
+    phoneNumber: ''
   });
+
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [showStartCalendar, setShowStartCalendar] = useState(false);
+  const [showEndCalendar, setShowEndCalendar] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Generate statement period from dates if selected
+    let statementPeriod = formData.statementPeriod;
+    if (startDate && endDate) {
+      const formatDate = (date: Date) => {
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'short' });
+        const year = date.getFullYear();
+        const suffix = day.toString().endsWith('1') && day !== 11 ? 'st' : 
+                     day.toString().endsWith('2') && day !== 12 ? 'nd' : 
+                     day.toString().endsWith('3') && day !== 13 ? 'rd' : 'th';
+        return `${day}${suffix} ${month}. ${year}`;
+      };
+      statementPeriod = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+    }
+    
     // Only include fields that have actual values (not empty strings)
-    const userData: Partial<UserDetails> & { initialBalance?: string } = {};
+    const userData: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string } = {};
     
     if (formData.name.trim()) userData.name = formData.name.trim();
     if (formData.address.trim()) userData.address = formData.address.trim();
     if (formData.accountNumber.trim()) userData.accountNumber = formData.accountNumber.trim();
-    if (formData.statementPeriod.trim()) userData.statementPeriod = formData.statementPeriod.trim();
+    if (statementPeriod.trim()) userData.statementPeriod = statementPeriod.trim();
     if (formData.initialBalance.trim()) userData.initialBalance = formData.initialBalance.trim();
+    if (formData.phoneNumber.trim()) userData.phoneNumber = formData.phoneNumber.trim();
 
     onSubmit(userData);
     onClose();
@@ -44,8 +69,11 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
       address: '',
       accountNumber: '',
       statementPeriod: '',
-      initialBalance: ''
+      initialBalance: '',
+      phoneNumber: ''
     });
+    setStartDate(undefined);
+    setEndDate(undefined);
   };
 
   const handleChange = (field: string, value: string) => {
@@ -103,6 +131,18 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
             </div>
 
             <div>
+              <Label htmlFor="phoneNumber" className="text-gray-300">Phone Number</Label>
+              <Input
+                id="phoneNumber"
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={(e) => handleChange('phoneNumber', e.target.value)}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="e.g., +447123456789"
+              />
+            </div>
+
+            <div>
               <Label htmlFor="accountNumber" className="text-gray-300">Account Number</Label>
               <Input
                 id="accountNumber"
@@ -115,15 +155,64 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
             </div>
 
             <div>
-              <Label htmlFor="statementPeriod" className="text-gray-300">Statement Period</Label>
-              <Input
-                id="statementPeriod"
-                type="text"
-                value={formData.statementPeriod}
-                onChange={(e) => handleChange('statementPeriod', e.target.value)}
-                className="bg-gray-700 border-gray-600 text-white"
-                placeholder="e.g., 01/01/2024 to 31/01/2024"
-              />
+              <Label className="text-gray-300">Statement Period</Label>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <Popover open={showStartCalendar} onOpenChange={setShowStartCalendar}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 justify-start text-left font-normal"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {startDate ? format(startDate, "PP") : "Start date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={(date) => {
+                        setStartDate(date);
+                        setShowStartCalendar(false);
+                      }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+
+                <Popover open={showEndCalendar} onOpenChange={setShowEndCalendar}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 justify-start text-left font-normal"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {endDate ? format(endDate, "PP") : "End date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={(date) => {
+                        setEndDate(date);
+                        setShowEndCalendar(false);
+                      }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              
+              <div className="mt-2">
+                <Input
+                  type="text"
+                  value={formData.statementPeriod}
+                  onChange={(e) => handleChange('statementPeriod', e.target.value)}
+                  className="bg-gray-700 border-gray-600 text-white"
+                  placeholder="Or type manually: e.g., 1st Jan. 2024 - 31st Jan. 2024"
+                />
+              </div>
             </div>
 
             <div>
