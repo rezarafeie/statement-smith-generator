@@ -10,33 +10,41 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
   return (
     <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
-        {/* Header - Two Column Layout */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {/* Left Column - Logo and Address */}
-          <div>
-            {/* Logo */}
-            <div className="mb-4">
+        {/* Header - Restructured Layout */}
+        <div className="flex justify-between mb-6">
+          {/* Left Column - Logo, Address and QR Code */}
+          <div className="flex-1">
+            {/* Logo - Much Larger */}
+            <div className="mb-6">
               <img 
                 src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
                 alt="E.ON Next" 
-                className="h-12"
+                className="h-20"
               />
             </div>
 
-            {/* Address - Increased size */}
-            <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
-              <div className="font-medium">{userDetails.name}</div>
-              <div>2 Frederick Street</div>
-              <div>Kings Cross</div>
-              <div>London</div>
-              <div>WC1X 0ND</div>
-              <div>+447412375153</div>
+            {/* Address and QR Code - Side by Side */}
+            <div className="flex items-start gap-6">
+              {/* Address */}
+              <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
+                <div className="font-medium">{userDetails.name}</div>
+                <div>2 Frederick Street</div>
+                <div>Kings Cross</div>
+                <div>London</div>
+                <div>WC1X 0ND</div>
+                <div>+447412375153</div>
+              </div>
+
+              {/* QR Code */}
+              <div>
+                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+              </div>
             </div>
           </div>
 
-          {/* Right Column - Contact Info, Account Number, etc. */}
-          <div className="space-y-3">
-            {/* Contact Info - Increased size */}
+          {/* Right Column - Contact Info and Account Number */}
+          <div className="w-80 space-y-4">
+            {/* Contact Info */}
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
               <div className="flex items-center gap-2 mb-1" style={{ fontSize: '12px' }}>
@@ -49,7 +57,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* Account Number Box - Smaller text and black color */}
+            {/* Account Number Box */}
             <div>
               <div className="font-bold mb-2 flex items-center gap-1" style={{ color: '#ec1c24', fontSize: '12px' }}>
                 <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
@@ -67,58 +75,17 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* QR Code moved further down */}
-            <div className="flex justify-end mt-6">
-              <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
-            </div>
-
-            {/* Bill Reference moved further down */}
-            <div style={{ fontSize: '10px' }} className="mt-6">
+            {/* Bill Reference */}
+            <div style={{ fontSize: '10px' }}>
               <div>Bill Reference: 72513189 (29th Jul. 2023)</div>
-            </div>
-            
-            {/* Estimated Annual Cost */}
-            <div>
-              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
-              <div style={{ fontSize: '11px' }} className="space-y-1">
-                <div><span className="font-bold">£4435.01</span> a year for electricity</div>
-                <div><span className="font-bold">£4322.87</span> a year for gas</div>
-              </div>
-              <div style={{ fontSize: '9px' }} className="mt-2 text-gray-600 leading-tight">
-                This is an estimate based on your expected annual energy usage, and your current tariff rates, charges and discounts, including VAT. Actual bills will vary depending on your usage and tariff selection. More information about your current tariff can be found overleaf.
-              </div>
-            </div>
-
-            <hr className="border-gray-400 my-2" />
-
-            {/* Could you pay less section */}
-            <div>
-              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Could you pay less?</div>
-              <div style={{ fontSize: '9px' }} className="text-gray-700 italic mb-2">
-                Remember - it might be worth thinking about switching your tariff or supplier.
-              </div>
-              <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
-                For your <strong>electricity</strong> (on meter point 1900005170146)
-              </div>
-              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
-              <div style={{ fontSize: '9px' }} className="text-gray-700 mb-2">
-                You're already on our cheapest tariff for your <strong>electricity</strong> usage. We'll let you know if this changes.
-              </div>
-              <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
-                For your <strong>gas</strong> (on meter point 711310402)
-              </div>
-              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
-              <div style={{ fontSize: '9px' }} className="text-gray-700">
-                You're already on our cheapest tariff for your <strong>gas</strong> usage. We'll let you know if this changes.
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Main Content - Two Column Layout with content on LEFT only */}
-        <div className="grid grid-cols-2 gap-4 mb-3">
+        {/* Main Content - Proper Two Column Layout */}
+        <div className="flex gap-8">
           {/* Left Column - Main Account Information */}
-          <div>
+          <div className="flex-1">
             {/* Title and Date Range */}
             <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
             <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
@@ -182,8 +149,44 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             </div>
           </div>
 
-          {/* Right Column - Empty */}
-          <div></div>
+          {/* Right Column - Estimated Costs and Tariff Info */}
+          <div className="w-80 space-y-4">
+            {/* Estimated Annual Cost */}
+            <div>
+              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
+              <div style={{ fontSize: '11px' }} className="space-y-1">
+                <div><span className="font-bold">£4435.01</span> a year for electricity</div>
+                <div><span className="font-bold">£4322.87</span> a year for gas</div>
+              </div>
+              <div style={{ fontSize: '9px' }} className="mt-2 text-gray-600 leading-tight">
+                This is an estimate based on your expected annual energy usage, and your current tariff rates, charges and discounts, including VAT. Actual bills will vary depending on your usage and tariff selection. More information about your current tariff can be found overleaf.
+              </div>
+            </div>
+
+            <hr className="border-gray-400 my-2" />
+
+            {/* Could you pay less section */}
+            <div>
+              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Could you pay less?</div>
+              <div style={{ fontSize: '9px' }} className="text-gray-700 italic mb-2">
+                Remember - it might be worth thinking about switching your tariff or supplier.
+              </div>
+              <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
+                For your <strong>electricity</strong> (on meter point 1900005170146)
+              </div>
+              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '9px' }} className="text-gray-700 mb-2">
+                You're already on our cheapest tariff for your <strong>electricity</strong> usage. We'll let you know if this changes.
+              </div>
+              <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
+                For your <strong>gas</strong> (on meter point 711310402)
+              </div>
+              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '9px' }} className="text-gray-700">
+                You're already on our cheapest tariff for your <strong>gas</strong> usage. We'll let you know if this changes.
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
@@ -205,8 +208,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           }
         }
         @media (max-width: 768px) {
-          .grid-cols-2 {
-            grid-template-columns: 1fr;
+          .flex {
+            flex-direction: column;
           }
         }
       `}</style>
