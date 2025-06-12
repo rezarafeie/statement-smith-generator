@@ -8,10 +8,10 @@ interface EONUtilityBillProps {
 
 export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) => {
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
-      <div className="min-h-screen p-3" style={{ fontSize: '11px', lineHeight: '1.1' }}>
+    <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm' }}>
+      <div className="p-4" style={{ fontSize: '11px', lineHeight: '1.2' }}>
         {/* Header - Only E.ON Logo */}
-        <div className="flex justify-start items-start mb-3">
+        <div className="flex justify-start items-start mb-4">
           <div>
             <img 
               src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
@@ -22,12 +22,12 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
         </div>
 
         {/* Main Layout - Two Columns */}
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           {/* Left Column - Main Content */}
-          <div className="flex-1" style={{ maxWidth: '60%' }}>
+          <div className="flex-1" style={{ maxWidth: '65%' }}>
             {/* Address and QR Code */}
-            <div className="flex justify-between items-start mb-3">
-              <div style={{ fontSize: '9px', lineHeight: '1.0' }}>
+            <div className="flex justify-between items-start mb-4">
+              <div style={{ fontSize: '9px', lineHeight: '1.1' }}>
                 <div className="font-medium">{userDetails.name}</div>
                 <div>2 Frederick Street</div>
                 <div>Kings Cross</div>
@@ -39,64 +39,64 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             </div>
 
             {/* Main Title */}
-            <div className="mb-3">
-              <h1 className="font-bold mb-0.5 text-gray-900" style={{ fontSize: '18px', fontWeight: 'bold' }}>Your energy account</h1>
-              <div className="font-bold mb-0.5" style={{ fontSize: '11px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
+            <div className="mb-4">
+              <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '20px', fontWeight: 'bold' }}>Your energy account</h1>
+              <div className="font-bold mb-1" style={{ fontSize: '12px', fontWeight: 'bold' }}>for 2 Frederick Street Kings Cross London WC1X 0ND.</div>
               <div className="font-normal mb-2" style={{ fontSize: '11px', fontWeight: 'normal' }}>29th Aug. 2022 - 28th Sept. 2022</div>
             </div>
 
             {/* Previous Balance */}
-            <div className="mb-2">
-              <div className="bg-gray-800 text-white p-1.5 flex justify-between items-center" style={{ fontSize: '10px' }}>
+            <div className="mb-3">
+              <div className="bg-gray-800 text-white p-2 flex justify-between items-center" style={{ fontSize: '10px' }}>
                 <span className="font-bold">On 29th Jun. 2023 your previous balance was</span>
                 <span className="font-normal">£872.46 DR</span>
               </div>
             </div>
 
             {/* Charges Section */}
-            <div className="mb-2">
-              <h2 className="font-bold mb-0.5" style={{ color: '#e31e24', fontSize: '11px' }}>1. We have charged you</h2>
-              <div style={{ fontSize: '9px' }} className="mb-1">Based on your meter readings.</div>
+            <div className="mb-3">
+              <h2 className="font-bold mb-1" style={{ color: '#e31e24', fontSize: '12px' }}>1. We have charged you</h2>
+              <div style={{ fontSize: '10px' }} className="mb-2">Based on your meter readings.</div>
               
-              <table className="w-full mb-1" style={{ fontSize: '9px' }}>
+              <table className="w-full mb-2" style={{ fontSize: '10px' }}>
                 <tbody>
                   <tr className="border-b border-gray-300">
-                    <td className="py-0.5">Electricity</td>
-                    <td className="py-0.5 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
-                    <td className="py-0.5 text-right font-medium">£82.52 DR</td>
+                    <td className="py-1">Electricity</td>
+                    <td className="py-1 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
+                    <td className="py-1 text-right font-medium">£82.52 DR</td>
                   </tr>
                   <tr className="border-b border-gray-300">
-                    <td className="py-0.5">Gas</td>
-                    <td className="py-0.5 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
-                    <td className="py-0.5 text-right font-medium">£34.48 DR</td>
+                    <td className="py-1">Gas</td>
+                    <td className="py-1 text-center">28th Jun. 2023 - 27th Jul. 2023</td>
+                    <td className="py-1 text-right font-medium">£34.48 DR</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* Payment Section */}
-            <div className="mb-2">
-              <h2 className="font-bold mb-0.5" style={{ color: '#e31e24', fontSize: '11px' }}>2. You have paid</h2>
-              <table className="w-full mb-1" style={{ fontSize: '9px' }}>
+            <div className="mb-3">
+              <h2 className="font-bold mb-1" style={{ color: '#e31e24', fontSize: '12px' }}>2. You have paid</h2>
+              <table className="w-full mb-2" style={{ fontSize: '10px' }}>
                 <tbody>
                   <tr className="border-b border-gray-300">
-                    <td className="py-0.5">Direct Debit collection</td>
-                    <td className="py-0.5 text-right font-medium">20th Jul. 2023 £422.20 CR</td>
+                    <td className="py-1">Direct Debit collection</td>
+                    <td className="py-1 text-right font-medium">20th Jul. 2023 £422.20 CR</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* New Balance */}
-            <div className="mb-2">
-              <div className="bg-gray-800 text-white p-1.5 flex justify-between items-center" style={{ fontSize: '10px' }}>
+            <div className="mb-3">
+              <div className="bg-gray-800 text-white p-2 flex justify-between items-center" style={{ fontSize: '10px' }}>
                 <span className="font-bold">On 28th Jul. 2023 your new balance was</span>
                 <span className="font-normal">£567.26 DR</span>
               </div>
             </div>
 
             {/* Payment Info */}
-            <div className="mb-2" style={{ fontSize: '9px', lineHeight: '1.1' }}>
+            <div className="mb-3" style={{ fontSize: '10px', lineHeight: '1.2' }}>
               <p>
                 You pay by monthly Direct Debit, so your payments are up to date. We regularly review how much you're paying to make sure it's the right amount and will let you know if it needs to change.
               </p>
@@ -104,11 +104,11 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           </div>
 
           {/* Right Column */}
-          <div style={{ width: '40%' }}>
+          <div style={{ width: '35%' }}>
             {/* Contact Info */}
-            <div className="mb-2" style={{ fontSize: '9px' }}>
+            <div className="mb-3" style={{ fontSize: '9px' }}>
               <div className="font-bold mb-1" style={{ color: '#e31e24', fontSize: '10px' }}>Get in touch with us</div>
-              <div className="flex items-center gap-1 mb-0.5">
+              <div className="flex items-center gap-1 mb-1">
                 <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" className="w-2.5 h-2.5" />
                 <span>eonnext.com/contact</span>
               </div>
@@ -119,41 +119,45 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             </div>
 
             {/* Account Number Box */}
-            <div className="mb-2">
+            <div className="mb-3">
               <div className="font-bold mb-1 flex items-center gap-1" style={{ color: '#e31e24', fontSize: '10px' }}>
                 <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-2.5 h-2.5" />
                 Your account number:
               </div>
-              <div className="bg-white p-2 text-center" style={{ border: '1px solid black' }}>
-                <span className="font-bold" style={{ fontSize: '14px' }}>A-73398C00</span>
-                <div className="flex justify-center mt-0.5">
-                  <img src="/lovable-uploads/c05923a2-25e4-4f2d-ac23-9ff3ee9ee5e1.png" alt="Color bars" className="h-0.5" />
+              <div className="bg-white p-3 text-center border border-gray-300">
+                <span className="font-bold block" style={{ fontSize: '16px' }}>A-73398C00</span>
+                <div className="flex justify-center mt-1">
+                  <div className="flex" style={{ height: '4px', width: '60px' }}>
+                    <div className="flex-1" style={{ backgroundColor: '#00a8e6' }}></div>
+                    <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
+                    <div className="flex-1" style={{ backgroundColor: '#e31e24' }}></div>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Bill Reference */}
-            <div style={{ fontSize: '9px' }} className="mb-2">
+            <div style={{ fontSize: '9px' }} className="mb-3">
               <div>Bill Reference: 72513189 (29th Jul. 2023)</div>
             </div>
             
             {/* Estimated Annual Cost */}
-            <div className="mb-2">
+            <div className="mb-3">
               <div className="font-bold mb-1" style={{ color: '#e31e24', fontSize: '10px' }}>Your estimated annual cost</div>
-              <div style={{ fontSize: '10px' }} className="space-y-0.5">
+              <div style={{ fontSize: '10px' }} className="space-y-1">
                 <div><span className="font-bold">£4435.01</span> a year for electricity</div>
                 <div><span className="font-bold">£4322.87</span> a year for gas</div>
               </div>
-              <div style={{ fontSize: '8px' }} className="mt-1.5 text-gray-600 leading-tight">
+              <div style={{ fontSize: '8px' }} className="mt-2 text-gray-600 leading-tight">
                 This is an estimate based on your expected annual energy usage, and your current tariff rates, charges and discounts, including VAT. Actual bills will vary depending on your usage and tariff selection. More information about your current tariff can be found overleaf.
               </div>
             </div>
 
-            <hr className="border-gray-400 mb-2" />
+            <hr className="border-gray-400 mb-3" />
 
             {/* Could you pay less section */}
-            <div className="mb-2">
-              <div className="font-bold mb-0.5" style={{ color: '#e31e24', fontSize: '10px' }}>Could you pay less?</div>
+            <div className="mb-3">
+              <div className="font-bold mb-1" style={{ color: '#e31e24', fontSize: '10px' }}>Could you pay less?</div>
               <div style={{ fontSize: '8px' }} className="text-gray-700 italic mb-1">
                 Remember - it might be worth thinking about switching your tariff or supplier.
               </div>
@@ -163,15 +167,15 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             </div>
 
             {/* Good to know sections */}
-            <div className="mb-1">
-              <div className="font-bold mb-0.5" style={{ fontSize: '10px' }}>Good to know.</div>
-              <div style={{ fontSize: '8px' }} className="text-gray-700 mb-1">
+            <div className="mb-2">
+              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '8px' }} className="text-gray-700 mb-2">
                 You're already on our cheapest tariff for your <strong>electricity</strong> usage. We'll let you know if this changes.
               </div>
-              <div style={{ fontSize: '8px' }} className="text-gray-600 mb-1">
+              <div style={{ fontSize: '8px' }} className="text-gray-600 mb-2">
                 For your <strong>gas</strong> (on meter point 711310402)
               </div>
-              <div className="font-bold mb-0.5" style={{ fontSize: '10px' }}>Good to know.</div>
+              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
               <div style={{ fontSize: '8px' }} className="text-gray-700">
                 You're already on our cheapest tariff for your <strong>gas</strong> usage. We'll let you know if this changes.
               </div>
@@ -180,7 +184,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
         </div>
 
         {/* Footer */}
-        <div className="mt-3 pt-1 border-t text-gray-600" style={{ fontSize: '8px' }}>
+        <div className="mt-6 pt-2 border-t text-gray-600" style={{ fontSize: '8px' }}>
           <div className="flex justify-between items-end">
             <div className="max-w-xl">
               <div>E.ON Next Energy Limited Registered Office: Westwood Way, Westwood Business Park, Coventry CV4 8LG.</div>
