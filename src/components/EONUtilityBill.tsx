@@ -12,10 +12,10 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   
   // Parse address properly
   const addressParts = userDetails.address.split('|');
-  const streetAddress = addressParts[0] || `${Math.floor(Math.random() * 999) + 1} High Street`;
-  const area1 = addressParts[1] || 'London';
-  const area2 = addressParts[2] || 'Greater London';
-  const postcode = addressParts[3] || 'SW1A 1AA';
+  const streetAddress = addressParts[0] || userDetails.address.split(',')[0] || `${Math.floor(Math.random() * 999) + 1} High Street`;
+  const area1 = addressParts[1] || userDetails.address.split(',')[1] || 'London';
+  const area2 = addressParts[2] || userDetails.address.split(',')[2] || 'Greater London';
+  const postcode = addressParts[3] || userDetails.address.split(',')[3] || userDetails.postcode || 'SW1A 1AA';
   
   // Use provided phone number or generate one
   const phoneNumber = userDetails.phoneNumber || `+44${Math.floor(1000000000 + Math.random() * 9000000000)}`;
@@ -31,77 +31,76 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   const estimatedGas = (Math.random() * 2000 + 3000).toFixed(2);
 
   return (
-    <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
+    <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20mm' }}>
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
-        {/* Header - Three Column Layout */}
-        <div className="flex justify-between mb-6">
-          {/* Left Column - Logo and Customer Address */}
-          <div className="flex-1 max-w-xs">
-            {/* Logo */}
-            <div className="mb-4">
-              <img 
-                src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
-                alt="E.ON Next" 
-                className="h-20"
-              />
-            </div>
-
-            {/* Customer Address */}
-            <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
-              <div className="font-medium">{userDetails.name}</div>
-              <div>{streetAddress}</div>
-              <div>{area1}</div>
-              <div>{area2}</div>
-              <div>{postcode}</div>
-              <div>{phoneNumber}</div>
-            </div>
-          </div>
-
-          {/* Middle Column - Spacer */}
-          <div className="flex-1"></div>
-
-          {/* Right Column - Contact Info, Account Number, Bill Reference and QR Code */}
-          <div className="w-80 space-y-4">
-            {/* Contact Info */}
-            <div>
-              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
-              <div className="flex items-center gap-2 mb-1" style={{ fontSize: '12px' }}>
-                <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" className="w-3 h-3" />
-                <span>eonnext.com/contact</span>
+        {/* Header - Improved Layout with QR Code Positioned Correctly */}
+        <div className="mb-6">
+          <div className="flex justify-between items-start">
+            {/* Left Column - Logo and Customer Address */}
+            <div className="w-1/3">
+              {/* Logo */}
+              <div className="mb-4">
+                <img 
+                  src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
+                  alt="E.ON Next" 
+                  className="h-20"
+                />
               </div>
-              <div className="flex items-center gap-2" style={{ fontSize: '12px' }}>
-                <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" className="w-3 h-3" />
-                <span>hi@eonnext.com</span>
+
+              {/* Customer Address */}
+              <div style={{ fontSize: '13px', lineHeight: '1.4' }}>
+                <div className="font-medium">{userDetails.name}</div>
+                <div>{streetAddress}</div>
+                <div>{area1}</div>
+                <div>{area2}</div>
+                <div>{postcode}</div>
+                <div>{phoneNumber}</div>
               </div>
             </div>
 
-            {/* Account Number Box */}
-            <div>
-              <div className="font-bold mb-2 flex items-center gap-1" style={{ color: '#ec1c24', fontSize: '12px' }}>
-                <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
-                Your account number:
+            {/* Middle Column - Contact Info and Account Details */}
+            <div className="w-1/3 px-4">
+              {/* Contact Info */}
+              <div className="mb-4">
+                <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
+                <div className="flex items-center gap-2 mb-1" style={{ fontSize: '12px' }}>
+                  <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" className="w-3 h-3" />
+                  <span>eonnext.com/contact</span>
+                </div>
+                <div className="flex items-center gap-2" style={{ fontSize: '12px' }}>
+                  <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" className="w-3 h-3" />
+                  <span>hi@eonnext.com</span>
+                </div>
               </div>
-              <div className="text-left">
-                <span className="block text-black" style={{ fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
-                <div className="flex justify-start mt-2">
-                  <div className="flex" style={{ height: '4px', width: '80px' }}>
-                    <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
-                    <div className="flex-1" style={{ backgroundColor: '#1d70b8' }}></div>
-                    <div className="flex-1" style={{ backgroundColor: '#ec1c24' }}></div>
+
+              {/* Account Number Box */}
+              <div className="mb-4">
+                <div className="font-bold mb-2 flex items-center gap-1" style={{ color: '#ec1c24', fontSize: '12px' }}>
+                  <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
+                  Your account number:
+                </div>
+                <div className="text-left">
+                  <span className="block text-black" style={{ fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
+                  <div className="flex justify-start mt-2">
+                    <div className="flex" style={{ height: '4px', width: '80px' }}>
+                      <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
+                      <div className="flex-1" style={{ backgroundColor: '#1d70b8' }}></div>
+                      <div className="flex-1" style={{ backgroundColor: '#ec1c24' }}></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Bill Reference and QR Code - Side by Side - Positioned exactly opposite the customer address */}
-            <div className="flex items-start justify-between" style={{ marginTop: '60px' }}>
+              {/* Bill Reference */}
               <div style={{ fontSize: '10px' }}>
                 <div>Bill Reference: {userDetails.sortCode}</div>
                 <div>({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
               </div>
-              
-              {/* QR Code positioned exactly opposite the customer address */}
-              <div className="ml-4">
+            </div>
+
+            {/* Right Column - QR Code positioned opposite the customer address */}
+            <div className="w-1/3 flex justify-end">
+              <div className="flex justify-end">
                 <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
               </div>
             </div>
