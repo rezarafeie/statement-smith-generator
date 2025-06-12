@@ -24,7 +24,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             </div>
 
             {/* Address and QR Code - Side by Side, QR positioned inline with address */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-start gap-2">
               {/* Address */}
               <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
                 <div className="font-medium">{userDetails.name}</div>
