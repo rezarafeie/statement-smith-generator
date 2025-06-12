@@ -10,21 +10,21 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
   return (
     <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
       <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
-        {/* Header - Two Column Layout */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {/* Left Column - Logo and Address */}
+        {/* Header - Three Column Layout */}
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          {/* Left Column - Logo, Address and QR Code */}
           <div>
-            {/* Logo */}
+            {/* Logo - Increased size */}
             <div className="mb-4">
               <img 
                 src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
                 alt="E.ON Next" 
-                className="h-12"
+                className="h-16"
               />
             </div>
 
-            {/* Address - Increased size */}
-            <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
+            {/* Address */}
+            <div style={{ fontSize: '13px', lineHeight: '1.3' }} className="mb-4">
               <div className="font-medium">{userDetails.name}</div>
               <div>2 Frederick Street</div>
               <div>Kings Cross</div>
@@ -32,11 +32,19 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               <div>WC1X 0ND</div>
               <div>+447412375153</div>
             </div>
+
+            {/* QR Code - moved to left, opposite address */}
+            <div className="flex justify-start">
+              <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+            </div>
           </div>
+
+          {/* Middle Column - Empty for spacing */}
+          <div></div>
 
           {/* Right Column - Contact Info, Account Number, etc. */}
           <div className="space-y-3">
-            {/* Contact Info - Increased size */}
+            {/* Contact Info */}
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
               <div className="flex items-center gap-2 mb-1" style={{ fontSize: '12px' }}>
@@ -49,7 +57,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* Account Number Box - Smaller text and black color */}
+            {/* Account Number Box */}
             <div>
               <div className="font-bold mb-2 flex items-center gap-1" style={{ color: '#ec1c24', fontSize: '12px' }}>
                 <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
@@ -67,13 +75,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
               </div>
             </div>
 
-            {/* QR Code moved further down */}
-            <div className="flex justify-end mt-6">
-              <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
-            </div>
-
-            {/* Bill Reference moved further down */}
-            <div style={{ fontSize: '10px' }} className="mt-6">
+            {/* Bill Reference - moved down */}
+            <div style={{ fontSize: '10px' }} className="mt-8">
               <div>Bill Reference: 72513189 (29th Jul. 2023)</div>
             </div>
             
@@ -115,7 +118,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
           </div>
         </div>
 
-        {/* Main Content - Two Column Layout with content on LEFT only */}
+        {/* Main Content - Two Column Layout */}
         <div className="grid grid-cols-2 gap-4 mb-3">
           {/* Left Column - Main Account Information */}
           <div>
@@ -182,8 +185,10 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
             </div>
           </div>
 
-          {/* Right Column - Empty */}
-          <div></div>
+          {/* Right Column - Additional space for continuation of right-side content if needed */}
+          <div>
+            {/* This column can be used for any overflow content from the right side */}
+          </div>
         </div>
 
         {/* Footer */}
@@ -206,6 +211,9 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails }) =
         }
         @media (max-width: 768px) {
           .grid-cols-2 {
+            grid-template-columns: 1fr;
+          }
+          .grid-cols-3 {
             grid-template-columns: 1fr;
           }
         }
