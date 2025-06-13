@@ -64,7 +64,7 @@ const generateUKPhone = (): string => {
 };
 
 // Generate E.ON specific data
-export const generateEONUserDetails = (customData?: Partial<UserDetails> & { phoneNumber?: string }): UserDetails => {
+export const generateEONUserDetails = (customData?: Partial<UserDetails> & { phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string }): UserDetails => {
   const firstName = ukFirstNames[Math.floor(Math.random() * ukFirstNames.length)];
   const lastName = ukLastNames[Math.floor(Math.random() * ukLastNames.length)];
   const streetName = ukStreetNames[Math.floor(Math.random() * ukStreetNames.length)];
@@ -87,7 +87,33 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails> & { pho
     return `${day}${day.endsWith('1') && day !== '11' ? 'st' : day.endsWith('2') && day !== '12' ? 'nd' : day.endsWith('3') && day !== '13' ? 'rd' : 'th'} ${month}. ${year}`;
   };
   
-  const formattedAddress = `${houseNumber} ${streetName}|${city.name}|${city.area}|${postcode}`;
+  // Build address from custom fields if provided, otherwise use generated data
+  let formattedAddress;
+  if (customData?.fullAddress || customData?.city || customData?.postcode) {
+    const addressParts = [];
+    if (customData.fullAddress) {
+      addressParts.push(customData.fullAddress);
+    } else {
+      addressParts.push(`${houseNumber} ${streetName}`);
+    }
+    
+    if (customData.city) {
+      addressParts.push(customData.city);
+    } else {
+      addressParts.push(city.name);
+      addressParts.push(city.area);
+    }
+    
+    if (customData.postcode) {
+      addressParts.push(customData.postcode);
+    } else {
+      addressParts.push(postcode);
+    }
+    
+    formattedAddress = addressParts.join('|');
+  } else {
+    formattedAddress = `${houseNumber} ${streetName}|${city.name}|${city.area}|${postcode}`;
+  }
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
@@ -99,7 +125,8 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails> & { pho
   };
 
   const filteredCustomData = customData ? Object.fromEntries(
-    Object.entries(customData).filter(([_, value]) => 
+    Object.entries(customData).filter(([key, value]) => 
+      key !== 'city' && key !== 'fullAddress' && key !== 'postcode' && 
       value !== undefined && value !== null && value !== ''
     )
   ) : {};
