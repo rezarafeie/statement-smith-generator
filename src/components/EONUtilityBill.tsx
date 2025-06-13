@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { generateEONUserDetails } from '@/utils/dataGenerator';
 
@@ -93,19 +92,18 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
                 <div style={{ textAlign: 'left' }}>
                   <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '8px' }}>
-                    <div style={{ display: 'flex', height: '4px', width: '80px' }}>
-                      <div style={{ flex: '1', backgroundColor: '#ffd700' }}></div>
-                      <div style={{ flex: '1', backgroundColor: '#1d70b8' }}></div>
-                      <div style={{ flex: '1', backgroundColor: '#ec1c24' }}></div>
-                    </div>
+                    <img 
+                      src="/lovable-uploads/2256be56-cc12-41f0-8e17-ef7fcac643fa.png" 
+                      alt="Color line" 
+                      style={{ width: '80px', height: '4px' }}
+                    />
                   </div>
                 </div>
               </div>
 
-              {/* Bill Reference */}
+              {/* Bill Reference - Combined into single line */}
               <div style={{ fontSize: '10px' }}>
-                <div>Bill Reference: {userDetails.sortCode}</div>
-                <div>({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
+                <div>Bill Reference: {userDetails.sortCode} ({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
               </div>
             </div>
           </div>
