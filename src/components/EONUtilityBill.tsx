@@ -36,78 +36,76 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   return (
     <div className="eon-bill-container bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', width: '794px', minHeight: '1123px', padding: '20px' }}>
       <div className="eon-bill-content" style={{ fontSize: '11px', lineHeight: '1.3' }}>
-        {/* Header - Three Column Layout */}
-        <div className="eon-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
-          {/* Left Column - Logo and Customer Address */}
-          <div className="eon-left-column" style={{ width: '280px' }}>
-            {/* Logo */}
-            <div style={{ marginBottom: '16px' }}>
-              <img 
-                src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
-                alt="E.ON Next" 
-                className="eon-logo"
-                style={{ height: '80px' }}
-              />
-            </div>
-
-            {/* Customer Address */}
-            <div className="eon-customer-address" style={{ fontSize: '13px', lineHeight: '1.3' }}>
-              <div style={{ fontWeight: '500' }}>{userDetails.name}</div>
-              <div>{streetAddress}</div>
-              {addressLine2 && <div>{addressLine2}</div>}
-              <div>{city}</div>
-              <div>{postcode}</div>
-              <div>{country}</div>
-              <div>{phoneNumber}</div>
-            </div>
+        {/* Header */}
+        <div className="eon-header" style={{ marginBottom: '24px' }}>
+          {/* Logo */}
+          <div style={{ marginBottom: '16px' }}>
+            <img 
+              src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
+              alt="E.ON Next" 
+              className="eon-logo"
+              style={{ height: '80px' }}
+            />
           </div>
 
-          {/* Middle Column - Spacer */}
-          <div className="eon-spacer" style={{ width: '100px' }}></div>
-
-          {/* Right Column - Contact Info, Account Number, Bill Reference and QR Code */}
-          <div className="eon-right-column" style={{ width: '320px' }}>
-            {/* Contact Info */}
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', fontSize: '12px' }}>
-                <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" style={{ width: '12px', height: '12px' }} />
-                <span>eonnext.com/contact</span>
+          {/* Address and QR Code Row */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+            {/* Customer Address and QR Code Container */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+              {/* Customer Address */}
+              <div className="eon-customer-address" style={{ fontSize: '13px', lineHeight: '1.3' }}>
+                <div style={{ fontWeight: '500' }}>{userDetails.name}</div>
+                <div>{streetAddress}</div>
+                {addressLine2 && <div>{addressLine2}</div>}
+                <div>{city}</div>
+                <div>{postcode}</div>
+                <div>{country}</div>
+                <div>{phoneNumber}</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
-                <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" style={{ width: '12px', height: '12px' }} />
-                <span>hi@eonnext.com</span>
+
+              {/* QR Code - positioned next to address */}
+              <div>
+                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="eon-qr-code" style={{ width: '64px', height: '64px' }} />
               </div>
             </div>
 
-            {/* Account Number Box */}
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px', color: '#ec1c24', fontSize: '12px' }}>
-                <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" style={{ width: '12px', height: '12px' }} />
-                Your account number:
+            {/* Contact Info and Account Details */}
+            <div style={{ width: '280px' }}>
+              {/* Contact Info */}
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', fontSize: '12px' }}>
+                  <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" style={{ width: '12px', height: '12px' }} />
+                  <span>eonnext.com/contact</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
+                  <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" style={{ width: '12px', height: '12px' }} />
+                  <span>hi@eonnext.com</span>
+                </div>
               </div>
-              <div style={{ textAlign: 'left' }}>
-                <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
-                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '8px' }}>
-                  <div style={{ display: 'flex', height: '4px', width: '80px' }}>
-                    <div style={{ flex: '1', backgroundColor: '#ffd700' }}></div>
-                    <div style={{ flex: '1', backgroundColor: '#1d70b8' }}></div>
-                    <div style={{ flex: '1', backgroundColor: '#ec1c24' }}></div>
+
+              {/* Account Number Box */}
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px', color: '#ec1c24', fontSize: '12px' }}>
+                  <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" style={{ width: '12px', height: '12px' }} />
+                  Your account number:
+                </div>
+                <div style={{ textAlign: 'left' }}>
+                  <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
+                  <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '8px' }}>
+                    <div style={{ display: 'flex', height: '4px', width: '80px' }}>
+                      <div style={{ flex: '1', backgroundColor: '#ffd700' }}></div>
+                      <div style={{ flex: '1', backgroundColor: '#1d70b8' }}></div>
+                      <div style={{ flex: '1', backgroundColor: '#ec1c24' }}></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Bill Reference and QR Code - Side by Side - Positioned exactly opposite the customer address */}
-            <div className="eon-qr-section" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: '60px' }}>
+              {/* Bill Reference */}
               <div style={{ fontSize: '10px' }}>
                 <div>Bill Reference: {userDetails.sortCode}</div>
                 <div>({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
-              </div>
-              
-              {/* QR Code positioned exactly opposite the customer address */}
-              <div style={{ marginLeft: '16px' }}>
-                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="eon-qr-code" style={{ width: '64px', height: '64px' }} />
               </div>
             </div>
           </div>
