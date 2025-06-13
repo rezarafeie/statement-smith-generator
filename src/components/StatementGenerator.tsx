@@ -178,7 +178,7 @@ export const StatementGenerator: React.FC = () => {
     }, 1000);
   };
 
-  const handleCustomDataSubmit = (customData: Partial<UserDetails> & { initialBalance?: string }) => {
+  const handleCustomDataSubmit = (customData: Partial<UserDetails> & { initialBalance?: string; country?: string }) => {
     console.log('Custom data submitted:', customData);
     console.log('Current document type:', selectedDocumentType);
     console.log('Current step:', currentStep);

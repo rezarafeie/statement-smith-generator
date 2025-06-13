@@ -16,6 +16,7 @@ export interface UserDetails {
   city?: string;
   fullAddress?: string;
   postcode?: string;
+  country?: string;
 }
 
 const firstNames = ['James', 'Sarah', 'Michael', 'Emma', 'David', 'Lucy', 'Thomas', 'Sophie', 'Daniel', 'Charlotte'];
@@ -96,6 +97,7 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserD
   let finalArea = city.area; // Use default area unless custom city is provided
   let finalPostcode = customData?.postcode || postcode;
   let finalStreetAddress = customData?.fullAddress || `${houseNumber} ${streetName}`;
+  let finalCountry = customData?.country || 'UNITED KINGDOM';
   
   // If custom city is provided, we might need to adjust the area
   if (customData?.city) {
@@ -119,7 +121,8 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserD
     phoneNumber,
     city: finalCity,
     fullAddress: finalStreetAddress,
-    postcode: finalPostcode
+    postcode: finalPostcode,
+    country: finalCountry
   };
 
   // Filter out undefined, null, and empty string values from custom data
@@ -202,9 +205,10 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
   const finalCity = customData?.city || city.name;
   const finalPostcode = customData?.postcode || postalCode;
   const finalStreetAddress = customData?.fullAddress || `${streetType} ${streetName}, ${houseNumber}`;
+  const finalCountry = customData?.country || 'SPAIN';
   
   // Create properly formatted Spanish address: Street | City, Postcode | Country
-  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|SPAIN`;
+  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|${finalCountry}`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
@@ -214,7 +218,8 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
     statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`,
     city: finalCity,
     fullAddress: finalStreetAddress,
-    postcode: finalPostcode
+    postcode: finalPostcode,
+    country: finalCountry
   };
 
   // Filter out undefined, null, and empty string values from custom data
@@ -229,8 +234,8 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
     ...defaultData,
     ...filteredCustomData,
     // Ensure address is rebuilt if any address components were customized
-    address: customData?.fullAddress || customData?.city || customData?.postcode 
-      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|SPAIN`
+    address: customData?.fullAddress || customData?.city || customData?.postcode || customData?.country
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|${filteredCustomData.country || finalCountry}`
       : formattedAddress
   };
 };
@@ -263,9 +268,10 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
   const finalCity = customData?.city || city;
   const finalPostcode = customData?.postcode || postcode;
   const finalStreetAddress = customData?.fullAddress || `${houseNumber} ${street}`;
+  const finalCountry = customData?.country || 'UNITED KINGDOM';
   
   // Create properly formatted address: Street | City, Postcode | Country
-  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|UNITED KINGDOM`;
+  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|${finalCountry}`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
@@ -275,7 +281,8 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
     statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`,
     city: finalCity,
     fullAddress: finalStreetAddress,
-    postcode: finalPostcode
+    postcode: finalPostcode,
+    country: finalCountry
   };
 
   // Filter out undefined, null, and empty string values from custom data
@@ -290,8 +297,8 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
     ...defaultData,
     ...filteredCustomData,
     // Ensure address is rebuilt if any address components were customized
-    address: customData?.fullAddress || customData?.city || customData?.postcode 
-      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|UNITED KINGDOM`
+    address: customData?.fullAddress || customData?.city || customData?.postcode || customData?.country
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|${filteredCustomData.country || finalCountry}`
       : formattedAddress
   };
 };

@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 interface CustomDataFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string }) => void;
+  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string; country?: string }) => void;
 }
 
 export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -24,6 +24,7 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     city: '',
     fullAddress: '',
     postcode: '',
+    country: '',
     accountNumber: '',
     statementPeriod: '',
     initialBalance: '',
@@ -54,13 +55,14 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     }
     
     // Only include fields that have actual values (not empty strings)
-    const userData: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string } = {};
+    const userData: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string; country?: string } = {};
     
     if (formData.name.trim()) userData.name = formData.name.trim();
     if (formData.address.trim()) userData.address = formData.address.trim();
     if (formData.city.trim()) userData.city = formData.city.trim();
     if (formData.fullAddress.trim()) userData.fullAddress = formData.fullAddress.trim();
     if (formData.postcode.trim()) userData.postcode = formData.postcode.trim();
+    if (formData.country.trim()) userData.country = formData.country.trim();
     if (formData.accountNumber.trim()) userData.accountNumber = formData.accountNumber.trim();
     if (statementPeriod.trim()) userData.statementPeriod = statementPeriod.trim();
     if (formData.initialBalance.trim()) userData.initialBalance = formData.initialBalance.trim();
@@ -76,6 +78,7 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
       city: '',
       fullAddress: '',
       postcode: '',
+      country: '',
       accountNumber: '',
       statementPeriod: '',
       initialBalance: '',
@@ -160,6 +163,18 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
                 onChange={(e) => handleChange('postcode', e.target.value)}
                 className="bg-gray-700 border-gray-600 text-white"
                 placeholder="e.g., SW1A 1AA"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="country" className="text-gray-300">Country</Label>
+              <Input
+                id="country"
+                type="text"
+                value={formData.country}
+                onChange={(e) => handleChange('country', e.target.value)}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="e.g., United Kingdom, Spain"
               />
             </div>
 
