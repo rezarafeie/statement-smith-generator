@@ -13,6 +13,9 @@ export interface UserDetails {
   sortCode: string;
   statementPeriod: string;
   phoneNumber?: string;
+  city?: string;
+  fullAddress?: string;
+  postcode?: string;
 }
 
 const firstNames = ['James', 'Sarah', 'Michael', 'Emma', 'David', 'Lucy', 'Thomas', 'Sophie', 'Daniel', 'Charlotte'];
@@ -64,7 +67,7 @@ const generateUKPhone = (): string => {
 };
 
 // Generate E.ON specific data
-export const generateEONUserDetails = (customData?: Partial<UserDetails> & { phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string }): UserDetails => {
+export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserDetails => {
   const firstName = ukFirstNames[Math.floor(Math.random() * ukFirstNames.length)];
   const lastName = ukLastNames[Math.floor(Math.random() * ukLastNames.length)];
   const streetName = ukStreetNames[Math.floor(Math.random() * ukStreetNames.length)];
@@ -89,31 +92,23 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails> & { pho
   
   // Build address from custom fields if provided, otherwise use generated data
   let formattedAddress;
-  if (customData?.fullAddress || customData?.city || customData?.postcode) {
-    const addressParts = [];
-    if (customData.fullAddress) {
-      addressParts.push(customData.fullAddress);
+  let finalCity = customData?.city || city.name;
+  let finalArea = city.area; // Use default area unless custom city is provided
+  let finalPostcode = customData?.postcode || postcode;
+  let finalStreetAddress = customData?.fullAddress || `${houseNumber} ${streetName}`;
+  
+  // If custom city is provided, we might need to adjust the area
+  if (customData?.city) {
+    const matchingCity = ukCities.find(c => c.name.toLowerCase() === customData.city!.toLowerCase());
+    if (matchingCity) {
+      finalArea = matchingCity.area;
     } else {
-      addressParts.push(`${houseNumber} ${streetName}`);
+      // If custom city doesn't match our predefined cities, use a generic area
+      finalArea = `${customData.city} Area`;
     }
-    
-    if (customData.city) {
-      addressParts.push(customData.city);
-    } else {
-      addressParts.push(city.name);
-      addressParts.push(city.area);
-    }
-    
-    if (customData.postcode) {
-      addressParts.push(customData.postcode);
-    } else {
-      addressParts.push(postcode);
-    }
-    
-    formattedAddress = addressParts.join('|');
-  } else {
-    formattedAddress = `${houseNumber} ${streetName}|${city.name}|${city.area}|${postcode}`;
   }
+  
+  formattedAddress = `${finalStreetAddress}|${finalCity}|${finalArea}|${finalPostcode}`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
@@ -121,19 +116,26 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails> & { pho
     accountNumber,
     sortCode: billReference,
     statementPeriod: `${formatDate(startDate)} - ${formatDate(endDate)}`,
-    phoneNumber
+    phoneNumber,
+    city: finalCity,
+    fullAddress: finalStreetAddress,
+    postcode: finalPostcode
   };
 
+  // Filter out undefined, null, and empty string values from custom data
   const filteredCustomData = customData ? Object.fromEntries(
-    Object.entries(customData).filter(([key, value]) => 
-      key !== 'city' && key !== 'fullAddress' && key !== 'postcode' && 
+    Object.entries(customData).filter(([_, value]) => 
       value !== undefined && value !== null && value !== ''
     )
   ) : {};
 
   return {
     ...defaultData,
-    ...filteredCustomData
+    ...filteredCustomData,
+    // Ensure address is rebuilt if any address components were customized
+    address: customData?.fullAddress || customData?.city || customData?.postcode 
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}|${finalArea}|${filteredCustomData.postcode || finalPostcode}`
+      : formattedAddress
   };
 };
 
@@ -196,15 +198,23 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
     return `${day}/${month}/${year}`;
   };
   
+  // Use custom data if provided, otherwise use generated data
+  const finalCity = customData?.city || city.name;
+  const finalPostcode = customData?.postcode || postalCode;
+  const finalStreetAddress = customData?.fullAddress || `${streetType} ${streetName}, ${houseNumber}`;
+  
   // Create properly formatted Spanish address: Street | City, Postcode | Country
-  const formattedAddress = `${streetType} ${streetName}, ${houseNumber}|${city.name}, ${postalCode}|SPAIN`;
+  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|SPAIN`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
     address: formattedAddress,
     accountNumber,
     sortCode,
-    statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`
+    statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`,
+    city: finalCity,
+    fullAddress: finalStreetAddress,
+    postcode: finalPostcode
   };
 
   // Filter out undefined, null, and empty string values from custom data
@@ -217,7 +227,11 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
   // Merge filtered custom data with default data
   return {
     ...defaultData,
-    ...filteredCustomData
+    ...filteredCustomData,
+    // Ensure address is rebuilt if any address components were customized
+    address: customData?.fullAddress || customData?.city || customData?.postcode 
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|SPAIN`
+      : formattedAddress
   };
 };
 
@@ -245,15 +259,23 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
     return `${day}/${month}/${year}`;
   };
   
+  // Use custom data if provided, otherwise use generated data
+  const finalCity = customData?.city || city;
+  const finalPostcode = customData?.postcode || postcode;
+  const finalStreetAddress = customData?.fullAddress || `${houseNumber} ${street}`;
+  
   // Create properly formatted address: Street | City, Postcode | Country
-  const formattedAddress = `${houseNumber} ${street}|${city}, ${postcode}|UNITED KINGDOM`;
+  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|UNITED KINGDOM`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
     address: formattedAddress,
     accountNumber,
     sortCode,
-    statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`
+    statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`,
+    city: finalCity,
+    fullAddress: finalStreetAddress,
+    postcode: finalPostcode
   };
 
   // Filter out undefined, null, and empty string values from custom data
@@ -266,7 +288,11 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
   // Merge filtered custom data with default data
   return {
     ...defaultData,
-    ...filteredCustomData
+    ...filteredCustomData,
+    // Ensure address is rebuilt if any address components were customized
+    address: customData?.fullAddress || customData?.city || customData?.postcode 
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|UNITED KINGDOM`
+      : formattedAddress
   };
 };
 

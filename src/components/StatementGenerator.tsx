@@ -9,7 +9,7 @@ import { SpanishUtilityBill } from './SpanishUtilityBill';
 import { SpanishBankStatement } from './SpanishBankStatement';
 import { UKUtilityBill } from './UKUtilityBill';
 import { EONUtilityBill } from './EONUtilityBill';
-import { generateUserDetails, generateSpanishUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
+import { generateUserDetails, generateSpanishUserDetails, generateEONUserDetails, generateTransactions, UserDetails, Transaction } from '../utils/dataGenerator';
 import { RefreshCw, Download, Zap, User, Sun, Moon, Copy, CheckCircle, Languages, FileText, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import html2canvas from 'html2canvas';
@@ -141,10 +141,18 @@ export const StatementGenerator: React.FC = () => {
     setIsGenerating(true);
     
     setTimeout(() => {
-      const isSpanishDocument = selectedCountry === 'ES' || ['utility-bill', 'bank-statement'].includes(documentType);
-      const newUserDetails = isSpanishDocument 
-        ? generateSpanishUserDetails(customData)
-        : generateUserDetails(customData);
+      let newUserDetails: UserDetails;
+      
+      // Use the appropriate generator based on document type
+      if (documentType === 'eon-utility-bill' || documentType === 'uk-utility-bill') {
+        newUserDetails = generateEONUserDetails(customData);
+      } else if (documentType === 'utility-bill' || documentType === 'bank-statement') {
+        // Spanish documents
+        newUserDetails = generateSpanishUserDetails(customData);
+      } else {
+        // Metro Bank and other UK documents
+        newUserDetails = generateUserDetails(customData);
+      }
       
       const newTransactions = generateTransactions(12 + Math.floor(Math.random() * 8), initialBalance);
       const newDocId = generateDocumentId();
