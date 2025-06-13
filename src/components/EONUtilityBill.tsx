@@ -73,31 +73,31 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
             <div style={{ width: '280px' }}>
               {/* Contact Info */}
               <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', fontSize: '12px' }}>
-                  <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" style={{ width: '12px', height: '12px' }} />
+                <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '16px' }}>Get in touch with us</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', fontSize: '14px' }}>
+                  <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" style={{ width: '16px', height: '16px' }} />
                   <span>eonnext.com/contact</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
-                  <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" style={{ width: '12px', height: '12px' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
+                  <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" style={{ width: '16px', height: '16px' }} />
                   <span>hi@eonnext.com</span>
                 </div>
               </div>
 
               {/* Account Number Box */}
               <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px', color: '#ec1c24', fontSize: '12px' }}>
-                  <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" style={{ width: '12px', height: '12px' }} />
+                <div style={{ fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px', color: '#ec1c24', fontSize: '16px' }}>
+                  <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" style={{ width: '16px', height: '16px' }} />
                   Your account number:
                 </div>
                 <div style={{ textAlign: 'left' }}>
-                  <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
+                  <span style={{ display: 'block', color: 'black', fontSize: '14px', fontWeight: '600' }}>{userDetails.accountNumber}</span>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '8px' }}>
-                    <div style={{ display: 'flex', height: '4px', width: '80px' }}>
-                      <div style={{ flex: '1', backgroundColor: '#ffd700' }}></div>
-                      <div style={{ flex: '1', backgroundColor: '#1d70b8' }}></div>
-                      <div style={{ flex: '1', backgroundColor: '#ec1c24' }}></div>
-                    </div>
+                    <img 
+                      src="/lovable-uploads/92150690-f960-40b2-a740-d8e2249a0a16.png" 
+                      alt="Color bar" 
+                      style={{ height: '4px', width: '80px' }}
+                    />
                   </div>
                 </div>
               </div>
