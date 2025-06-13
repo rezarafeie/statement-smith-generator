@@ -8,6 +8,8 @@ interface BankStatementProps {
 }
 
 export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, transactions }) => {
+  console.log('Metro Bank - User Details:', userDetails);
+  
   const formatCurrency = (amount: number) => {
     return `${amount.toFixed(2)}`;
   };
@@ -27,29 +29,45 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
   };
 
   // Helper function to format address in 3-line structure
-  const formatAddress = (address: string | undefined) => {
-    if (!address) return ['N/A'];
+  const formatAddress = (userDetails: UserDetails) => {
+    console.log('Formatting address for:', userDetails);
     
-    // Check if address uses the new pipe-separated format
-    if (address.includes('|')) {
-      return address.split('|');
+    // First try to use individual custom fields if available
+    if (userDetails.fullAddress && userDetails.city && userDetails.postcode) {
+      const line1 = userDetails.fullAddress;
+      const line2 = `${userDetails.city}, ${userDetails.postcode}`;
+      const line3 = userDetails.country || 'UNITED KINGDOM';
+      return [line1, line2, line3];
+    }
+    
+    // Fall back to parsing the address field
+    if (userDetails.address && userDetails.address.includes('|')) {
+      const parts = userDetails.address.split('|');
+      if (parts.length >= 3) {
+        return [
+          parts[0], // street address
+          parts[1], // city, postcode
+          parts[2]  // country
+        ];
+      }
     }
     
     // Handle legacy comma-separated format
-    const parts = address.split(', ');
-    if (parts.length >= 3) {
-      // Try to restructure: [street], [city, postcode], [country]
-      const street = parts[0];
-      const cityPostcode = parts.slice(1, -1).join(', ');
-      const country = parts[parts.length - 1].toUpperCase();
-      return [street, cityPostcode, country];
+    if (userDetails.address) {
+      const parts = userDetails.address.split(', ');
+      if (parts.length >= 3) {
+        const street = parts[0];
+        const cityPostcode = parts.slice(1, -1).join(', ');
+        const country = parts[parts.length - 1].toUpperCase();
+        return [street, cityPostcode, country];
+      }
+      return parts;
     }
     
-    // Fallback for simple addresses
-    return parts;
+    return ['N/A'];
   };
 
-  const addressLines = formatAddress(userDetails.address);
+  const addressLines = formatAddress(userDetails);
 
   return (
     <div 

@@ -10,12 +10,15 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   // Generate random UK user details if not provided
   const userDetails = providedUserDetails || generateEONUserDetails();
   
+  console.log('EON Bill - User Details:', userDetails);
+  
   // Parse address properly
   const addressParts = userDetails.address.split('|');
-  const streetAddress = addressParts[0] || `${Math.floor(Math.random() * 999) + 1} High Street`;
-  const area1 = addressParts[1] || 'London';
+  const streetAddress = addressParts[0] || userDetails.fullAddress || `${Math.floor(Math.random() * 999) + 1} High Street`;
+  const area1 = addressParts[1] || userDetails.city || 'London';
   const area2 = addressParts[2] || 'Greater London';
-  const postcode = addressParts[3] || 'SW1A 1AA';
+  const postcode = addressParts[3] || userDetails.postcode || 'SW1A 1AA';
+  const country = userDetails.country || 'UNITED KINGDOM';
   
   // Use provided phone number or generate one
   const phoneNumber = userDetails.phoneNumber || `+44${Math.floor(1000000000 + Math.random() * 9000000000)}`;
@@ -54,6 +57,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
               <div>{area1}</div>
               <div>{area2}</div>
               <div>{postcode}</div>
+              <div>{country}</div>
               <div>{phoneNumber}</div>
             </div>
           </div>
