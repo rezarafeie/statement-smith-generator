@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { generateEONUserDetails } from '@/utils/dataGenerator';
 
@@ -231,11 +230,6 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
         @media print {
           .page-break {
             page-break-before: always;
-          }
-        }
-        @media (max-width: 768px) {
-          .flex {
-            flex-direction: column;
           }
         }
       `}</style>

@@ -111,7 +111,7 @@ export const StatementGenerator: React.FC = () => {
     console.log('Country selected:', countryCode);
     setSelectedCountry(countryCode);
     setCurrentStep('document-selection');
-    setSelectedDocumentType(''); // Reset document type
+    setSelectedDocumentType('');
   };
 
   const handleDocumentTypeSelect = (documentType: string) => {
@@ -141,7 +141,6 @@ export const StatementGenerator: React.FC = () => {
     setIsGenerating(true);
     
     setTimeout(() => {
-      // Use Spanish address generation for Spanish documents
       const isSpanishDocument = selectedCountry === 'ES' || ['utility-bill', 'bank-statement'].includes(documentType);
       const newUserDetails = isSpanishDocument 
         ? generateSpanishUserDetails(customData)
@@ -156,7 +155,6 @@ export const StatementGenerator: React.FC = () => {
       setCurrentStep('document-generated');
       setIsGenerating(false);
 
-      // Save document state for sharing
       const docState: DocumentState = {
         userDetails: newUserDetails,
         transactions: newTransactions,
@@ -180,7 +178,6 @@ export const StatementGenerator: React.FC = () => {
     const initialBalance = customData.initialBalance ? parseFloat(customData.initialBalance) : undefined;
     const { initialBalance: _, ...userData } = customData;
     
-    // Check if we have a valid document type selected
     if (!isValidDocumentType(selectedDocumentType)) {
       console.error('No valid document type selected when submitting custom data');
       toast({
@@ -334,7 +331,6 @@ export const StatementGenerator: React.FC = () => {
     setUserDetails(null);
     setTransactions([]);
     setDocumentId('');
-    // Clear URL
     window.history.pushState({}, '', window.location.pathname);
   };
 
@@ -392,19 +388,6 @@ export const StatementGenerator: React.FC = () => {
             </div>
           )}
 
-          {currentStep === 'document-selection' && (
-            <div className="text-center">
-              <Button 
-                onClick={handleBackToCountrySelection}
-                variant="outline"
-                className="mb-4"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Country Selection
-              </Button>
-            </div>
-          )}
-
           {currentStep === 'document-generated' && (
             <div className="space-y-4">
               <div className="text-center">
@@ -418,7 +401,7 @@ export const StatementGenerator: React.FC = () => {
                 </Button>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <div className="flex flex-col gap-4 items-center justify-center">
                 <Button 
                   onClick={() => isValidDocumentType(selectedDocumentType) && generateDocument(selectedDocumentType)}
                   disabled={isGenerating || !isValidDocumentType(selectedDocumentType)}
@@ -488,7 +471,7 @@ export const StatementGenerator: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center flex-wrap">
+              <div className="flex flex-col gap-4 items-center justify-center flex-wrap">
                 <Button 
                   onClick={downloadAsImage}
                   className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-lg min-w-[160px]"

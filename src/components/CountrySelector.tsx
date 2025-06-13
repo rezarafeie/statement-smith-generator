@@ -27,7 +27,7 @@ const countries: Country[] = [
 
 export const CountrySelector: React.FC<CountrySelectorProps> = ({ onCountrySelect }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+    <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
       {countries.map((country) => (
         <Card 
           key={country.code}
