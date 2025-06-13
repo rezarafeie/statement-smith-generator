@@ -20,13 +20,26 @@ export const SpanishBankStatement: React.FC<SpanishBankStatementProps> = ({
     return `${month}/${day}`;
   };
 
-  // Helper function to format address in 3-line structure
+  // Helper function to format address with Address Line 2 support
   const formatAddress = (address: string | undefined) => {
     if (!address) return ['N/A'];
     
-    // Check if address uses the new pipe-separated format
+    // Check if address uses the new pipe-separated format: fullAddress|addressLine2|city,postcode|country
     if (address.includes('|')) {
-      return address.split('|');
+      const parts = address.split('|');
+      if (parts.length >= 4) {
+        const addressLines = [];
+        addressLines.push(parts[0]); // street address
+        if (parts[1] && parts[1].trim()) { // address line 2 (if not empty)
+          addressLines.push(parts[1]);
+        }
+        addressLines.push(parts[2]); // city, postcode
+        addressLines.push(parts[3]); // country
+        return addressLines;
+      } else if (parts.length >= 3) {
+        // Legacy format
+        return parts;
+      }
     }
     
     // Handle legacy comma-separated format

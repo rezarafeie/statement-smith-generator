@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 interface CustomDataFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string; country?: string }) => void;
+  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; addressLine2?: string; postcode?: string; country?: string }) => void;
 }
 
 export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -23,6 +23,7 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     address: '',
     city: '',
     fullAddress: '',
+    addressLine2: '',
     postcode: '',
     country: '',
     accountNumber: '',
@@ -55,12 +56,13 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     }
     
     // Only include fields that have actual values (not empty strings)
-    const userData: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string; country?: string } = {};
+    const userData: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; addressLine2?: string; postcode?: string; country?: string } = {};
     
     if (formData.name.trim()) userData.name = formData.name.trim();
     if (formData.address.trim()) userData.address = formData.address.trim();
     if (formData.city.trim()) userData.city = formData.city.trim();
     if (formData.fullAddress.trim()) userData.fullAddress = formData.fullAddress.trim();
+    if (formData.addressLine2.trim()) userData.addressLine2 = formData.addressLine2.trim();
     if (formData.postcode.trim()) userData.postcode = formData.postcode.trim();
     if (formData.country.trim()) userData.country = formData.country.trim();
     if (formData.accountNumber.trim()) userData.accountNumber = formData.accountNumber.trim();
@@ -77,6 +79,7 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
       address: '',
       city: '',
       fullAddress: '',
+      addressLine2: '',
       postcode: '',
       country: '',
       accountNumber: '',
@@ -131,14 +134,26 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
             </div>
 
             <div>
-              <Label htmlFor="fullAddress" className="text-gray-300">Full Address</Label>
+              <Label htmlFor="fullAddress" className="text-gray-300">Address Line 1</Label>
               <Textarea
                 id="fullAddress"
                 value={formData.fullAddress}
                 onChange={(e) => handleChange('fullAddress', e.target.value)}
                 className="bg-gray-700 border-gray-600 text-white"
-                placeholder="e.g., 123 High Street, Apartment 4B"
+                placeholder="e.g., 123 High Street"
                 rows={2}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="addressLine2" className="text-gray-300">Address Line 2</Label>
+              <Input
+                id="addressLine2"
+                type="text"
+                value={formData.addressLine2}
+                onChange={(e) => handleChange('addressLine2', e.target.value)}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="e.g., Apartment 4B, Building A"
               />
             </div>
 

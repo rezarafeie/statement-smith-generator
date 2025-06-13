@@ -28,22 +28,38 @@ export const BankStatement: React.FC<BankStatementProps> = ({ userDetails, trans
     return period.replace(/\//g, '/');
   };
 
-  // Helper function to format address in 3-line structure
+  // Helper function to format address with Address Line 2 support
   const formatAddress = (userDetails: UserDetails) => {
     console.log('Formatting address for:', userDetails);
     
     // First try to use individual custom fields if available
     if (userDetails.fullAddress && userDetails.city && userDetails.postcode) {
-      const line1 = userDetails.fullAddress;
-      const line2 = `${userDetails.city}, ${userDetails.postcode}`;
-      const line3 = userDetails.country || 'UNITED KINGDOM';
-      return [line1, line2, line3];
+      const addressLines = [];
+      addressLines.push(userDetails.fullAddress);
+      if (userDetails.addressLine2) {
+        addressLines.push(userDetails.addressLine2);
+      }
+      addressLines.push(`${userDetails.city}, ${userDetails.postcode}`);
+      addressLines.push(userDetails.country || 'UNITED KINGDOM');
+      return addressLines;
     }
     
-    // Fall back to parsing the address field
+    // Fall back to parsing the address field with new format: fullAddress|addressLine2|city|postcode
     if (userDetails.address && userDetails.address.includes('|')) {
       const parts = userDetails.address.split('|');
-      if (parts.length >= 3) {
+      if (parts.length >= 4) {
+        const addressLines = [];
+        addressLines.push(parts[0]); // street address
+        if (parts[1] && parts[1].trim()) { // address line 2 (if not empty)
+          addressLines.push(parts[1]);
+        }
+        addressLines.push(parts[2]); // city, postcode
+        if (parts[3]) {
+          addressLines.push(parts[3]); // country
+        }
+        return addressLines;
+      } else if (parts.length >= 3) {
+        // Legacy format: street|city,postcode|country
         return [
           parts[0], // street address
           parts[1], // city, postcode

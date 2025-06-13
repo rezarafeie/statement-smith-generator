@@ -15,6 +15,7 @@ export interface UserDetails {
   phoneNumber?: string;
   city?: string;
   fullAddress?: string;
+  addressLine2?: string;
   postcode?: string;
   country?: string;
 }
@@ -92,25 +93,21 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserD
   };
   
   // Build address from custom fields if provided, otherwise use generated data
-  let formattedAddress;
   let finalCity = customData?.city || city.name;
-  let finalArea = city.area; // Use default area unless custom city is provided
   let finalPostcode = customData?.postcode || postcode;
   let finalStreetAddress = customData?.fullAddress || `${houseNumber} ${streetName}`;
+  let finalAddressLine2 = customData?.addressLine2 || '';
   let finalCountry = customData?.country || 'UNITED KINGDOM';
   
-  // If custom city is provided, we might need to adjust the area
-  if (customData?.city) {
-    const matchingCity = ukCities.find(c => c.name.toLowerCase() === customData.city!.toLowerCase());
-    if (matchingCity) {
-      finalArea = matchingCity.area;
-    } else {
-      // If custom city doesn't match our predefined cities, use a generic area
-      finalArea = `${customData.city} Area`;
-    }
+  // Build formatted address with pipe separation
+  // Format: fullAddress|addressLine2|city|postcode
+  let formattedAddress = `${finalStreetAddress}`;
+  if (finalAddressLine2) {
+    formattedAddress += `|${finalAddressLine2}`;
+  } else {
+    formattedAddress += '|';
   }
-  
-  formattedAddress = `${finalStreetAddress}|${finalCity}|${finalArea}|${finalPostcode}`;
+  formattedAddress += `|${finalCity}|${finalPostcode}`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
@@ -121,6 +118,7 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserD
     phoneNumber,
     city: finalCity,
     fullAddress: finalStreetAddress,
+    addressLine2: finalAddressLine2,
     postcode: finalPostcode,
     country: finalCountry
   };
@@ -136,8 +134,8 @@ export const generateEONUserDetails = (customData?: Partial<UserDetails>): UserD
     ...defaultData,
     ...filteredCustomData,
     // Ensure address is rebuilt if any address components were customized
-    address: customData?.fullAddress || customData?.city || customData?.postcode 
-      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}|${finalArea}|${filteredCustomData.postcode || finalPostcode}`
+    address: customData?.fullAddress || customData?.addressLine2 || customData?.city || customData?.postcode 
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.addressLine2 || finalAddressLine2}|${filteredCustomData.city || finalCity}|${filteredCustomData.postcode || finalPostcode}`
       : formattedAddress
   };
 };
@@ -205,10 +203,17 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
   const finalCity = customData?.city || city.name;
   const finalPostcode = customData?.postcode || postalCode;
   const finalStreetAddress = customData?.fullAddress || `${streetType} ${streetName}, ${houseNumber}`;
+  const finalAddressLine2 = customData?.addressLine2 || '';
   const finalCountry = customData?.country || 'SPAIN';
   
-  // Create properly formatted Spanish address: Street | City, Postcode | Country
-  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|${finalCountry}`;
+  // Create properly formatted Spanish address: Street | AddressLine2 | City, Postcode | Country
+  let formattedAddress = `${finalStreetAddress}`;
+  if (finalAddressLine2) {
+    formattedAddress += `|${finalAddressLine2}`;
+  } else {
+    formattedAddress += '|';
+  }
+  formattedAddress += `|${finalCity}, ${finalPostcode}|${finalCountry}`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
@@ -218,6 +223,7 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
     statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`,
     city: finalCity,
     fullAddress: finalStreetAddress,
+    addressLine2: finalAddressLine2,
     postcode: finalPostcode,
     country: finalCountry
   };
@@ -234,8 +240,8 @@ export const generateSpanishUserDetails = (customData?: Partial<UserDetails>): U
     ...defaultData,
     ...filteredCustomData,
     // Ensure address is rebuilt if any address components were customized
-    address: customData?.fullAddress || customData?.city || customData?.postcode || customData?.country
-      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|${filteredCustomData.country || finalCountry}`
+    address: customData?.fullAddress || customData?.addressLine2 || customData?.city || customData?.postcode || customData?.country
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.addressLine2 || finalAddressLine2}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|${filteredCustomData.country || finalCountry}`
       : formattedAddress
   };
 };
@@ -268,10 +274,17 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
   const finalCity = customData?.city || city;
   const finalPostcode = customData?.postcode || postcode;
   const finalStreetAddress = customData?.fullAddress || `${houseNumber} ${street}`;
+  const finalAddressLine2 = customData?.addressLine2 || '';
   const finalCountry = customData?.country || 'UNITED KINGDOM';
   
-  // Create properly formatted address: Street | City, Postcode | Country
-  const formattedAddress = `${finalStreetAddress}|${finalCity}, ${finalPostcode}|${finalCountry}`;
+  // Create properly formatted address: Street | AddressLine2 | City, Postcode | Country
+  let formattedAddress = `${finalStreetAddress}`;
+  if (finalAddressLine2) {
+    formattedAddress += `|${finalAddressLine2}`;
+  } else {
+    formattedAddress += '|';
+  }
+  formattedAddress += `|${finalCity}, ${finalPostcode}|${finalCountry}`;
   
   const defaultData = {
     name: `${firstName} ${lastName}`,
@@ -281,6 +294,7 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
     statementPeriod: `${formatDate(startDate)} to ${formatDate(endDate)}`,
     city: finalCity,
     fullAddress: finalStreetAddress,
+    addressLine2: finalAddressLine2,
     postcode: finalPostcode,
     country: finalCountry
   };
@@ -297,8 +311,8 @@ export const generateUserDetails = (customData?: Partial<UserDetails>): UserDeta
     ...defaultData,
     ...filteredCustomData,
     // Ensure address is rebuilt if any address components were customized
-    address: customData?.fullAddress || customData?.city || customData?.postcode || customData?.country
-      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|${filteredCustomData.country || finalCountry}`
+    address: customData?.fullAddress || customData?.addressLine2 || customData?.city || customData?.postcode || customData?.country
+      ? `${filteredCustomData.fullAddress || finalStreetAddress}|${filteredCustomData.addressLine2 || finalAddressLine2}|${filteredCustomData.city || finalCity}, ${filteredCustomData.postcode || finalPostcode}|${filteredCustomData.country || finalCountry}`
       : formattedAddress
   };
 };

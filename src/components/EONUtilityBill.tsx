@@ -12,11 +12,11 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   
   console.log('EON Bill - User Details:', userDetails);
   
-  // Parse address properly
+  // Parse address properly with new format: fullAddress|addressLine2|city|postcode
   const addressParts = userDetails.address.split('|');
   const streetAddress = addressParts[0] || userDetails.fullAddress || `${Math.floor(Math.random() * 999) + 1} High Street`;
-  const area1 = addressParts[1] || userDetails.city || 'London';
-  const area2 = addressParts[2] || 'Greater London';
+  const addressLine2 = addressParts[1] || userDetails.addressLine2 || '';
+  const city = addressParts[2] || userDetails.city || 'London';
   const postcode = addressParts[3] || userDetails.postcode || 'SW1A 1AA';
   const country = userDetails.country || 'UNITED KINGDOM';
   
@@ -54,8 +54,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
             <div className="eon-customer-address" style={{ fontSize: '13px', lineHeight: '1.3' }}>
               <div style={{ fontWeight: '500' }}>{userDetails.name}</div>
               <div>{streetAddress}</div>
-              <div>{area1}</div>
-              <div>{area2}</div>
+              {addressLine2 && <div>{addressLine2}</div>}
+              <div>{city}</div>
               <div>{postcode}</div>
               <div>{country}</div>
               <div>{phoneNumber}</div>
@@ -119,7 +119,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           <div className="eon-main-column" style={{ width: '450px' }}>
             {/* Title and Date Range */}
             <h1 style={{ fontWeight: 'bold', marginBottom: '4px', color: '#111827', fontSize: '24px' }}>Your energy account</h1>
-            <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '14px' }}>for {streetAddress} {area1} {area2} {postcode}.</div>
+            <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '14px' }}>for {streetAddress}{addressLine2 ? `, ${addressLine2}` : ''} {city} {postcode}.</div>
             <div style={{ fontWeight: 'normal', marginBottom: '12px', fontSize: '12px' }}>{userDetails.statementPeriod}</div>
 
             {/* Previous Balance */}
