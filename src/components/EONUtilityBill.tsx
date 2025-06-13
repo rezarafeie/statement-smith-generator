@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { generateEONUserDetails } from '@/utils/dataGenerator';
 
@@ -93,7 +94,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
                   <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '8px' }}>
                     <img 
-                      src="/lovable-uploads/2256be56-cc12-41f0-8e17-ef7fcac643fa.png" 
+                      src="/lovable-uploads/4f733928-6073-4435-8a26-73b1ee9d8bac.png" 
                       alt="Color line" 
                       style={{ width: '80px', height: '4px' }}
                     />
@@ -109,67 +110,67 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
         </div>
 
-        {/* Main Content - Proper Two Column Layout */}
-        <div className="eon-main-content" style={{ display: 'flex', gap: '32px' }}>
+        {/* Main Content - Adjusted Column Layout */}
+        <div className="eon-main-content" style={{ display: 'flex', gap: '16px' }}>
           {/* Left Column - Main Account Information */}
-          <div className="eon-main-column" style={{ width: '450px' }}>
+          <div className="eon-main-column" style={{ width: '420px' }}>
             {/* Title and Date Range */}
             <h1 style={{ fontWeight: 'bold', marginBottom: '4px', color: '#111827', fontSize: '24px' }}>Your energy account</h1>
             <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '14px' }}>for {streetAddress}{addressLine2 ? `, ${addressLine2}` : ''} {city} {postcode}.</div>
             <div style={{ fontWeight: 'normal', marginBottom: '12px', fontSize: '12px' }}>{userDetails.statementPeriod}</div>
 
             {/* Previous Balance */}
-            <div style={{ marginBottom: '12px' }}>
-              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
+            <div style={{ marginBottom: '10px' }}>
+              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
                 <span style={{ fontWeight: 'bold' }}>On {new Date(Date.now() - 30*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your previous balance was</span>
                 <span style={{ fontWeight: 'normal' }}>£{previousBalance} DR</span>
               </div>
             </div>
 
             {/* Charges Section */}
-            <div style={{ marginBottom: '12px' }}>
-              <h2 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '14px' }}>1. We have charged you</h2>
-              <div style={{ fontSize: '11px', marginBottom: '8px' }}>Based on your meter readings.</div>
+            <div style={{ marginBottom: '10px' }}>
+              <h2 style={{ fontWeight: 'bold', marginBottom: '6px', color: '#ec1c24', fontSize: '14px' }}>1. We have charged you</h2>
+              <div style={{ fontSize: '11px', marginBottom: '6px' }}>Based on your meter readings.</div>
               
-              <table style={{ width: '100%', marginBottom: '12px', fontSize: '11px' }}>
+              <table style={{ width: '100%', marginBottom: '10px', fontSize: '11px' }}>
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #d1d5db' }}>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px' }}>Electricity</td>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'center' }}>{userDetails.statementPeriod}</td>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right', fontWeight: '500' }}>£{electricityAmount} DR</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px' }}>Electricity</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px', textAlign: 'center' }}>{userDetails.statementPeriod}</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px', textAlign: 'right', fontWeight: '500' }}>£{electricityAmount} DR</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #d1d5db' }}>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px' }}>Gas</td>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'center' }}>{userDetails.statementPeriod}</td>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right', fontWeight: '500' }}>£{gasAmount} DR</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px' }}>Gas</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px', textAlign: 'center' }}>{userDetails.statementPeriod}</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px', textAlign: 'right', fontWeight: '500' }}>£{gasAmount} DR</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* Payment Section */}
-            <div style={{ marginBottom: '12px' }}>
-              <h2 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '14px' }}>2. You have paid</h2>
-              <table style={{ width: '100%', marginBottom: '12px', fontSize: '11px' }}>
+            <div style={{ marginBottom: '10px' }}>
+              <h2 style={{ fontWeight: 'bold', marginBottom: '6px', color: '#ec1c24', fontSize: '14px' }}>2. You have paid</h2>
+              <table style={{ width: '100%', marginBottom: '10px', fontSize: '11px' }}>
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #d1d5db' }}>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px' }}>Direct Debit collection</td>
-                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right', fontWeight: '500' }}>{new Date(Date.now() - 10*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} £{payment} CR</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px' }}>Direct Debit collection</td>
+                    <td style={{ paddingTop: '6px', paddingBottom: '6px', textAlign: 'right', fontWeight: '500' }}>{new Date(Date.now() - 10*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} £{payment} CR</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* New Balance */}
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
                 <span style={{ fontWeight: 'bold' }}>On {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your new balance was</span>
                 <span style={{ fontWeight: 'normal' }}>£{newBalance} DR</span>
               </div>
             </div>
 
             {/* Payment Info */}
-            <div style={{ marginBottom: '24px', fontSize: '11px', lineHeight: '1.4' }}>
+            <div style={{ marginBottom: '16px', fontSize: '11px', lineHeight: '1.4' }}>
               <p>
                 You pay by monthly Direct Debit, so your payments are up to date. We regularly review how much you're paying to make sure it's the right amount and will let you know if it needs to change.
               </p>
@@ -177,38 +178,38 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
 
           {/* Right Column - Estimated Costs and Tariff Info */}
-          <div className="eon-sidebar" style={{ width: '320px' }}>
+          <div className="eon-sidebar" style={{ width: '340px' }}>
             {/* Estimated Annual Cost */}
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '6px', color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
               <div style={{ fontSize: '11px' }}>
-                <div style={{ marginBottom: '4px' }}><span style={{ fontWeight: 'bold' }}>£{estimatedElectricity}</span> a year for electricity</div>
+                <div style={{ marginBottom: '3px' }}><span style={{ fontWeight: 'bold' }}>£{estimatedElectricity}</span> a year for electricity</div>
                 <div><span style={{ fontWeight: 'bold' }}>£{estimatedGas}</span> a year for gas</div>
               </div>
-              <div style={{ fontSize: '9px', marginTop: '8px', color: '#4b5563', lineHeight: '1.3' }}>
+              <div style={{ fontSize: '9px', marginTop: '6px', color: '#4b5563', lineHeight: '1.3' }}>
                 This is an estimate based on your expected annual energy usage, and your current tariff rates, charges and discounts, including VAT. Actual bills will vary depending on your usage and tariff selection. More information about your current tariff can be found overleaf.
               </div>
             </div>
 
-            <hr style={{ borderColor: '#9ca3af', margin: '8px 0' }} />
+            <hr style={{ borderColor: '#9ca3af', margin: '6px 0' }} />
 
             {/* Could you pay less section */}
             <div>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Could you pay less?</div>
-              <div style={{ fontSize: '9px', color: '#374151', fontStyle: 'italic', marginBottom: '8px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '6px', color: '#ec1c24', fontSize: '12px' }}>Could you pay less?</div>
+              <div style={{ fontSize: '9px', color: '#374151', fontStyle: 'italic', marginBottom: '6px' }}>
                 Remember - it might be worth thinking about switching your tariff or supplier.
               </div>
-              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '8px' }}>
+              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '6px' }}>
                 For your <strong>electricity</strong> (on meter point {Math.floor(1000000000000 + Math.random() * 9000000000000)})
               </div>
-              <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '10px' }}>Good to know.</div>
-              <div style={{ fontSize: '9px', color: '#374151', marginBottom: '8px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '9px', color: '#374151', marginBottom: '6px' }}>
                 You're already on our cheapest tariff for your <strong>electricity</strong> usage. We'll let you know if this changes.
               </div>
-              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '8px' }}>
+              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '6px' }}>
                 For your <strong>gas</strong> (on meter point {Math.floor(100000000 + Math.random() * 900000000)})
               </div>
-              <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '10px' }}>Good to know.</div>
               <div style={{ fontSize: '9px', color: '#374151' }}>
                 You're already on our cheapest tariff for your <strong>gas</strong> usage. We'll let you know if this changes.
               </div>
@@ -217,7 +218,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
         </div>
 
         {/* Footer */}
-        <div style={{ marginTop: '32px', paddingTop: '12px', borderTop: '1px solid #e5e7eb', color: '#4b5563', fontSize: '9px' }}>
+        <div style={{ marginTop: '24px', paddingTop: '10px', borderTop: '1px solid #e5e7eb', color: '#4b5563', fontSize: '9px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <div style={{ maxWidth: '500px' }}>
               <div>E.ON Next Energy Limited Registered Office: Westwood Way, Westwood Business Park, Coventry CV4 8LG.</div>
