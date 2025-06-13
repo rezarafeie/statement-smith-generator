@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { generateEONUserDetails } from '@/utils/dataGenerator';
 
@@ -30,23 +31,23 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   const estimatedGas = (Math.random() * 2000 + 3000).toFixed(2);
 
   return (
-    <div className="w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
-      <div style={{ fontSize: '11px', lineHeight: '1.3' }}>
+    <div className="eon-bill-container w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
+      <div className="eon-bill-content" style={{ fontSize: '11px', lineHeight: '1.3' }}>
         {/* Header - Three Column Layout */}
-        <div className="flex justify-between mb-6">
+        <div className="eon-header flex justify-between mb-6">
           {/* Left Column - Logo and Customer Address */}
-          <div className="flex-1 max-w-xs">
+          <div className="eon-left-column flex-1 max-w-xs">
             {/* Logo */}
             <div className="mb-4">
               <img 
                 src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
                 alt="E.ON Next" 
-                className="h-20"
+                className="eon-logo h-20"
               />
             </div>
 
             {/* Customer Address */}
-            <div style={{ fontSize: '13px', lineHeight: '1.3' }}>
+            <div className="eon-customer-address" style={{ fontSize: '13px', lineHeight: '1.3' }}>
               <div className="font-medium">{userDetails.name}</div>
               <div>{streetAddress}</div>
               <div>{area1}</div>
@@ -57,10 +58,10 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
 
           {/* Middle Column - Spacer */}
-          <div className="flex-1"></div>
+          <div className="eon-spacer flex-1"></div>
 
           {/* Right Column - Contact Info, Account Number, Bill Reference and QR Code */}
-          <div className="w-80 space-y-4">
+          <div className="eon-right-column w-80 space-y-4">
             {/* Contact Info */}
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
@@ -93,7 +94,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
             </div>
 
             {/* Bill Reference and QR Code - Side by Side - Positioned exactly opposite the customer address */}
-            <div className="flex items-start justify-between" style={{ marginTop: '60px' }}>
+            <div className="eon-qr-section flex items-start justify-between" style={{ marginTop: '60px' }}>
               <div style={{ fontSize: '10px' }}>
                 <div>Bill Reference: {userDetails.sortCode}</div>
                 <div>({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
@@ -101,16 +102,16 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
               
               {/* QR Code positioned exactly opposite the customer address */}
               <div className="ml-4">
-                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="w-16 h-16" />
+                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="eon-qr-code w-16 h-16" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Main Content - Proper Two Column Layout */}
-        <div className="flex gap-8">
+        <div className="eon-main-content flex gap-8">
           {/* Left Column - Main Account Information */}
-          <div className="flex-1">
+          <div className="eon-main-column flex-1">
             {/* Title and Date Range */}
             <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
             <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for {streetAddress} {area1} {area2} {postcode}.</div>
@@ -175,7 +176,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
 
           {/* Right Column - Estimated Costs and Tariff Info */}
-          <div className="w-80 space-y-4">
+          <div className="eon-sidebar w-80 space-y-4">
             {/* Estimated Annual Cost */}
             <div>
               <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
@@ -230,6 +231,156 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
         @media print {
           .page-break {
             page-break-before: always;
+          }
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+          .eon-bill-container {
+            max-width: 100% !important;
+            padding: 10px !important;
+            margin: 0 !important;
+          }
+          
+          .eon-bill-content {
+            font-size: 14px !important;
+          }
+          
+          .eon-header {
+            flex-direction: column !important;
+            gap: 20px !important;
+          }
+          
+          .eon-left-column {
+            max-width: 100% !important;
+            order: 1;
+          }
+          
+          .eon-spacer {
+            display: none !important;
+          }
+          
+          .eon-right-column {
+            width: 100% !important;
+            order: 2;
+            max-width: 100% !important;
+          }
+          
+          .eon-customer-address {
+            font-size: 16px !important;
+            line-height: 1.4 !important;
+            margin-bottom: 20px !important;
+          }
+          
+          .eon-logo {
+            height: 60px !important;
+            max-width: 100% !important;
+          }
+          
+          .eon-qr-section {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 15px !important;
+            margin-top: 20px !important;
+          }
+          
+          .eon-qr-code {
+            width: 80px !important;
+            height: 80px !important;
+            margin-left: 0 !important;
+          }
+          
+          .eon-main-content {
+            flex-direction: column !important;
+            gap: 20px !important;
+          }
+          
+          .eon-main-column {
+            width: 100% !important;
+          }
+          
+          .eon-sidebar {
+            width: 100% !important;
+            order: 2;
+          }
+          
+          /* Enhanced typography for mobile */
+          h1 {
+            font-size: 20px !important;
+          }
+          
+          .eon-bill-content table {
+            font-size: 14px !important;
+          }
+          
+          .eon-bill-content div[style*="font-size: 11px"] {
+            font-size: 14px !important;
+          }
+          
+          .eon-bill-content div[style*="font-size: 12px"] {
+            font-size: 15px !important;
+          }
+          
+          .eon-bill-content div[style*="font-size: 9px"] {
+            font-size: 12px !important;
+          }
+          
+          .eon-bill-content div[style*="font-size: 10px"] {
+            font-size: 13px !important;
+          }
+          
+          /* Balance and charge sections */
+          .bg-gray-800 {
+            padding: 15px !important;
+            font-size: 14px !important;
+          }
+          
+          .bg-gray-800 span {
+            font-size: 14px !important;
+          }
+          
+          /* Table improvements */
+          table td {
+            padding: 10px 5px !important;
+            font-size: 14px !important;
+          }
+          
+          /* Footer adjustments */
+          .mt-8 {
+            margin-top: 30px !important;
+          }
+          
+          .mt-8 > div {
+            flex-direction: column !important;
+            gap: 10px !important;
+          }
+          
+          .mt-8 .max-w-xl {
+            max-width: 100% !important;
+          }
+          
+          .mt-8 div {
+            font-size: 12px !important;
+          }
+        }
+        
+        /* Tablet adjustments */
+        @media (max-width: 1024px) and (min-width: 769px) {
+          .eon-bill-container {
+            max-width: 95% !important;
+            padding: 15px !important;
+          }
+          
+          .eon-right-column {
+            width: 300px !important;
+          }
+          
+          .eon-main-content {
+            gap: 30px !important;
+          }
+          
+          .eon-sidebar {
+            width: 300px !important;
           }
         }
       `}</style>
