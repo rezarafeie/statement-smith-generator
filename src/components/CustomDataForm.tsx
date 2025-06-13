@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,13 +13,16 @@ import { format } from 'date-fns';
 interface CustomDataFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string }) => void;
+  onSubmit: (data: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string }) => void;
 }
 
 export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
+    city: '',
+    fullAddress: '',
+    postcode: '',
     accountNumber: '',
     statementPeriod: '',
     initialBalance: '',
@@ -51,10 +53,13 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     }
     
     // Only include fields that have actual values (not empty strings)
-    const userData: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string } = {};
+    const userData: Partial<UserDetails> & { initialBalance?: string; phoneNumber?: string; city?: string; fullAddress?: string; postcode?: string } = {};
     
     if (formData.name.trim()) userData.name = formData.name.trim();
     if (formData.address.trim()) userData.address = formData.address.trim();
+    if (formData.city.trim()) userData.city = formData.city.trim();
+    if (formData.fullAddress.trim()) userData.fullAddress = formData.fullAddress.trim();
+    if (formData.postcode.trim()) userData.postcode = formData.postcode.trim();
     if (formData.accountNumber.trim()) userData.accountNumber = formData.accountNumber.trim();
     if (statementPeriod.trim()) userData.statementPeriod = statementPeriod.trim();
     if (formData.initialBalance.trim()) userData.initialBalance = formData.initialBalance.trim();
@@ -67,6 +72,9 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     setFormData({
       name: '',
       address: '',
+      city: '',
+      fullAddress: '',
+      postcode: '',
       accountNumber: '',
       statementPeriod: '',
       initialBalance: '',
@@ -119,15 +127,54 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
             </div>
 
             <div>
-              <Label htmlFor="address" className="text-gray-300">Address</Label>
+              <Label htmlFor="fullAddress" className="text-gray-300">Full Address (Street & Number)</Label>
+              <Input
+                id="fullAddress"
+                type="text"
+                value={formData.fullAddress}
+                onChange={(e) => handleChange('fullAddress', e.target.value)}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="e.g., 123 High Street"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="city" className="text-gray-300">City</Label>
+              <Input
+                id="city"
+                type="text"
+                value={formData.city}
+                onChange={(e) => handleChange('city', e.target.value)}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="e.g., London"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="postcode" className="text-gray-300">Postcode</Label>
+              <Input
+                id="postcode"
+                type="text"
+                value={formData.postcode}
+                onChange={(e) => handleChange('postcode', e.target.value)}
+                className="bg-gray-700 border-gray-600 text-white"
+                placeholder="e.g., SW1A 1AA"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="address" className="text-gray-300">Complete Address (Advanced)</Label>
               <Textarea
                 id="address"
                 value={formData.address}
                 onChange={(e) => handleChange('address', e.target.value)}
                 className="bg-gray-700 border-gray-600 text-white"
-                placeholder="Leave empty for random generation"
-                rows={3}
+                placeholder="Use this to override the full formatted address"
+                rows={2}
               />
+              <p className="text-xs text-gray-400 mt-1">
+                Leave empty to auto-generate from street, city, and postcode above
+              </p>
             </div>
 
             <div>
