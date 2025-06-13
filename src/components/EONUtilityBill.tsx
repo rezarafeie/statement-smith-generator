@@ -236,6 +236,14 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
             page-break-before: always;
           }
         }
+        
+        img.eon-qr-code {
+          margin: 140px 0px 0px 220px !important;
+        }
+        
+        .eon-customer-address {
+          margin: 50px -20px 0px 20px !important;
+        }
       `}</style>
     </div>
   );
