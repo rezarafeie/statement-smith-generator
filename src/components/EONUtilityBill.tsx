@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { generateEONUserDetails } from '@/utils/dataGenerator';
 
@@ -30,24 +31,25 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
   const estimatedGas = (Math.random() * 2000 + 3000).toFixed(2);
 
   return (
-    <div className="eon-bill-container w-full mx-auto bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', maxWidth: '210mm', minHeight: '297mm', padding: '20px' }}>
+    <div className="eon-bill-container bg-white" style={{ fontFamily: 'Arial, Helvetica, sans-serif', width: '794px', minHeight: '1123px', padding: '20px' }}>
       <div className="eon-bill-content" style={{ fontSize: '11px', lineHeight: '1.3' }}>
         {/* Header - Three Column Layout */}
-        <div className="eon-header flex justify-between mb-6">
+        <div className="eon-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
           {/* Left Column - Logo and Customer Address */}
-          <div className="eon-left-column flex-1 max-w-xs">
+          <div className="eon-left-column" style={{ width: '280px' }}>
             {/* Logo */}
-            <div className="mb-4">
+            <div style={{ marginBottom: '16px' }}>
               <img 
                 src="/lovable-uploads/e97b991c-300c-43af-9d18-cc5459757879.png" 
                 alt="E.ON Next" 
-                className="eon-logo h-20"
+                className="eon-logo"
+                style={{ height: '80px' }}
               />
             </div>
 
             {/* Customer Address */}
             <div className="eon-customer-address" style={{ fontSize: '13px', lineHeight: '1.3' }}>
-              <div className="font-medium">{userDetails.name}</div>
+              <div style={{ fontWeight: '500' }}>{userDetails.name}</div>
               <div>{streetAddress}</div>
               <div>{area1}</div>
               <div>{area2}</div>
@@ -57,117 +59,117 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
 
           {/* Middle Column - Spacer */}
-          <div className="eon-spacer flex-1"></div>
+          <div className="eon-spacer" style={{ width: '100px' }}></div>
 
           {/* Right Column - Contact Info, Account Number, Bill Reference and QR Code */}
-          <div className="eon-right-column w-80 space-y-4">
+          <div className="eon-right-column" style={{ width: '320px' }}>
             {/* Contact Info */}
-            <div>
-              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
-              <div className="flex items-center gap-2 mb-1" style={{ fontSize: '12px' }}>
-                <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" className="w-3 h-3" />
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Get in touch with us</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', fontSize: '12px' }}>
+                <img src="/lovable-uploads/b888e67f-9614-4f1e-835e-4c71b2db3bc0.png" alt="Website" style={{ width: '12px', height: '12px' }} />
                 <span>eonnext.com/contact</span>
               </div>
-              <div className="flex items-center gap-2" style={{ fontSize: '12px' }}>
-                <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" className="w-3 h-3" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
+                <img src="/lovable-uploads/1cc87fd3-7bdb-47bf-a469-508150f70210.png" alt="Email" style={{ width: '12px', height: '12px' }} />
                 <span>hi@eonnext.com</span>
               </div>
             </div>
 
             {/* Account Number Box */}
-            <div>
-              <div className="font-bold mb-2 flex items-center gap-1" style={{ color: '#ec1c24', fontSize: '12px' }}>
-                <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" className="w-3 h-3" />
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px', color: '#ec1c24', fontSize: '12px' }}>
+                <img src="/lovable-uploads/422992aa-59ff-4459-a271-99363753e72d.png" alt="Account" style={{ width: '12px', height: '12px' }} />
                 Your account number:
               </div>
-              <div className="text-left">
-                <span className="block text-black" style={{ fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
-                <div className="flex justify-start mt-2">
-                  <div className="flex" style={{ height: '4px', width: '80px' }}>
-                    <div className="flex-1" style={{ backgroundColor: '#ffd700' }}></div>
-                    <div className="flex-1" style={{ backgroundColor: '#1d70b8' }}></div>
-                    <div className="flex-1" style={{ backgroundColor: '#ec1c24' }}></div>
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
+                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '8px' }}>
+                  <div style={{ display: 'flex', height: '4px', width: '80px' }}>
+                    <div style={{ flex: '1', backgroundColor: '#ffd700' }}></div>
+                    <div style={{ flex: '1', backgroundColor: '#1d70b8' }}></div>
+                    <div style={{ flex: '1', backgroundColor: '#ec1c24' }}></div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Bill Reference and QR Code - Side by Side - Positioned exactly opposite the customer address */}
-            <div className="eon-qr-section flex items-start justify-between" style={{ marginTop: '60px' }}>
+            <div className="eon-qr-section" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: '60px' }}>
               <div style={{ fontSize: '10px' }}>
                 <div>Bill Reference: {userDetails.sortCode}</div>
                 <div>({new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')})</div>
               </div>
               
               {/* QR Code positioned exactly opposite the customer address */}
-              <div className="ml-4">
-                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="eon-qr-code w-16 h-16" />
+              <div style={{ marginLeft: '16px' }}>
+                <img src="/lovable-uploads/90e5f195-4d01-4e97-aca8-111a0f74f712.png" alt="QR Code" className="eon-qr-code" style={{ width: '64px', height: '64px' }} />
               </div>
             </div>
           </div>
         </div>
 
         {/* Main Content - Proper Two Column Layout */}
-        <div className="eon-main-content flex gap-8">
+        <div className="eon-main-content" style={{ display: 'flex', gap: '32px' }}>
           {/* Left Column - Main Account Information */}
-          <div className="eon-main-column flex-1">
+          <div className="eon-main-column" style={{ width: '450px' }}>
             {/* Title and Date Range */}
-            <h1 className="font-bold mb-1 text-gray-900" style={{ fontSize: '24px', fontWeight: 'bold' }}>Your energy account</h1>
-            <div className="font-bold mb-1" style={{ fontSize: '14px', fontWeight: 'bold' }}>for {streetAddress} {area1} {area2} {postcode}.</div>
-            <div className="font-normal mb-3" style={{ fontSize: '12px', fontWeight: 'normal' }}>{userDetails.statementPeriod}</div>
+            <h1 style={{ fontWeight: 'bold', marginBottom: '4px', color: '#111827', fontSize: '24px' }}>Your energy account</h1>
+            <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '14px' }}>for {streetAddress} {area1} {area2} {postcode}.</div>
+            <div style={{ fontWeight: 'normal', marginBottom: '12px', fontSize: '12px' }}>{userDetails.statementPeriod}</div>
 
             {/* Previous Balance */}
-            <div className="mb-3">
-              <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
-                <span className="font-bold">On {new Date(Date.now() - 30*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your previous balance was</span>
-                <span className="font-normal">£{previousBalance} DR</span>
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
+                <span style={{ fontWeight: 'bold' }}>On {new Date(Date.now() - 30*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your previous balance was</span>
+                <span style={{ fontWeight: 'normal' }}>£{previousBalance} DR</span>
               </div>
             </div>
 
             {/* Charges Section */}
-            <div className="mb-3">
-              <h2 className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '14px' }}>1. We have charged you</h2>
-              <div style={{ fontSize: '11px' }} className="mb-2">Based on your meter readings.</div>
+            <div style={{ marginBottom: '12px' }}>
+              <h2 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '14px' }}>1. We have charged you</h2>
+              <div style={{ fontSize: '11px', marginBottom: '8px' }}>Based on your meter readings.</div>
               
-              <table className="w-full mb-3" style={{ fontSize: '11px' }}>
+              <table style={{ width: '100%', marginBottom: '12px', fontSize: '11px' }}>
                 <tbody>
-                  <tr className="border-b border-gray-300">
-                    <td className="py-2">Electricity</td>
-                    <td className="py-2 text-center">{userDetails.statementPeriod}</td>
-                    <td className="py-2 text-right font-medium">£{electricityAmount} DR</td>
+                  <tr style={{ borderBottom: '1px solid #d1d5db' }}>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px' }}>Electricity</td>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'center' }}>{userDetails.statementPeriod}</td>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right', fontWeight: '500' }}>£{electricityAmount} DR</td>
                   </tr>
-                  <tr className="border-b border-gray-300">
-                    <td className="py-2">Gas</td>
-                    <td className="py-2 text-center">{userDetails.statementPeriod}</td>
-                    <td className="py-2 text-right font-medium">£{gasAmount} DR</td>
+                  <tr style={{ borderBottom: '1px solid #d1d5db' }}>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px' }}>Gas</td>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'center' }}>{userDetails.statementPeriod}</td>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right', fontWeight: '500' }}>£{gasAmount} DR</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* Payment Section */}
-            <div className="mb-3">
-              <h2 className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '14px' }}>2. You have paid</h2>
-              <table className="w-full mb-3" style={{ fontSize: '11px' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <h2 style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '14px' }}>2. You have paid</h2>
+              <table style={{ width: '100%', marginBottom: '12px', fontSize: '11px' }}>
                 <tbody>
-                  <tr className="border-b border-gray-300">
-                    <td className="py-2">Direct Debit collection</td>
-                    <td className="py-2 text-right font-medium">{new Date(Date.now() - 10*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} £{payment} CR</td>
+                  <tr style={{ borderBottom: '1px solid #d1d5db' }}>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px' }}>Direct Debit collection</td>
+                    <td style={{ paddingTop: '8px', paddingBottom: '8px', textAlign: 'right', fontWeight: '500' }}>{new Date(Date.now() - 10*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} £{payment} CR</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* New Balance */}
-            <div className="mb-4">
-              <div className="bg-gray-800 text-white p-3 flex justify-between items-center" style={{ fontSize: '11px' }}>
-                <span className="font-bold">On {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your new balance was</span>
-                <span className="font-normal">£{newBalance} DR</span>
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
+                <span style={{ fontWeight: 'bold' }}>On {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your new balance was</span>
+                <span style={{ fontWeight: 'normal' }}>£{newBalance} DR</span>
               </div>
             </div>
 
             {/* Payment Info */}
-            <div className="mb-6" style={{ fontSize: '11px', lineHeight: '1.4' }}>
+            <div style={{ marginBottom: '24px', fontSize: '11px', lineHeight: '1.4' }}>
               <p>
                 You pay by monthly Direct Debit, so your payments are up to date. We regularly review how much you're paying to make sure it's the right amount and will let you know if it needs to change.
               </p>
@@ -175,39 +177,39 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
 
           {/* Right Column - Estimated Costs and Tariff Info */}
-          <div className="eon-sidebar w-80 space-y-4">
+          <div className="eon-sidebar" style={{ width: '320px' }}>
             {/* Estimated Annual Cost */}
-            <div>
-              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
-              <div style={{ fontSize: '11px' }} className="space-y-1">
-                <div><span className="font-bold">£{estimatedElectricity}</span> a year for electricity</div>
-                <div><span className="font-bold">£{estimatedGas}</span> a year for gas</div>
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
+              <div style={{ fontSize: '11px' }}>
+                <div style={{ marginBottom: '4px' }}><span style={{ fontWeight: 'bold' }}>£{estimatedElectricity}</span> a year for electricity</div>
+                <div><span style={{ fontWeight: 'bold' }}>£{estimatedGas}</span> a year for gas</div>
               </div>
-              <div style={{ fontSize: '9px' }} className="mt-2 text-gray-600 leading-tight">
+              <div style={{ fontSize: '9px', marginTop: '8px', color: '#4b5563', lineHeight: '1.3' }}>
                 This is an estimate based on your expected annual energy usage, and your current tariff rates, charges and discounts, including VAT. Actual bills will vary depending on your usage and tariff selection. More information about your current tariff can be found overleaf.
               </div>
             </div>
 
-            <hr className="border-gray-400 my-2" />
+            <hr style={{ borderColor: '#9ca3af', margin: '8px 0' }} />
 
             {/* Could you pay less section */}
             <div>
-              <div className="font-bold mb-2" style={{ color: '#ec1c24', fontSize: '12px' }}>Could you pay less?</div>
-              <div style={{ fontSize: '9px' }} className="text-gray-700 italic mb-2">
+              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#ec1c24', fontSize: '12px' }}>Could you pay less?</div>
+              <div style={{ fontSize: '9px', color: '#374151', fontStyle: 'italic', marginBottom: '8px' }}>
                 Remember - it might be worth thinking about switching your tariff or supplier.
               </div>
-              <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
+              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '8px' }}>
                 For your <strong>electricity</strong> (on meter point {Math.floor(1000000000000 + Math.random() * 9000000000000)})
               </div>
-              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
-              <div style={{ fontSize: '9px' }} className="text-gray-700 mb-2">
+              <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '9px', color: '#374151', marginBottom: '8px' }}>
                 You're already on our cheapest tariff for your <strong>electricity</strong> usage. We'll let you know if this changes.
               </div>
-              <div style={{ fontSize: '9px' }} className="text-gray-600 mb-2">
+              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '8px' }}>
                 For your <strong>gas</strong> (on meter point {Math.floor(100000000 + Math.random() * 900000000)})
               </div>
-              <div className="font-bold mb-1" style={{ fontSize: '10px' }}>Good to know.</div>
-              <div style={{ fontSize: '9px' }} className="text-gray-700">
+              <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '9px', color: '#374151' }}>
                 You're already on our cheapest tariff for your <strong>gas</strong> usage. We'll let you know if this changes.
               </div>
             </div>
@@ -215,9 +217,9 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
         </div>
 
         {/* Footer */}
-        <div className="mt-8 pt-3 border-t text-gray-600" style={{ fontSize: '9px' }}>
-          <div className="flex justify-between items-end">
-            <div className="max-w-xl">
+        <div style={{ marginTop: '32px', paddingTop: '12px', borderTop: '1px solid #e5e7eb', color: '#4b5563', fontSize: '9px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div style={{ maxWidth: '500px' }}>
               <div>E.ON Next Energy Limited Registered Office: Westwood Way, Westwood Business Park, Coventry CV4 8LG.</div>
               <div>Registered in England and Wales No: 03782443. E.ON UK plc VAT Group Registration Number: 559 0978 89</div>
             </div>
