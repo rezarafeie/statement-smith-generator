@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { generateEONUserDetails } from '@/utils/dataGenerator';
 
@@ -96,7 +95,12 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
                     <img 
                       src="/lovable-uploads/4f733928-6073-4435-8a26-73b1ee9d8bac.png" 
                       alt="Color line" 
-                      style={{ width: '80px', height: '4px' }}
+                      style={{ width: '80px', height: '4px', display: 'block' }}
+                      onError={(e) => {
+                        console.log('Color line image failed to load');
+                        e.currentTarget.style.display = 'none';
+                      }}
+                      onLoad={() => console.log('Color line image loaded successfully')}
                     />
                   </div>
                 </div>

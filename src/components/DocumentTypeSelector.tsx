@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,12 +22,6 @@ const ukDocuments: DocumentType[] = [
     name: 'Bank Statement',
     description: 'Metro Bank account statement',
     icon: <FileText className="h-8 w-8" />
-  },
-  {
-    id: 'uk-utility-bill',
-    name: 'British Gas Utility Bill',
-    description: 'British Gas electricity bill',
-    icon: <Receipt className="h-8 w-8" />
   },
   {
     id: 'eon-utility-bill',
