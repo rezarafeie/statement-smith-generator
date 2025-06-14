@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { generateEONUserDetails } from '@/utils/dataGenerator';
 
@@ -94,7 +93,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
                   <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '8px' }}>
                     <img 
-                      src="/lovable-uploads/43cb505f-7447-4ef9-9817-08d8ae9994ef.png" 
+                      src="/lovable-uploads/fbebaeb3-a483-4fde-b191-0d85920882b2.png" 
                       alt="Color line" 
                       style={{ width: '80px', height: '4px', display: 'block' }}
                       onError={(e) => {
@@ -115,10 +114,10 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
         </div>
 
-        {/* Main Content - Adjusted Column Layout with tighter spacing */}
-        <div className="eon-main-content" style={{ display: 'flex', gap: '8px' }}>
+        {/* Main Content - Adjusted Column Layout */}
+        <div className="eon-main-content" style={{ display: 'flex', gap: '40px' }}>
           {/* Left Column - Main Account Information */}
-          <div className="eon-main-column" style={{ width: '450px' }}>
+          <div className="eon-main-column" style={{ width: '434px' }}>
             {/* Title and Date Range */}
             <h1 style={{ fontWeight: 'bold', marginBottom: '4px', color: '#111827', fontSize: '24px' }}>Your energy account</h1>
             <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '14px' }}>for {streetAddress}{addressLine2 ? `, ${addressLine2}` : ''} {city} {postcode}.</div>
@@ -183,7 +182,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
 
           {/* Right Column - Estimated Costs and Tariff Info */}
-          <div className="eon-sidebar" style={{ width: '330px' }}>
+          <div className="eon-sidebar" style={{ width: '280px' }}>
             {/* Estimated Annual Cost */}
             <div style={{ marginBottom: '14px' }}>
               <div style={{ fontWeight: 'bold', marginBottom: '6px', color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
