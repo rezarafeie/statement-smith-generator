@@ -94,7 +94,7 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
                   <span style={{ display: 'block', color: 'black', fontSize: '10px', fontWeight: '400' }}>{userDetails.accountNumber}</span>
                   <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '6px' }}>
                     <img 
-                      src="/lovable-uploads/fbebaeb3-a483-4fde-b191-0d85920882b2.png" 
+                      src="/lovable-uploads/c05923a2-25e4-4f2d-ac23-9ff3ee9ee5e1.png" 
                       alt="Color line" 
                       style={{ width: '80px', height: '4px', display: 'block' }}
                       onError={(e) => {
@@ -116,17 +116,17 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
         </div>
 
         {/* Main Content - Adjusted Column Layout */}
-        <div className="eon-main-content" style={{ display: 'flex', gap: '32px' }}>
+        <div className="eon-main-content" style={{ display: 'flex', gap: '40px' }}>
           {/* Left Column - Main Account Information */}
-          <div className="eon-main-column" style={{ width: '440px' }}>
+          <div className="eon-main-column" style={{ width: '480px' }}>
             {/* Title and Date Range */}
-            <h1 style={{ fontWeight: 'bold', marginBottom: '3px', color: '#111827', fontSize: '26px' }}>Your energy account</h1>
-            <div style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '15px', color: '#111827' }}>for {streetAddress}{addressLine2 ? `, ${addressLine2}` : ''} {city} {postcode}.</div>
+            <h1 style={{ fontWeight: 'bold', marginBottom: '3px', color: '#111827', fontSize: '30px' }}>Your energy account</h1>
+            <div style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '16px', color: '#111827' }}>for {streetAddress}{addressLine2 ? `, ${addressLine2}` : ''} {city} {postcode}.</div>
             <div style={{ fontWeight: 'normal', marginBottom: '10px', fontSize: '11px', color: '#4b5563' }}>{userDetails.statementPeriod}</div>
 
             {/* Previous Balance */}
             <div style={{ marginBottom: '8px' }}>
-              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '8px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px' }}>
+              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '6px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
                 <span style={{ fontWeight: 'bold' }}>On {new Date(Date.now() - 30*24*60*60*1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your previous balance was</span>
                 <span style={{ fontWeight: 'normal' }}>£{previousBalance} DR</span>
               </div>
@@ -134,10 +134,10 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
 
             {/* Charges Section */}
             <div style={{ marginBottom: '8px' }}>
-              <h2 style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '13px' }}>1. We have charged you</h2>
-              <div style={{ fontSize: '10px', marginBottom: '5px', color: '#4b5563' }}>Based on your meter readings.</div>
+              <h2 style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '15px' }}>1. We have charged you</h2>
+              <div style={{ fontSize: '11px', marginBottom: '5px', color: '#4b5563' }}>Based on your meter readings.</div>
               
-              <table style={{ width: '100%', marginBottom: '8px', fontSize: '10px' }}>
+              <table style={{ width: '100%', marginBottom: '8px', fontSize: '11px' }}>
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #d1d5db' }}>
                     <td style={{ paddingTop: '4px', paddingBottom: '4px' }}>Electricity</td>
@@ -155,8 +155,8 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
 
             {/* Payment Section */}
             <div style={{ marginBottom: '8px' }}>
-              <h2 style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '13px' }}>2. You have paid</h2>
-              <table style={{ width: '100%', marginBottom: '8px', fontSize: '10px' }}>
+              <h2 style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '15px' }}>2. You have paid</h2>
+              <table style={{ width: '100%', marginBottom: '8px', fontSize: '11px' }}>
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #d1d5db' }}>
                     <td style={{ paddingTop: '4px', paddingBottom: '4px' }}>Direct Debit collection</td>
@@ -168,14 +168,14 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
 
             {/* New Balance */}
             <div style={{ marginBottom: '10px' }}>
-              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '8px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px' }}>
+              <div style={{ backgroundColor: '#1f2937', color: 'white', padding: '6px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' }}>
                 <span style={{ fontWeight: 'bold' }}>On {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(',', '.')} your new balance was</span>
                 <span style={{ fontWeight: 'normal' }}>£{newBalance} DR</span>
               </div>
             </div>
 
             {/* Payment Info */}
-            <div style={{ marginBottom: '12px', fontSize: '10px', lineHeight: '1.3', color: '#374151' }}>
+            <div style={{ marginBottom: '12px', fontSize: '11px', lineHeight: '1.3', color: '#374151' }}>
               <p>
                 You pay by monthly Direct Debit, so your payments are up to date. We regularly review how much you're paying to make sure it's the right amount and will let you know if it needs to change.
               </p>
@@ -183,15 +183,15 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
           </div>
 
           {/* Right Column - Estimated Costs and Tariff Info */}
-          <div className="eon-sidebar" style={{ width: '290px' }}>
+          <div className="eon-sidebar" style={{ width: '240px' }}>
             {/* Estimated Annual Cost */}
             <div style={{ marginBottom: '12px' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '11px' }}>Your estimated annual cost</div>
-              <div style={{ fontSize: '10px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '12px' }}>Your estimated annual cost</div>
+              <div style={{ fontSize: '11px' }}>
                 <div style={{ marginBottom: '2px' }}><span style={{ fontWeight: 'bold' }}>£{estimatedElectricity}</span> a year for electricity</div>
                 <div><span style={{ fontWeight: 'bold' }}>£{estimatedGas}</span> a year for gas</div>
               </div>
-              <div style={{ fontSize: '8px', marginTop: '5px', color: '#4b5563', lineHeight: '1.2' }}>
+              <div style={{ fontSize: '9px', marginTop: '5px', color: '#4b5563', lineHeight: '1.2' }}>
                 This is an estimate based on your expected annual energy usage, and your current tariff rates, charges and discounts, including VAT. Actual bills will vary depending on your usage and tariff selection. More information about your current tariff can be found overleaf.
               </div>
             </div>
@@ -200,22 +200,22 @@ export const EONUtilityBill: React.FC<EONUtilityBillProps> = ({ userDetails: pro
 
             {/* Could you pay less section */}
             <div>
-              <div style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '11px' }}>Could you pay less?</div>
-              <div style={{ fontSize: '8px', color: '#374151', fontStyle: 'italic', marginBottom: '5px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '5px', color: '#ec1c24', fontSize: '12px' }}>Could you pay less?</div>
+              <div style={{ fontSize: '9px', color: '#374151', fontStyle: 'italic', marginBottom: '5px' }}>
                 Remember - it might be worth thinking about switching your tariff or supplier.
               </div>
-              <div style={{ fontSize: '8px', color: '#4b5563', marginBottom: '5px' }}>
+              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '5px' }}>
                 For your <strong>electricity</strong> (on meter point {Math.floor(1000000000000 + Math.random() * 9000000000000)})
               </div>
-              <div style={{ fontWeight: 'bold', marginBottom: '2px', fontSize: '9px' }}>Good to know.</div>
-              <div style={{ fontSize: '8px', color: '#374151', marginBottom: '5px' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '2px', fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '9px', color: '#374151', marginBottom: '5px' }}>
                 You're already on our cheapest tariff for your <strong>electricity</strong> usage. We'll let you know if this changes.
               </div>
-              <div style={{ fontSize: '8px', color: '#4b5563', marginBottom: '5px' }}>
+              <div style={{ fontSize: '9px', color: '#4b5563', marginBottom: '5px' }}>
                 For your <strong>gas</strong> (on meter point {Math.floor(100000000 + Math.random() * 900000000)})
               </div>
-              <div style={{ fontWeight: 'bold', marginBottom: '2px', fontSize: '9px' }}>Good to know.</div>
-              <div style={{ fontSize: '8px', color: '#374151' }}>
+              <div style={{ fontWeight: 'bold', marginBottom: '2px', fontSize: '10px' }}>Good to know.</div>
+              <div style={{ fontSize: '9px', color: '#374151' }}>
                 You're already on our cheapest tariff for your <strong>gas</strong> usage. We'll let you know if this changes.
               </div>
             </div>
