@@ -7,17 +7,36 @@ interface SpanishUtilityBillProps {
     consumptionKwh: number;
     totalAmount: number;
     billPeriod: string;
+    billNumber: string;
+    contractNumber: string;
+    meterNumber: string;
+    electricityAmount: number;
+    gasAmount: number;
+    taxAmount: number;
+    equipmentRental: number;
+    vatAmount: number;
   };
 }
 
 export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({ 
   userDetails, 
-  utilityData = {
-    consumptionKwh: 127,
-    totalAmount: 36.65,
-    billPeriod: '15/12/2024 - 22/01/2025'
-  }
+  utilityData
 }) => {
+  // Generate dynamic utility data if not provided
+  const dynamicUtilityData = utilityData || {
+    consumptionKwh: Math.floor(Math.random() * 200) + 100,
+    totalAmount: parseFloat((Math.random() * 50 + 25).toFixed(2)),
+    billPeriod: userDetails.statementPeriod || '15/12/2024 - 22/01/2025',
+    billNumber: `2021${Math.floor(Math.random() * 100000000).toString().padStart(8, '0')}O`,
+    contractNumber: `CO-2024-${Math.floor(Math.random() * 100000).toString().padStart(6, '0')}_1_9`,
+    meterNumber: Math.floor(Math.random() * 1000000000).toString().padStart(10, '0'),
+    electricityAmount: parseFloat((Math.random() * 20 + 10).toFixed(2)),
+    gasAmount: parseFloat((Math.random() * 15 + 5).toFixed(2)),
+    taxAmount: parseFloat((Math.random() * 2 + 1).toFixed(2)),
+    equipmentRental: parseFloat((Math.random() * 1.5 + 0.5).toFixed(2)),
+    vatAmount: parseFloat((Math.random() * 8 + 4).toFixed(2))
+  };
+
   const formatCurrency = (amount: number) => {
     return `${amount.toFixed(2)} €`;
   };
@@ -61,10 +80,10 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
           </div>
           <div className="text-right text-xs space-y-1 max-w-xs">
             <div><strong>Razón Social:</strong> {userDetails.name}</div>
-            <div><strong>NIF / CIF:</strong> 167995605</div>
-            <div><strong>CUPS:</strong> ES0021000007301376FT</div>
+            <div><strong>NIF / CIF:</strong> {Math.floor(Math.random() * 1000000000)}</div>
+            <div><strong>CUPS:</strong> ES{Math.floor(Math.random() * 10000000000000000).toString().padStart(16, '0')}FT</div>
             <div><strong>Dir. Suministro:</strong> {addressLines[0]}</div>
-            <div><strong>Contrato Acceso:</strong> 0005031826I</div>
+            <div><strong>Contrato Acceso:</strong> {Math.floor(Math.random() * 10000000000).toString().padStart(10, '0')}I</div>
             <div><strong>Empresa Distribuidora:</strong> IBERDROLA DISTRIBUCION ELECTRICA, S.A.</div>
           </div>
         </div>
@@ -74,10 +93,10 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
           <div>
             <h3 className="font-bold mb-2">Datos Factura</h3>
             <div className="text-xs space-y-1">
-              <div><strong>Fecha de Factura:</strong> 25/01/2025</div>
-              <div><strong>Período Facturación:</strong> {utilityData.billPeriod}</div>
-              <div><strong>Factura Nº:</strong> 202107041814O</div>
-              <div><strong>Nº de Contrato:</strong> CO-2024-049579_1_9</div>
+              <div><strong>Fecha de Factura:</strong> {new Date().toLocaleDateString('es-ES')}</div>
+              <div><strong>Período Facturación:</strong> {dynamicUtilityData.billPeriod}</div>
+              <div><strong>Factura Nº:</strong> {dynamicUtilityData.billNumber}</div>
+              <div><strong>Nº de Contrato:</strong> {dynamicUtilityData.contractNumber}</div>
             </div>
           </div>
           <div className="text-right">
@@ -111,18 +130,18 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
             <tbody>
               <tr>
                 <td className="border border-gray-300 p-2">P1:</td>
-                <td className="border border-gray-300 p-2">0,062021 €/kWh</td>
-                <td className="border border-gray-300 p-2">+ 0,086517€/kWh=</td>
-                <td className="border border-gray-300 p-2">0,148529€/kWh</td>
-                <td className="border border-gray-300 p-2">x 69,00kWh = 10,25 €</td>
-                <td className="border border-gray-300 p-2 font-bold">14,58€</td>
+                <td className="border border-gray-300 p-2">{(Math.random() * 0.1 + 0.05).toFixed(6)} €/kWh</td>
+                <td className="border border-gray-300 p-2">+ {(Math.random() * 0.1 + 0.05).toFixed(6)}€/kWh=</td>
+                <td className="border border-gray-300 p-2">{(Math.random() * 0.2 + 0.1).toFixed(6)}€/kWh</td>
+                <td className="border border-gray-300 p-2">x {Math.floor(dynamicUtilityData.consumptionKwh * 0.6)},00kWh = {dynamicUtilityData.electricityAmount.toFixed(2)} €</td>
+                <td className="border border-gray-300 p-2 font-bold">{(dynamicUtilityData.electricityAmount + dynamicUtilityData.gasAmount).toFixed(2)}€</td>
               </tr>
               <tr>
                 <td className="border border-gray-300 p-2">P2:</td>
-                <td className="border border-gray-300 p-2">0,002215 €/kWh</td>
-                <td className="border border-gray-300 p-2">+ 0,072361€/kWh=</td>
-                <td className="border border-gray-300 p-2">0,074576€/kWh</td>
-                <td className="border border-gray-300 p-2">x 58,00kWh = 4,33 €</td>
+                <td className="border border-gray-300 p-2">{(Math.random() * 0.01 + 0.001).toFixed(6)} €/kWh</td>
+                <td className="border border-gray-300 p-2">+ {(Math.random() * 0.1 + 0.05).toFixed(6)}€/kWh=</td>
+                <td className="border border-gray-300 p-2">{(Math.random() * 0.1 + 0.05).toFixed(6)}€/kWh</td>
+                <td className="border border-gray-300 p-2">x {Math.floor(dynamicUtilityData.consumptionKwh * 0.4)},00kWh = {dynamicUtilityData.gasAmount.toFixed(2)} €</td>
                 <td className="border border-gray-300 p-2"></td>
               </tr>
             </tbody>
@@ -148,13 +167,13 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
             </thead>
             <tbody>
               <tr>
-                <td className="border border-gray-300 p-2">P1: 3,450kW</td>
+                <td className="border border-gray-300 p-2">P1: {(Math.random() * 2 + 2).toFixed(3)}kW</td>
                 <td className="border border-gray-300 p-2"></td>
-                <td className="border border-gray-300 p-2">0,104229€/kWh día</td>
+                <td className="border border-gray-300 p-2">{(Math.random() * 0.2 + 0.05).toFixed(6)}€/kWh día</td>
                 <td className="border border-gray-300 p-2">+ 0€/kWh día=</td>
-                <td className="border border-gray-300 p-2">0,104229€/kWh día x</td>
-                <td className="border border-gray-300 p-2">3,45kWx 37días =</td>
-                <td className="border border-gray-300 p-2 font-bold">13,30€</td>
+                <td className="border border-gray-300 p-2">{(Math.random() * 0.2 + 0.05).toFixed(6)}€/kWh día x</td>
+                <td className="border border-gray-300 p-2">{(Math.random() * 2 + 2).toFixed(2)}kWx {Math.floor(Math.random() * 10 + 30)}días =</td>
+                <td className="border border-gray-300 p-2 font-bold">{(Math.random() * 20 + 10).toFixed(2)}€</td>
               </tr>
             </tbody>
           </table>
@@ -190,20 +209,20 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
         {/* Taxes and Additional Charges */}
         <div className="space-y-2 text-xs mb-6">
           <div className="flex justify-between border-b border-gray-200 pb-2">
-            <span><strong>Impuesto electricidad</strong> 5,112696323% s/ 27,88 €</span>
-            <span className="font-bold">1,43 €</span>
+            <span><strong>Impuesto electricidad</strong> 5,112696323% s/ {(dynamicUtilityData.electricityAmount + dynamicUtilityData.gasAmount).toFixed(2)} €</span>
+            <span className="font-bold">{dynamicUtilityData.taxAmount.toFixed(2)} €</span>
           </div>
           <div className="flex justify-between border-b border-gray-200 pb-2">
-            <span><strong>Alquiler Equipo medida</strong> ( Nº Contador 0043643392):</span>
-            <span className="font-bold">0,98 €</span>
+            <span><strong>Alquiler Equipo medida</strong> ( Nº Contador {dynamicUtilityData.meterNumber}):</span>
+            <span className="font-bold">{dynamicUtilityData.equipmentRental.toFixed(2)} €</span>
           </div>
           <div className="flex justify-between border-b-2 border-black pb-2">
-            <span><strong>IVA</strong> 21,00% s/ 30,29</span>
-            <span className="font-bold">6,36€</span>
+            <span><strong>IVA</strong> 21,00% s/ {(dynamicUtilityData.electricityAmount + dynamicUtilityData.gasAmount + dynamicUtilityData.taxAmount + dynamicUtilityData.equipmentRental).toFixed(2)}</span>
+            <span className="font-bold">{dynamicUtilityData.vatAmount.toFixed(2)}€</span>
           </div>
           <div className="flex justify-between pt-2 text-lg font-bold">
             <span>TOTAL FACTURA:</span>
-            <span>{formatCurrency(utilityData.totalAmount)}</span>
+            <span>{formatCurrency(dynamicUtilityData.totalAmount)}</span>
           </div>
         </div>
 
@@ -211,7 +230,7 @@ export const SpanishUtilityBill: React.FC<SpanishUtilityBillProps> = ({
         <div className="grid grid-cols-2 gap-6 text-xs">
           <div className="border-2 border-black rounded-lg p-4">
             <h4 className="font-bold mb-2">Datos de Pago</h4>
-            <p className="mb-2">El importe de la presente factura le será adeudado a partir del 22/01/2025 en:</p>
+            <p className="mb-2">El importe de la presente factura le será adeudado a partir del {new Date(Date.now() + 3*24*60*60*1000).toLocaleDateString('es-ES')} en:</p>
             <div className="font-mono text-sm font-bold">
               Banco 0182-2294-31-0201XXXXXX
             </div>
