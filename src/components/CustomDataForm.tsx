@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,12 +44,9 @@ export const CustomDataForm: React.FC<CustomDataFormProps> = ({ isOpen, onClose,
     if (startDate && endDate) {
       const formatDate = (date: Date) => {
         const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'short' });
+        const month = date.getMonth() + 1;
         const year = date.getFullYear();
-        const suffix = day.toString().endsWith('1') && day !== 11 ? 'st' : 
-                     day.toString().endsWith('2') && day !== 12 ? 'nd' : 
-                     day.toString().endsWith('3') && day !== 13 ? 'rd' : 'th';
-        return `${day}${suffix} ${month}. ${year}`;
+        return `${day}/${month}/${year}`;
       };
       statementPeriod = `${formatDate(startDate)} - ${formatDate(endDate)}`;
     }
